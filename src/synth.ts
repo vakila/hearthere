@@ -5,5 +5,10 @@ export const synth = new Synth().toDestination();
 
 export function play() {
     //play a middle 'C' for the duration of an 8th note
-    synth.triggerAttackRelease("C4", "8n");
+    synth.triggerAttack("C4");
+}
+
+export function pause() {
+    //release the note immediately
+    synth.triggerRelease();
 }
