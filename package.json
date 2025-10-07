@@ -1,0 +1,26 @@
+{
+  "name": "hearthere",
+  "version": "0.0.0",
+  "description": "a data sonification experiment",
+  "homepage": "https://github.com/vakila/hearthere#readme",
+  "bugs": {
+    "url": "https://github.com/vakila/hearthere/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vakila/hearthere.git"
+  },
+  "license": "ISC",
+  "author": "Anjana Vakil <contact@anjana.dev>",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9"
+  }
+}
