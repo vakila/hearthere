@@ -1,5 +1,6 @@
 import './style.css'
 import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff } from './synth';
+import { map, customLayer } from './globe';
 
 
 function setupButton(button: HTMLButtonElement) {
@@ -30,3 +31,12 @@ setupButton(document.querySelector<HTMLButtonElement>('#playpause')!);
 setupSlider(document.querySelector<HTMLInputElement>('#freq')!, setBaseFreq);
 setupSlider(document.querySelector<HTMLInputElement>('#lfo-freq')!, setDelayFreq);
 setupSlider(document.querySelector<HTMLInputElement>('#filter-freq')!, setFilterCutoff);
+
+
+
+map.on('style.load', () => {
+  map.setProjection({
+    type: 'globe', // Set projection to globe
+  });
+  map.addLayer(customLayer);
+});
