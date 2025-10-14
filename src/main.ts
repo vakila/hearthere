@@ -1,5 +1,5 @@
 import './style.css'
-import { play, pause, setFreq } from './synth';
+import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff } from './synth';
 
 
 function setupButton(button: HTMLButtonElement) {
@@ -18,13 +18,15 @@ function setupButton(button: HTMLButtonElement) {
   button.addEventListener('click', () => togglePlaying())
 }
 
-function setupSlider(slider: HTMLInputElement) {
+function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
   slider.addEventListener('input', () => {
 
-    setFreq(parseFloat(slider.value));
+    setFn(parseFloat(slider.value));
   });
 }
 
 
 setupButton(document.querySelector<HTMLButtonElement>('#playpause')!);
-setupSlider(document.querySelector<HTMLInputElement>('#freq')!);
+setupSlider(document.querySelector<HTMLInputElement>('#freq')!, setBaseFreq);
+setupSlider(document.querySelector<HTMLInputElement>('#lfo-freq')!, setDelayFreq);
+setupSlider(document.querySelector<HTMLInputElement>('#filter-freq')!, setFilterCutoff);

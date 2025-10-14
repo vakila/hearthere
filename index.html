@@ -13,10 +13,17 @@
     <h1>hear there</h1>
     <div class="card">
       <button id="playpause" type="button">Play/Pause</button>
-      </div>
-        <label>frequency
+      <label>base freq
           <input id="freq" type="range" value="270" min="100" max="500" />
         </label>
+        <label>delay LFO freq
+          <input id="lfo-freq" type="range" value="0.1" min="0.05" max="0.2" step="0.01" />
+        </label>
+        <label>filter cutoff
+          <input id="filter-freq" type="range" value="270" min="100" max="500" />
+        </label>
+        </div>
+
     <p class="read-the-docs">
       Made with Vite and TypeScript at the Recurse Center
     </p>
