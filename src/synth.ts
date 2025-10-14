@@ -44,16 +44,16 @@ export function pause() {
 
 export function playStation(feature: any) {
     const lng = feature.geometry.coordinates[0];
-    const newVco = Math.abs(lng);
+    const newVco = Math.abs(lng) / 180;
     setBaseFreq(newVco);
     const lat = feature.geometry.coordinates[1];
-    const newLfo = Math.abs(lat / 90);
+    const newLfo = Math.abs(lat / 6 / 30);
     setDelayFreq(newLfo);
     play();
 }
 
 export function setBaseFreq(newFreq: number) {
-    const vcoFreq = 150 + newFreq;
+    const vcoFreq = 150 + 150 * newFreq;
     vco1.set({ frequency: vcoFreq });
     console.log('set vco1 to', vcoFreq);
 }
