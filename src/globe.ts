@@ -1,18 +1,32 @@
 
-import {Map, type LngLatLike} from 'maplibre-gl';
+import { Map, type LngLatLike } from 'maplibre-gl';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const CITIES: { [name: string]: LngLatLike } = {
+const CITIES: { [name: string]: [number, number] } = {
     Sydney: [150.16546137527212, -35.017179237129994],
     Brooklyn: [-73.98520849211138, 40.69145896738993],
     Berlin: [13.423920312613438, 52.503588841349234],
     Oakland: [-122.29541297453854, 37.80784592023481],
 }
 
+const CITY_FEATURES = Object.entries(CITIES).map(
+    ([name, lngLat]) => ({
+        'type': 'Feature' as const,
+        'properties': {
+            name,
+            selected: false
+        },
+        geometry: {
+            type: 'Point' as const,
+            coordinates: lngLat
+        },
+    }));
+console.log(CITY_FEATURES)
+
 export const map = new Map({
     container: 'map',
-    style: 'https://demotiles.maplibre.org/style.json',
+    style: 'https://tiles.openfreemap.org/styles/bright',
     zoom: 1.5,
     center: CITIES.Brooklyn,
     maxPitch: 80,
@@ -35,6 +49,22 @@ map.on('style.load', () => {
 //         type: currentProjection.type === 'globe' ? 'mercator' : 'globe',
 //     });
 // });
+
+export const pointsLayer = {
+    'id': 'stations',
+    'type': 'circle',
+    'source': {
+        'type': 'geojson',
+        'data': {
+            'type': 'FeatureCollection',
+            'features': CITY_FEATURES,
+        }
+    },
+    "paint": {
+        "circle-radius": 5,
+        "circle-color": 'red',
+    }
+} as const;
 
 // configuration of the custom layer for a 3D model per the CustomLayerInterface
 export const customLayer: any = {
@@ -101,3 +131,20 @@ export const customLayer: any = {
         this.map.triggerRepaint();
     }
 };
+
+
+map.on('style.load', () => {
+
+
+
+
+    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+    map.on('mouseenter', 'symbols', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'symbols', () => {
+        map.getCanvas().style.cursor = '';
+    });
+})

@@ -42,16 +42,30 @@ export function pause() {
     vco1.stop();
 }
 
-
+export function playStation(feature: any) {
+    const lng = feature.geometry.coordinates[0];
+    const newVco = Math.abs(lng);
+    setBaseFreq(newVco);
+    const lat = feature.geometry.coordinates[1];
+    const newLfo = Math.abs(lat / 90);
+    setDelayFreq(newLfo);
+    play();
+}
 
 export function setBaseFreq(newFreq: number) {
-    vco1.set({ frequency: newFreq });
+    const vcoFreq = 150 + newFreq;
+    vco1.set({ frequency: vcoFreq });
+    console.log('set vco1 to', vcoFreq);
 }
 
 export function setDelayFreq(newFreq: number) {
     lfo.set({ frequency: newFreq });
+    console.log('set lfo to', newFreq);
+
 }
 
 export function setFilterCutoff(newFreq: number) {
     filter.set({ frequency: newFreq });
+    console.log('set cutoff to', newFreq);
+
 }
