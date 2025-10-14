@@ -1,5 +1,5 @@
 import './style.css'
-import { play, pause } from './synth';
+import { play, pause, setFreq } from './synth';
 
 
 function setupButton(button: HTMLButtonElement) {
@@ -18,5 +18,13 @@ function setupButton(button: HTMLButtonElement) {
   button.addEventListener('click', () => togglePlaying())
 }
 
+function setupSlider(slider: HTMLInputElement) {
+  slider.addEventListener('input', () => {
 
-setupButton(document.querySelector<HTMLButtonElement>('#playpause')!)
+    setFreq(parseFloat(slider.value));
+  });
+}
+
+
+setupButton(document.querySelector<HTMLButtonElement>('#playpause')!);
+setupSlider(document.querySelector<HTMLInputElement>('#freq')!);

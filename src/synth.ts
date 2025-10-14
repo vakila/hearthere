@@ -8,17 +8,22 @@ const Fmaj = ["F3", "A3", "C3"]
 
 
 export function play() {
-    synth.triggerAttack(Fmaj);
+    vco1.start();
+    // synth.triggerAttack(Fmaj);
 }
 
 export function pause() {
-    synth.triggerRelease(Fmaj);
-    vco1.stop()
+    // synth.triggerRelease(Fmaj);
+    vco1.stop();
 }
 
 // saw wave Oscillator with PWM
 // const vco1 = new Oscillator(260, "sawtooth");
-const vco1 = new PulseOscillator(260, 0.37).start();
+const vco1 = new PulseOscillator(260, 0.37);
+
+export function setFreq(newFreq: number) {
+    vco1.set({ frequency: newFreq });
+}
 
 // to low-pass filter
 const filter = new Filter(275, "lowpass");
