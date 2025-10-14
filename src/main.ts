@@ -39,4 +39,11 @@ map.on('style.load', () => {
     type: 'globe', // Set projection to globe
   });
   map.addLayer(customLayer);
+  map.on('click', (e) => {
+    console.log(e);
+  });
+  map.on('click', '3d-model', (e) => {
+    console.log(e.features);
+  });
 });
+

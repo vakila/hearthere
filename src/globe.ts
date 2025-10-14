@@ -3,13 +3,20 @@ import {Map, type LngLatLike} from 'maplibre-gl';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+const CITIES: { [name: string]: LngLatLike } = {
+    Sydney: [150.16546137527212, -35.017179237129994],
+    Brooklyn: [-73.98520849211138, 40.69145896738993],
+    Berlin: [13.423920312613438, 52.503588841349234],
+    Oakland: [-122.29541297453854, 37.80784592023481],
+}
+
 export const map = new Map({
     container: 'map',
     style: 'https://demotiles.maplibre.org/style.json',
-    zoom: 5.5,
-    center: [150.16546137527212, -35.017179237129994],
+    zoom: 1.5,
+    center: CITIES.Brooklyn,
     maxPitch: 80,
-    pitch: 70,
+    pitch: 50,
     canvasContextAttributes: {antialias: true} // create the gl context with MSAA antialiasing, so custom layers are antialiased
 });
 
@@ -68,7 +75,8 @@ export const customLayer: any = {
     },
     render(_gl: any, args: any) {
         // parameters to ensure the model is georeferenced correctly on the map
-        const modelOrigin: LngLatLike = [148.9819, -35.39847];
+        const modelOrigin: LngLatLike = CITIES.Brooklyn
+        // [148.9819, -35.39847];
         const modelAltitude = 0;
 
         // Make the object ~10s of km tall to make it visible at planetary scale.
