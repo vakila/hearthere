@@ -1,5 +1,5 @@
 import './style.css'
-import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playStation } from './synth';
+import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playThere } from './synth';
 import { map, customLayer, pointsLayer } from './globe';
 import type { LngLatLike } from 'maplibre-gl';
 
@@ -61,10 +61,11 @@ map.on('style.load', () => {
       feature.properties.selected = true;
       const point = feature.geometry as GeoJSON.Point;
       console.log(feature);
+      getWeatherAt(point.coordinates[0], point.coordinates[1]);
       map.flyTo({
         center: point.coordinates as LngLatLike
       });
-      playStation(feature);
+      // playThere(feature);
     } else {
       pause();
     }

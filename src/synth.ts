@@ -42,7 +42,7 @@ export function pause() {
     vco1.stop();
 }
 
-export function playStation(feature: any) {
+export function playThere(feature: any) {
     const lng = feature.geometry.coordinates[0];
     const newVco = Math.abs(lng) / 180;
     setBaseFreq(newVco);
