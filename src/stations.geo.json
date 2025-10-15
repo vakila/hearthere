@@ -1,0 +1,57 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Sydney"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    150.16546137527212,
+                    -35.017179237129994
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Brooklyn"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -73.98520849211138,
+                    40.69145896738993
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Berlin"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    13.423920312613438,
+                    52.503588841349234
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Oakland"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.29541297453854,
+                    37.80784592023481
+                ]
+            }
+        }
+    ]
+}

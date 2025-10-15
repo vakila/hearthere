@@ -2,42 +2,22 @@
 import { Map, type LngLatLike } from 'maplibre-gl';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import STATION_SRC from './stations.geo.json';
+import type { FeatureCollection } from 'geojson';
 
-const CITIES: { [name: string]: [number, number] } = {
-    Sydney: [150.16546137527212, -35.017179237129994],
-    Brooklyn: [-73.98520849211138, 40.69145896738993],
-    Berlin: [13.423920312613438, 52.503588841349234],
-    Oakland: [-122.29541297453854, 37.80784592023481],
-}
-
-const CITY_FEATURES = Object.entries(CITIES).map(
-    ([name, lngLat]) => ({
-        'type': 'Feature' as const,
-        'properties': {
-            name,
-            selected: false
-        },
-        geometry: {
-            type: 'Point' as const,
-            coordinates: lngLat
-        },
-    }));
-console.log(CITY_FEATURES)
+const STATIONS = Object.fromEntries(STATION_SRC.features.map((feat) => [
+    feat.properties.name,
+    feat.geometry.coordinates as LngLatLike,
+]));
 
 export const map = new Map({
     container: 'map',
     style: 'https://tiles.openfreemap.org/styles/bright',
     zoom: 1.5,
-    center: CITIES.Brooklyn,
+    center: STATIONS.Brooklyn,
     maxPitch: 80,
     pitch: 50,
     canvasContextAttributes: {antialias: true} // create the gl context with MSAA antialiasing, so custom layers are antialiased
-});
-
-map.on('style.load', () => {
-    map.setProjection({
-        type: 'globe', // Set projection to globe
-    });
 });
 
 // The API demonstrated in this example will work regardless of projection.
@@ -50,15 +30,14 @@ map.on('style.load', () => {
 //     });
 // });
 
+
+
 export const pointsLayer = {
     'id': 'stations',
     'type': 'circle',
     'source': {
-        'type': 'geojson',
-        'data': {
-            'type': 'FeatureCollection',
-            'features': CITY_FEATURES,
-        }
+        type: 'geojson',
+        data: STATION_SRC as FeatureCollection
     },
     "paint": {
         "circle-radius": 5,
@@ -105,7 +84,7 @@ export const customLayer: any = {
     },
     render(_gl: any, args: any) {
         // parameters to ensure the model is georeferenced correctly on the map
-        const modelOrigin: LngLatLike = CITIES.Brooklyn
+        const modelOrigin: LngLatLike = STATIONS.Brooklyn;
         // [148.9819, -35.39847];
         const modelAltitude = 0;
 
@@ -135,16 +114,18 @@ export const customLayer: any = {
 
 map.on('style.load', () => {
 
-
+    map.setProjection({
+        type: 'globe', // Set projection to globe
+    });
 
 
     // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-    map.on('mouseenter', 'symbols', () => {
+    map.on('mouseenter', 'stations', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'symbols', () => {
+    map.on('mouseleave', 'stations', () => {
         map.getCanvas().style.cursor = '';
     });
 })

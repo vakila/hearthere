@@ -20,6 +20,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.16",
     "@types/maplibre-gl": "^1.13.2",
     "@types/three": "^0.180.0",
     "typescript": "^5.9.3",
