@@ -2,6 +2,7 @@ import './style.css'
 import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playThere } from './synth';
 import { map, customLayer, pointsLayer } from './globe';
 import type { LngLatLike } from 'maplibre-gl';
+import { getWeatherAt } from './weather';
 
 
 let playing = false;
