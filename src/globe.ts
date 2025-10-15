@@ -1,5 +1,5 @@
 
-import { Map, type LngLatLike } from 'maplibre-gl';
+import { Map, type DataDrivenPropertyValueSpecification, type LngLatLike } from 'maplibre-gl';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import STATION_SRC from './stations.geo.json';
@@ -10,13 +10,100 @@ const STATIONS = Object.fromEntries(STATION_SRC.features.map((feat) => [
     feat.geometry.coordinates as LngLatLike,
 ]));
 
+const COLORS = {
+    DeepBlue: "#101d30",
+    DeepGreen: "#162d11",
+    Yellow: "#f5ee1eff"
+};
+
 export const map = new Map({
     container: 'map',
-    style: 'https://tiles.openfreemap.org/styles/bright',
+    style: {
+        "version": 8,
+        "sources": {
+            "satellite": {
+                "type": "raster",
+                "tiles": [
+                    "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg"
+                ],
+                "tileSize": 256
+            },
+            "maplibre": {
+                "url": "https://demotiles.maplibre.org/tiles/tiles.json",
+                "type": "vector"
+            },
+        },
+        "layers": [{
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": COLORS.DeepBlue
+            },
+            "layout": {
+                "visibility": "visible"
+            },
+            "maxzoom": 24
+        },
+        {
+            "id": "land",
+            "type": "fill",
+            "source": "maplibre",
+            "source-layer": "countries",
+            "paint": {
+                "fill-color": COLORS.DeepGreen
+            }
+        },
+        {
+            "id": "coastline",
+            "type": "line",
+            "paint": {
+                "line-blur": 0.5,
+                "line-color": COLORS.DeepGreen,
+                "line-width": {
+                    "stops": [
+                        [
+                            0,
+                            2
+                        ],
+                        [
+                            6,
+                            6
+                        ],
+                        [
+                            14,
+                            9
+                        ],
+                        [
+                            22,
+                            18
+                        ]
+                    ]
+                } as DataDrivenPropertyValueSpecification<number>
+            },
+            "filter": [
+                "all"
+            ],
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "source": "maplibre",
+            "maxzoom": 24,
+            "minzoom": 0,
+            "source-layer": "countries"
+        },
+        {
+            "id": "satellite",
+            "type": "raster",
+            "source": "satellite"
+        }
+        ]
+    },
     zoom: 1.5,
     center: STATIONS.Brooklyn,
-    maxPitch: 80,
-    pitch: 50,
+    // maxPitch: 60,
+    // pitch: 50,
     canvasContextAttributes: {antialias: true} // create the gl context with MSAA antialiasing, so custom layers are antialiased
 });
 
@@ -40,8 +127,8 @@ export const pointsLayer = {
         data: STATION_SRC as FeatureCollection
     },
     "paint": {
-        "circle-radius": 5,
-        "circle-color": 'red',
+        "circle-radius": 10,
+        "circle-color": COLORS.Yellow,
     }
 } as const;
 
