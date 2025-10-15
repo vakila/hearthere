@@ -1,4 +1,6 @@
-import './style.css'
+import './style.css'; // Custom styles 
+import 'maplibre-gl/dist/maplibre-gl.css'; // Map styles
+
 import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playThere } from './synth';
 import { map, customLayer, pointsLayer } from './globe';
 import type { LngLatLike } from 'maplibre-gl';

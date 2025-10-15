@@ -10,10 +10,10 @@
 
 <body>
   <div id="app">
-    <h1>hear there</h1>
     <div id="map"></div>
     <!-- <button id="project">Toggle projection</button> -->
-    <div class="card">
+    <div class="card" id="info">
+      <h1>hear there</h1>
       <button id="playpause" type="button">Play/Pause</button>
       <label>base freq
           <input id="freq" type="range" value="270" min="100" max="500" />
@@ -24,7 +24,6 @@
         <label>filter cutoff
           <input id="filter-freq" type="range" value="270" min="100" max="500" />
         </label>
-        </div>
 
     <p class="read-the-docs">
       Made with MapLibre, Three.js, Vite & TypeScript at the Recurse Center

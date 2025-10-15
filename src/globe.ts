@@ -104,7 +104,10 @@ export const map = new Map({
     center: STATIONS.Brooklyn,
     // maxPitch: 60,
     // pitch: 50,
-    canvasContextAttributes: {antialias: true} // create the gl context with MSAA antialiasing, so custom layers are antialiased
+    canvasContextAttributes: {
+        antialias: true, // create the gl context with MSAA antialiasing, so custom layers are antialiased
+        alpha: true,
+    }
 });
 
 // The API demonstrated in this example will work regardless of projection.
