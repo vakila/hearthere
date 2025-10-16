@@ -52,8 +52,20 @@ export function playThere(feature: any) {
     play();
 }
 
+export function playWeather({ temperature, elevationMeters, precipitation, humidity }: any) {
+    console.log(temperature);
+    console.log(precipitation);
+    const newVco = temperature * 5;
+    setBaseFreq(newVco);
+    const newLfo = elevationMeters / 10;
+    setDelayFreq(newLfo);
+    const newCutoff = humidity.value / 100 * 300;
+    setFilterCutoff(newCutoff);
+    play();
+}
+
 export function setBaseFreq(newFreq: number) {
-    const vcoFreq = 150 + 150 * newFreq;
+    const vcoFreq = newFreq;
     vco1.set({ frequency: vcoFreq });
     console.log('set vco1 to', vcoFreq);
 }

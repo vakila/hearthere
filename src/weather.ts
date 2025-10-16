@@ -29,8 +29,11 @@ export async function getWeatherAt(lng: number, lat: number) {
     const elevationMeters = hourly.properties.elevation.value;
     console.log('elevation', elevationMeters);
     const nextHour = hourly.properties.periods[0];
+    const { temperature, isDaytime, probabilityOfPrecipitation: precipitation, relativeHumidity: humidity } = nextHour;
     console.log('temp (F)', nextHour.temperature);
     console.log('daytime?', nextHour.isDaytime);
-    console.log('');
+    console.log('precipitation', nextHour.probabilityOfPrecipitation);
+    console.log('humidity', humidity);
+    return { temperature, isDaytime, elevationMeters, precipitation, humidity };
 
 }

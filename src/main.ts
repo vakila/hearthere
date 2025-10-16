@@ -1,7 +1,7 @@
 import './style.css'; // Custom styles 
 import 'maplibre-gl/dist/maplibre-gl.css'; // Map styles
 
-import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playThere } from './synth';
+import { play, pause, setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './synth';
 import { map, customLayer, pointsLayer } from './globe';
 import type { LngLatLike } from 'maplibre-gl';
 import { getWeatherAt } from './weather';
@@ -53,7 +53,7 @@ map.on('style.load', () => {
   });
 
   // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
-  map.on('click', 'stations', (e) => {
+  map.on('click', 'stations', async (e) => {
     pause();
     const features = map.querySourceFeatures('stations');
     for (let feature of features) {
@@ -64,11 +64,15 @@ map.on('style.load', () => {
       feature.properties.selected = true;
       const point = feature.geometry as GeoJSON.Point;
       console.log(feature);
-      getWeatherAt(point.coordinates[0], point.coordinates[1]);
+      const weather = await getWeatherAt(point.coordinates[0], point.coordinates[1]);
       map.flyTo({
         center: point.coordinates as LngLatLike
       });
       // playThere(feature);
+      if (weather) {
+        playWeather(weather);
+      }
+      else { playThere(feature); }
     } else {
       pause();
     }
