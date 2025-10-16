@@ -24,17 +24,18 @@ Impossible stuff day:
 - [x] Scaffold a vanilla TS project with Vite
 
 - [ ] Build the Synth
-  - [ ] Decide which tool(s) to use (Tone.js? vanilla WebAudio API?)
-  - [ ] Generate the simplest possible sound
+  - [x] Decide which tool(s) to use (Tone.js? vanilla WebAudio API?)
+  - [x] Generate the simplest possible sound
   - [ ] ...draw the rest of the owl
 
 Beyond impossible stuff day: 
 - [ ] Build the UI
-  - [ ] Make a play/pause button that plays/stops sound
-  - [ ] World map to browse locations
+  - [x] Make a play/pause button that plays/stops sound
+  - [x] World map to browse locations
   - [ ] (stretch) Visualization to go along with the sound? 
 
-- [ ] Get the Data
+- [ ] Get the Weather Data
+  - [x] Basic prototype with any weather API (weather.gov)
   - [ ] Get live streaming open weather data, if available
   - [ ] or build a DIY weather station(s)
 
