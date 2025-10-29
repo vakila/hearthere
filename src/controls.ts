@@ -4,10 +4,9 @@ import { FeedbackDelay, Filter, LFO, Merge, PolySynth, PulseOscillator, Synth, s
 export const monosynth = new Synth();
 const synth = new PolySynth(Synth);
 
-const Fmaj = ["F3", "A3", "C3"]
+const Fmaj = ["F3", "A3", "C3"];
 
-// saw wave Oscillator with PWM
-// const vco1 = new Oscillator(260, "sawtooth");
+// Oscillator with PWM
 const vco1 = new PulseOscillator(260, 0.37);
 
 
