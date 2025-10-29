@@ -126,6 +126,10 @@ button:focus-visible {
   justify-content: space-around;
 }
 
+#synth-controls {
+  display: none;
+}
+
 @media (width > 680px) {
   #app {
     grid-template-columns: minmax(40%, 100vh) 1fr;
