@@ -1,13 +1,103 @@
-// import * as Tone from "tone";
+import * as Tone from "tone";
+
+interface VoiceOptions {
+    value: number;
+    name: string;
+}
+class Voice {
+    // Housekeeping
+    name: string;
+    index: number;
+
+    // Audio pipeline
+    delay?: any;
+    lfo?: any;
+    filter?: any;
+
+    // Modulation
+    inputSource: any;
+    inputName: string;
+    inputValue: number;
 
 
+    static * getNextIndex(): Generator<number, number, number> {
+        let i = 0;
+        while (true) {
+            yield i;
+            i++;
+        }
+    }
+    static indexGenerator = this.getNextIndex();
+
+    constructor({ value, name }: VoiceOptions) {
+        this.index = Voice.indexGenerator.next().value;
+        this.name = name || `Voice ${this.index}`;
+        this.delay = 'i am delay';
+        this.lfo = 'i am lfo';
+        this.filter = 'i am filter';
+        this.inputName = 'filter freq'
+        this.inputValue = value || 0;
+
+    }
+
+}
+
+
+class OscVoice extends Voice {
+
+
+    constructor(options: VoiceOptions & { color?: string }) {
+        super(options);
+
+
+    }
+}
+
+
+class NoiseVoice extends Voice {
+    color: string;
+
+
+    constructor(options: VoiceOptions & { color?: string }) {
+        super(options);
+        this.color = options.color || 'pink'
+
+
+    }
+}
 
 
 // Voice 0: F0
 
-let vco0;
-let lfo0;
-let filter0;
+const v0 = new OscVoice({
+    name: 'Fundamental',
+    value: 174, // F3
+
+})
+
+
+export function getVoice0() {
+    const voice = {} as any;
+    voice.freq = 174; // F3
+    voice.filterFreq = 0.03
+    voice.vco = new Tone.Oscillator(voice.freq, "sine");
+    voice.lfo = new Tone.LFO(0.03, 0.01, 1.0);
+    voice.filter = new Tone.Filter({
+        frequency: 1000.0,
+        type: 'highpass',
+        Q: 58.4, // Resonance? TODO
+    });
+    voice.lfo.connect(voice.filter.frequency);
+    voice.vco.connect(voice.filter);
+    voice.output = voice.filter;
+    voice.start = () => {
+        voice.lfo.start();
+        voice.vco.start();
+    };
+    console.log(voice);
+    return voice;
+}
+
 
 
 
@@ -36,6 +126,8 @@ let delay2;
 
 
 // Voice 3: Noise
+
+const v3 = new NoiseVoice({ name: 'Noise', value: 0, color: 'pink' });
 
 let noise = 'red';
 let delay3;
