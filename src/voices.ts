@@ -79,13 +79,13 @@ const v0 = new OscVoice({
 export function getVoice0() {
     const voice = {} as any;
     voice.freq = 174; // F3
-    voice.filterFreq = 0.03
+    voice.lfoFreq = 0.03
     voice.vco = new Tone.Oscillator(voice.freq, "sine");
-    voice.lfo = new Tone.LFO(0.03, 0.01, 1.0);
+    voice.lfo = new Tone.LFO(voice.lfoFreq, 800, 1200);
     voice.filter = new Tone.Filter({
-        frequency: 1000.0,
-        type: 'highpass',
-        Q: 58.4, // Resonance? TODO
+        frequency: 1000,
+        type: 'lowpass',
+        Q: 580, // Resonance? TODO
     });
     voice.lfo.connect(voice.filter.frequency);
     voice.vco.connect(voice.filter);
