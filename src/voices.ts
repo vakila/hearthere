@@ -77,20 +77,30 @@ const v0 = new OscVoice({
 
 
 export function getVoice0() {
-    const voice = {} as any;
-    voice.freq = 174; // F3
-    voice.lfoFreq = 0.03
-    voice.vco = new Tone.Oscillator(voice.freq, "sine");
-    voice.lfo = new Tone.LFO(voice.lfoFreq, 800, 1200);
-    voice.filter = new Tone.Filter({
-        frequency: 1000,
-        type: 'lowpass',
-        Q: 580, // Resonance? TODO
-    });
+    let freq = 174; // F3
+    let lfoFreq = 0.03;
+    const voice = {
+        freq,
+        lfoFreq,
+        vco: new Tone.Oscillator({
+            frequency: freq,
+            type: "sine",
+        }),
+        lfo: new Tone.LFO(lfoFreq, 800, 1200),
+        filter: new Tone.Filter({
+            frequency: 1000,
+            type: 'lowpass',
+            Q: 580, // Resonance? TODO
+        }),
+        start: () => { }, // placeholder 
+        output: undefined as (Tone.Filter | undefined),
+    };
+
     voice.lfo.connect(voice.filter.frequency);
     voice.vco.connect(voice.filter);
     voice.output = voice.filter;
     voice.start = () => {
+        voice.output!.toDestination();
         voice.lfo.start();
         voice.vco.start();
     };

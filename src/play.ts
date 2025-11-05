@@ -1,6 +1,6 @@
 // import { FeedbackDelay, Filter, LFO, Merge, PolySynth, PulseOscillator, Synth, start as toneStart } from "tone";
 
-// import * as Tone from "tone";
+import * as Tone from "tone";
 
 import { getVoice0 } from "./voices";
 
@@ -8,12 +8,24 @@ import { getVoice0 } from "./voices";
 const F3maj = ["F3", "A3", "C3"];
 
 
-const v0 = getVoice0();
 
 export async function play() {
     // the AudioContext is suspended until user action
-    await v0.start(); //Tone.start(); // Tone.start() un-suspends it
-    v0.output.toDestination();
+    await Tone.start(); // Tone.start() un-suspends it
+    Tone.getDestination().set({ volume: -64 });
+    const v0 = getVoice0();
+    Tone.getDestination().volume.rampTo(-12, 1);
+    v0.start();
+}
+
+
+export function pause() {
+    Tone.getDestination().volume.rampTo(-64, 1);
+    setTimeout(() => {
+        Tone.getDestination().disconnect();
+        console.log('disconnected');
+        // TODO dispose of everything
+    }, 1200);
 }
 
 
@@ -45,10 +57,6 @@ function getVoice1() {
 
 
 
-export function pause() {
-    v0.output.disconnect();
-
-}
 
 // export function playThere(feature: any) {
 //     const lng = feature.geometry.coordinates[0];
