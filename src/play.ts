@@ -2,7 +2,7 @@
 
 import * as Tone from "tone";
 
-import { getVoice0 } from "./voices";
+import { getVoice0, getVoiceD } from "./voices";
 
 
 const F3maj = ["F3", "A3", "C3"];
@@ -14,7 +14,9 @@ export async function init() {
     await Tone.start(); // Tone.start() un-suspends it
     Tone.getDestination().set({ volume: -96 });
     if (!voices.length) {
-        voices.push(getVoice0());
+        const v0 = getVoice0();
+        const vD = getVoiceD(v0);
+        voices.push(v0, vD);
     }
     console.log(voices);
     window.voices = voices; // for debugging

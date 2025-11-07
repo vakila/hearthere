@@ -75,8 +75,6 @@ export function getVoice0() {
     let lfoFreq = 0.03;
     let cutoffFreq = { min: 800, max: 1200 };
     const voice = {
-        freq,
-        lfoFreq,
         vco: new Tone.Oscillator({
             frequency: freq,
             type: "sine",
@@ -98,6 +96,7 @@ export function getVoice0() {
             resonance: 0.58,
         }),
         start: () => { }, // placeholder 
+        output: undefined as any,
     };
 
 
@@ -105,10 +104,10 @@ export function getVoice0() {
     voice.start = () => {
         voice.lfo.connect(voice.lowpassFilter.frequency);
         // voice.lfo.connect(voice.resonanceFilter.frequency)
-        voice.vco.chain(
+        voice.output = voice.vco.chain(
             voice.lowpassFilter,
             voice.resonanceFilter,
-            Tone.getDestination()
+            // Tone.getDestination()
         ); 
         voice.lfo.start();
         voice.vco.start();
@@ -165,3 +164,27 @@ let level3 = -17.9;
 
 let lfoZ;
 let delayZ;
+
+export const getVoiceD = (input: ReturnType<typeof getVoice0>['output']) => {
+    let lfoFreq = 0.01;
+    let time = { min: 0.18, max: 0.25 };
+    const voice = {
+        lfo: new Tone.LFO(lfoFreq, time.min, time.max),
+        delay: new Tone.FeedbackDelay({
+            delayTime: time.min,
+            feedback: 0.36
+        }),
+        start: () => { }, // placeholder
+        output: Tone.getDestination(),
+    };
+    voice.start = () => {
+        voice.lfo.connect(voice.delay.delayTime);
+        // voice.lfo.connect(voice.resonanceFilter.frequency)
+        input.output.chain(
+            voice.delay,
+            Tone.getDestination()
+        );
+        voice.lfo.start();
+    }
+    return voice;
+}
