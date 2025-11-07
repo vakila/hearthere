@@ -72,8 +72,8 @@ class NoiseVoice extends Voice {
 
 export function getVoice0() {
     let freq = 174; // F3
-    let lfoFreq = 0.1;
-    let cutoffFreq = 1000;
+    let lfoFreq = 0.03;
+    let cutoffFreq = { min: 800, max: 1200 };
     const voice = {
         freq,
         lfoFreq,
@@ -81,12 +81,18 @@ export function getVoice0() {
             frequency: freq,
             type: "sine",
         }),
-        lfo: new Tone.LFO(lfoFreq, 800, 1200),
+        lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
         lowpassFilter: new Tone.Filter({
-            frequency: cutoffFreq,
+            frequency: cutoffFreq.max,
             type: 'lowpass',
             Q: 80, // ? TODO
         }),
+        // resonanceFilter: new Tone.Filter({
+        //     frequency: cutoffFreq.max,
+        //     type: 'peaking',
+        //     Q: 50,
+        //     gain: 24,
+        // }),
         resonanceFilter: new Tone.FeedbackCombFilter({
             delayTime: 0.0001,
             resonance: 0.58,
@@ -98,10 +104,10 @@ export function getVoice0() {
 
     voice.start = () => {
         voice.lfo.connect(voice.lowpassFilter.frequency);
-
+        // voice.lfo.connect(voice.resonanceFilter.frequency)
         voice.vco.chain(
             voice.lowpassFilter,
-            // voice.resonanceFilter,
+            voice.resonanceFilter,
             Tone.getDestination()
         ); 
         voice.lfo.start();
