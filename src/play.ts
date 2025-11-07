@@ -7,14 +7,21 @@ import { getVoice0 } from "./voices";
 
 const F3maj = ["F3", "A3", "C3"];
 
+let voices = [
+    getVoice0(),
+];
 
 
-export async function play() {
+export async function init() {
     // the AudioContext is suspended until user action
     await Tone.start(); // Tone.start() un-suspends it
     Tone.getDestination().set({ volume: -96 });
-    const v0 = getVoice0();
-    v0.start();
+}
+
+export async function play() {
+    for (let voice of voices) {
+        voice.start();
+    }
     Tone.getDestination().volume.rampTo(-12, 1);
 }
 

@@ -79,6 +79,7 @@ const v0 = new OscVoice({
 export function getVoice0() {
     let freq = 174; // F3
     let lfoFreq = 0.03;
+    let cutoffFreq = 1000;
     const voice = {
         freq,
         lfoFreq,
@@ -87,21 +88,25 @@ export function getVoice0() {
             type: "sine",
         }),
         lfo: new Tone.LFO(lfoFreq, 800, 1200),
-        filter: new Tone.Filter({
-            frequency: 1000,
+
+        lowpassFilter: new Tone.Filter({
+            frequency: cutoffFreq,
             type: 'lowpass',
-            Q: 70, // Resonance? TODO
+            Q: 58, // Resonance? TODO
+            rolloff: -12,
+        }),
+        resonanceFilter: new Tone.LowpassCombFilter({
+            delayTime: 0.0001,
+            resonance: 0.58,
+            dampening: 500,
         }),
         start: () => { }, // placeholder 
-        output: undefined as (Tone.Filter | undefined),
     };
 
 
-    voice.output = voice.filter;
+    voice.lfo.connect(voice.lowpassFilter.frequency);
+    voice.vco.chain(voice.lowpassFilter, Tone.getDestination()); 
     voice.start = () => {
-        voice.lfo.connect(voice.filter.frequency);
-    voice.vco.connect(voice.filter);
-        voice.filter.toDestination();
         voice.lfo.start();
         voice.vco.start();
     };

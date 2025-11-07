@@ -1,31 +1,31 @@
 import './style.css'; // Custom styles 
 
 
-import { play, pause } from './play'; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
+import { init, play, pause } from './play'; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
 import { map, customLayer, pointsLayer } from './globe';
 import type { LngLatLike } from 'maplibre-gl';
 import { getWeatherAt } from './weather';
 
 
-const togglePlaying = (button?: HTMLButtonElement) => {
-  const playing = button?.dataset.playing;
-  if (!playing) {
-    play();
-    if (button) {
-      button.dataset.playing = 'true';
-      button.innerText = 'pause';
-    }
-  } else {
+const togglePlaying = async (button: HTMLButtonElement) => {
+  const playing = button.dataset.playing;
+  if (playing === 'true') {
     pause();
-    if (button) {
-      button.dataset.playing = '';
-      button.innerText = 'play';
+    button.dataset.playing = '';
+    button.innerText = 'play';
+  } else {
+    if (playing === 'init') {
+      await init(); 
     }
+    play();
+    button.dataset.playing = 'true';
+    button.innerText = 'pause';
+
   }
 }
 function setupButton(button: HTMLButtonElement) {
   button.innerText = 'play';
-  button.dataset.playing = '';
+  button.dataset.playing = 'init';
   button.addEventListener('click', () => togglePlaying(button))
 }
 
