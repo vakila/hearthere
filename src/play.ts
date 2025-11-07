@@ -12,20 +12,16 @@ const F3maj = ["F3", "A3", "C3"];
 export async function play() {
     // the AudioContext is suspended until user action
     await Tone.start(); // Tone.start() un-suspends it
-    Tone.getDestination().set({ volume: -64 });
+    Tone.getDestination().set({ volume: -96 });
     const v0 = getVoice0();
-    Tone.getDestination().volume.rampTo(-12, 1);
     v0.start();
+    Tone.getDestination().volume.rampTo(-12, 1);
 }
 
 
 export function pause() {
-    Tone.getDestination().volume.rampTo(-64, 1);
-    setTimeout(() => {
-        Tone.getDestination().disconnect();
-        console.log('disconnected');
-        // TODO dispose of everything
-    }, 1200);
+    Tone.getDestination().volume.rampTo(-96, 1);
+
 }
 
 

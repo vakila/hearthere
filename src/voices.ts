@@ -90,21 +90,23 @@ export function getVoice0() {
         filter: new Tone.Filter({
             frequency: 1000,
             type: 'lowpass',
-            Q: 580, // Resonance? TODO
+            Q: 70, // Resonance? TODO
         }),
         start: () => { }, // placeholder 
         output: undefined as (Tone.Filter | undefined),
     };
 
-    voice.lfo.connect(voice.filter.frequency);
-    voice.vco.connect(voice.filter);
+
     voice.output = voice.filter;
     voice.start = () => {
-        voice.output!.toDestination();
+        voice.lfo.connect(voice.filter.frequency);
+    voice.vco.connect(voice.filter);
+        voice.filter.toDestination();
         voice.lfo.start();
         voice.vco.start();
     };
     console.log(voice);
+    window.voice = voice;
     return voice;
 }
 
