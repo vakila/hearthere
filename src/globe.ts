@@ -1,4 +1,5 @@
 
+import 'maplibre-gl/dist/maplibre-gl.css'; // Map styles
 import { Map, type DataDrivenPropertyValueSpecification, type LngLatLike } from 'maplibre-gl';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
