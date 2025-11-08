@@ -1,116 +1,140 @@
 import * as Tone from "tone";
 
-interface VoiceOptions {
-    value: number;
+// interface VoiceOptions {
+//     value: number;
+//     name: string;
+// }
+// class Voice {
+//     // Housekeeping
+//     name: string;
+//     index: number;
+
+//     // Audio pipeline
+//     delay?: any;
+//     lfo?: any;
+//     filter?: any;
+
+//     // Modulation
+//     inputSource: any;
+//     inputName: string;
+//     inputValue: number;
+
+
+//     static * getNextIndex(): Generator<number, number, number> {
+//         let i = 0;
+//         while (true) {
+//             yield i;
+//             i++;
+//         }
+//     }
+//     static indexGenerator = this.getNextIndex();
+
+//     constructor({ value, name }: VoiceOptions) {
+//         this.index = Voice.indexGenerator.next().value;
+//         this.name = name || `Voice ${this.index}`;
+//         this.delay = 'i am delay';
+//         this.lfo = 'i am lfo';
+//         this.filter = 'i am filter';
+//         this.inputName = 'filter freq'
+//         this.inputValue = value || 0;
+
+//     }
+
+// }
+
+
+// class OscVoice extends Voice {
+
+
+//     constructor(options: VoiceOptions & { color?: string }) {
+//         super(options);
+
+
+//     }
+// }
+
+
+// class NoiseVoice extends Voice {
+//     color: string;
+
+
+//     constructor(options: VoiceOptions & { color?: string }) {
+//         super(options);
+//         this.color = options.color || 'pink'
+
+
+//     }
+// }
+
+// types
+
+interface Voice {
     name: string;
-}
-class Voice {
-    // Housekeeping
-    name: string;
-    index: number;
-
-    // Audio pipeline
-    delay?: any;
-    lfo?: any;
-    filter?: any;
-
-    // Modulation
-    inputSource: any;
-    inputName: string;
-    inputValue: number;
-
-
-    static * getNextIndex(): Generator<number, number, number> {
-        let i = 0;
-        while (true) {
-            yield i;
-            i++;
-        }
-    }
-    static indexGenerator = this.getNextIndex();
-
-    constructor({ value, name }: VoiceOptions) {
-        this.index = Voice.indexGenerator.next().value;
-        this.name = name || `Voice ${this.index}`;
-        this.delay = 'i am delay';
-        this.lfo = 'i am lfo';
-        this.filter = 'i am filter';
-        this.inputName = 'filter freq'
-        this.inputValue = value || 0;
-
-    }
-
+    source?: Tone.Oscillator | Tone.Noise;
+    lfo?: Tone.LFO;
+    delay?: Tone.FeedbackDelay;
+    filters?: {
+        [name: string]: Tone.Filter
+    };
+    start: () => void;
+    stop?: () => void;
+    output?: Tone.ToneAudioNode;
 }
 
-
-class OscVoice extends Voice {
-
-
-    constructor(options: VoiceOptions & { color?: string }) {
-        super(options);
-
-
-    }
-}
-
-
-class NoiseVoice extends Voice {
-    color: string;
-
-
-    constructor(options: VoiceOptions & { color?: string }) {
-        super(options);
-        this.color = options.color || 'pink'
-
-
-    }
-}
 
 
 // Voice 0: F0
 
 
-export function getVoice0() {
+export function getVoice0(): Voice {
+    let name = "fundamental";
     let freq = 174; // F3
     let lfoFreq = 0.03;
     let cutoffFreq = { min: 800, max: 1200 };
-    const voice = {
-        vco: new Tone.Oscillator({
+    const voice: Voice = {
+        name,
+        source: new Tone.Oscillator({
             frequency: freq,
             type: "sine",
         }),
         lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
-        lowpassFilter: new Tone.Filter({
-            frequency: cutoffFreq.max,
-            type: 'lowpass',
-            Q: 80, // ? TODO
-        }),
-        // resonanceFilter: new Tone.Filter({
-        //     frequency: cutoffFreq.max,
-        //     type: 'peaking',
-        //     Q: 50,
-        //     gain: 24,
-        // }),
-        resonanceFilter: new Tone.FeedbackCombFilter({
-            delayTime: 0.0001,
-            resonance: 0.58,
-        }),
-        start: () => { }, // placeholder 
-        output: undefined as any,
+        filters: {
+            lowpass: new Tone.Filter({
+                frequency: cutoffFreq.max,
+                type: 'lowpass',
+                Q: 80, // ? TODO
+            }),
+            // resonance: new Tone.FeedbackCombFilter({
+            //     delayTime: 0.0001,
+            //     resonance: 0.58,
+            // }),
+            // resonance: new Tone.Filter({
+            //     frequency: cutoffFreq.max,
+            //     type: 'peaking',
+            //     Q: 50,
+            //     gain: 24,
+            // }),
+
+        },
+
+        // placeholders
+        start: () => { },
+        output: Tone.getDestination(),
     };
 
 
 
     voice.start = () => {
-        voice.lfo.connect(voice.lowpassFilter.frequency);
-        // voice.lfo.connect(voice.resonanceFilter.frequency)
-        voice.output = voice.vco.chain(
-            voice.lowpassFilter,
-            voice.resonanceFilter,
-            // Tone.getDestination()
+        voice.lfo!.connect(voice.filters!.lowpass.frequency);
+        // voice.lfo.connect(voice.resonanceFilter.frequency);
+        voice.source!.chain(
+            voice.filters!.lowpass,
+            // voice.filters.resonance,
+            Tone.getDestination()
         ); 
-        voice.lfo.start();
-        voice.vco.start();
+        // voice.output = voice.filters!.lowpass;
+        voice.lfo!.start();
+        voice.source!.start();
     };
     return voice;
 }
@@ -144,12 +168,47 @@ let delay2;
 
 // Voice 3: Noise
 
-const v3 = new NoiseVoice({ name: 'Noise', value: 0, color: 'pink' });
-
-let noise = 'red';
-let delay3;
-let lfo3;
-let filter3;
+export const getVoice3 = (): Voice => {
+    let name = 'noise';
+    let color: Tone.NoiseType = 'pink';
+    let delayTime = 0.18;
+    let lfoFreq = 0.16;
+    let cutoffFreq = {
+        min: 1054 * 0.75,
+        max: 1054 * 1.25
+    };
+    const voice: Voice = {
+        name,
+        source: new Tone.Noise(color),
+        lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
+        delay: new Tone.FeedbackDelay({
+            delayTime,
+            feedback: 0.6
+        }),
+        filters: {
+            lowpass: new Tone.Filter({
+                frequency: cutoffFreq.max,
+                type: 'lowpass',
+            }),
+        },
+        output: Tone.getDestination().output, // placeholder
+        start: () => { }, // placeholder
+    };
+    voice.start = () => {
+        voice.lfo!.connect(
+            voice.filters!.lowpass.frequency
+        );
+        voice.source!.chain(
+            voice.delay!,
+            voice.filters!.lowpass,
+            Tone.getDestination()
+        );
+        // voice.output = voice.filters!.lowpass.output;
+        voice.lfo!.start();
+        voice.source!.start()!
+    }
+    return voice;
+}
 
 
 // Mix (dB units)
@@ -158,29 +217,37 @@ let level1 = -3.5;
 let level2 = -11.25;
 let level3 = -17.9;
 
+export const getMixer = (inputs: [Voice, number][]) => {
+    const merge = new Tone.Merge().toDestination();
+    inputs.map(([voice, dB], i) => {
+        // const gain = new Tone.Gain(dB);
+        voice.output!.connect(merge, 0, 0);
+        // gain.connect(merge);
+    });
+    return merge;
+}
 
 
 // Final Delay
 
-let lfoZ;
-let delayZ;
-
-export const getVoiceD = (input: ReturnType<typeof getVoice0>['output']) => {
+export const getVoiceD = (input: Voice['output']) => {
+    let name = 'delay';
     let lfoFreq = 0.01;
-    let time = { min: 0.18, max: 0.25 };
+    let delayTime = { min: 0.2, max: 0.3 };
     const voice = {
-        lfo: new Tone.LFO(lfoFreq, time.min, time.max),
+        name,
+        lfo: new Tone.LFO(lfoFreq, delayTime.min, delayTime.max),
         delay: new Tone.FeedbackDelay({
-            delayTime: time.min,
+            delayTime: delayTime.min,
             feedback: 0.36
         }),
         start: () => { }, // placeholder
-        output: Tone.getDestination(),
+        output: Tone.getDestination().output,
     };
     voice.start = () => {
         voice.lfo.connect(voice.delay.delayTime);
         // voice.lfo.connect(voice.resonanceFilter.frequency)
-        input.output.chain(
+        input!.chain(
             voice.delay,
             Tone.getDestination()
         );

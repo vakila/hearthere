@@ -2,7 +2,7 @@
 
 import * as Tone from "tone";
 
-import { getVoice0, getVoiceD } from "./voices";
+import { getMixer, getVoice0, getVoice3, getVoiceD } from "./voices";
 
 
 const F3maj = ["F3", "A3", "C3"];
@@ -13,13 +13,29 @@ export async function init() {
     // the AudioContext is suspended until user action
     await Tone.start(); // Tone.start() un-suspends it
     Tone.getDestination().set({ volume: -96 });
+    let mixer;
     if (!voices.length) {
-        const v0 = getVoice0();
-        const vD = getVoiceD(v0);
-        voices.push(v0, vD);
+        const fundamental = getVoice0();
+        voices.push(fundamental);
+        const noise = getVoice3();
+        voices.push(noise);
+        // const delay = getVoiceD(noise.output);
+        // voices.push(delay);
+        // mixer = new Tone.Merge(1).toDestination();
+        // noise.output!.connect(mixer);
+        // mixer = getMixer([
+        //     // [fundamental, 0],
+        //     // // let level1 = -3.5;
+        //     // // let level2 = -11.25;
+        //     // [noise, 0],
+        // ]);
+        // mixer.debug = true;
     }
+
     console.log(voices);
-    window.voices = voices; // for debugging
+    // expose in console for debugging
+    window.voices = voices;
+    window.mixer = mixer;
 }
 
 export async function play() {
@@ -27,7 +43,7 @@ export async function play() {
     for (let voice of voices) {
         voice.start();
     }
-    Tone.getDestination().volume.rampTo(-12, 1);
+    Tone.getDestination().volume.rampTo(0, 1);
 }
 
 
