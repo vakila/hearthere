@@ -79,6 +79,7 @@ export interface Voice {
     start: () => void;
     stop?: () => void;
     output?: Tone.ToneAudioNode;
+    gain: Tone.Unit.GainFactor;
 }
 
 
@@ -88,11 +89,13 @@ export interface Voice {
 
 export function getVoice0(): Voice {
     let name = "fundamental";
+    let gain = 0;
     let freq = 174; // F3
     let lfoFreq = 0.03;
     let cutoffFreq = { min: 800, max: 1200 };
     const voice: Voice = {
         name,
+        gain,
         source: new Tone.Oscillator({
             frequency: freq,
             type: "sine",
@@ -180,8 +183,10 @@ export const getVoice3 = (): Voice => {
         min: 1054 * 0.75,
         max: 1054 * 1.25
     };
+    let gain = -3.5;
     const voice: Voice = {
         name,
+        gain,
         source: new Tone.Noise(color),
         lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
         delay: new Tone.FeedbackDelay({
@@ -231,10 +236,10 @@ export const getMixer = (inputs: Voice[]) => {
     console.log('getMixer', inputs)
     const merge = new Tone.Merge(1);
     inputs.map((voice, i) => {
-        console.log('connecting voice', i, voice)
-    // const gain = new Tone.Gain(levels[i]);
-        voice.output!.connect(merge, 0, 0);
-        // gain.connect(merge);
+        console.log('connecting voice', voice)
+        const gain = new Tone.Gain(voice.gain, 'decibels');
+        voice.output!.connect(gain);
+        gain.connect(merge);
     });
     merge.toDestination()
     return merge;

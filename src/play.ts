@@ -22,7 +22,6 @@ export async function init() {
         // const delay = getVoiceD(noise.output);
         // voices.push(delay);
 
-        console.log(voices);
         mixer = getMixer(voices)
     }
 
