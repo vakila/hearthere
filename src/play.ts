@@ -2,12 +2,12 @@
 
 import * as Tone from "tone";
 
-import { getMixer, getVoice0, getVoice3, getVoiceD } from "./voices";
+import { getMixer, getVoice0, getVoice3, getVoiceD, type Voice } from "./voices";
 
 
 const F3maj = ["F3", "A3", "C3"];
 
-let voices: { start: () => void }[] = [];
+let voices: Voice[] = [];
 
 export async function init() {
     // the AudioContext is suspended until user action
@@ -21,18 +21,12 @@ export async function init() {
         voices.push(noise);
         // const delay = getVoiceD(noise.output);
         // voices.push(delay);
-        // mixer = new Tone.Merge(1).toDestination();
-        // noise.output!.connect(mixer);
-        // mixer = getMixer([
-        //     // [fundamental, 0],
-        //     // // let level1 = -3.5;
-        //     // // let level2 = -11.25;
-        //     // [noise, 0],
-        // ]);
-        // mixer.debug = true;
+
+        console.log(voices);
+        mixer = getMixer(voices)
     }
 
-    console.log(voices);
+
     // expose in console for debugging
     window.voices = voices;
     window.mixer = mixer;
@@ -41,6 +35,7 @@ export async function init() {
 export async function play() {
 
     for (let voice of voices) {
+        console.log('starting voice', voice)
         voice.start();
     }
     Tone.getDestination().volume.rampTo(0, 1);
@@ -49,33 +44,6 @@ export async function play() {
 
 export function pause() {
     Tone.getDestination().volume.rampTo(-96, 1);
-
-}
-
-
-function getVoice1() {
-
-
-    // Oscillator with PWM
-    const vco1 = new Tone.PulseOscillator(260, 0.37);
-
-
-    // to low-pass filter
-    const filter = new Tone.Filter(250, "lowpass");
-    vco1.connect(filter);
-
-    // to LFO-modulated Delay
-    const lfo = new Tone.LFO(0.05, 0.3, 0.5);
-    const delay = new Tone.FeedbackDelay(0.4, 0.5);
-    lfo.connect(delay.delayTime);
-    filter.connect(delay);
-
-    // hook it all up
-
-    const merge = new Tone.Merge(1);
-    delay.connect(merge);
-
-    return merge;
 
 }
 

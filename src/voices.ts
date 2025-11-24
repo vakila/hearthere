@@ -68,7 +68,7 @@ import * as Tone from "tone";
 
 // types
 
-interface Voice {
+export interface Voice {
     name: string;
     source?: Tone.Oscillator | Tone.Noise;
     lfo?: Tone.LFO;
@@ -119,20 +119,23 @@ export function getVoice0(): Voice {
 
         // placeholders
         start: () => { },
-        output: Tone.getDestination(),
+        output: undefined,
     };
 
 
+    voice.output = voice.filters!.lowpass;
+    voice.lfo!.connect(voice.filters!.lowpass.frequency);
+    // voice.lfo.connect(voice.resonanceFilter.frequency);
+    voice.source!.chain(
+        voice.filters!.lowpass,
+    // voice.filters.resonance,
+        // Tone.getDestination()
+    ); 
+
+    voice.source!.debug = true;
+    voice.output!.debug = true;
 
     voice.start = () => {
-        voice.lfo!.connect(voice.filters!.lowpass.frequency);
-        // voice.lfo.connect(voice.resonanceFilter.frequency);
-        voice.source!.chain(
-            voice.filters!.lowpass,
-            // voice.filters.resonance,
-            Tone.getDestination()
-        ); 
-        // voice.output = voice.filters!.lowpass;
         voice.lfo!.start();
         voice.source!.start();
     };
@@ -191,19 +194,24 @@ export const getVoice3 = (): Voice => {
                 type: 'lowpass',
             }),
         },
-        output: Tone.getDestination().output, // placeholder
+        output: undefined, // placeholder
         start: () => { }, // placeholder
     };
-    voice.start = () => {
-        voice.lfo!.connect(
+
+    voice.lfo!.connect(
             voice.filters!.lowpass.frequency
         );
-        voice.source!.chain(
+    voice.source!.chain(
             voice.delay!,
             voice.filters!.lowpass,
-            Tone.getDestination()
+        // Tone.getDestination()
         );
-        // voice.output = voice.filters!.lowpass.output;
+    voice.output = voice.filters!.lowpass;
+    voice.source!.debug = true;
+    voice.output!.debug = true;
+
+    voice.start = () => {
+
         voice.lfo!.start();
         voice.source!.start()!
     }
@@ -212,18 +220,23 @@ export const getVoice3 = (): Voice => {
 
 
 // Mix (dB units)
-let level0 = 0; 
-let level1 = -3.5; 
-let level2 = -11.25;
-let level3 = -17.9;
+let levels = [
+    0,
+    -3.5,
+    -11.25,
+    -17.9,
+];
 
-export const getMixer = (inputs: [Voice, number][]) => {
-    const merge = new Tone.Merge().toDestination();
-    inputs.map(([voice, dB], i) => {
-        // const gain = new Tone.Gain(dB);
+export const getMixer = (inputs: Voice[]) => {
+    console.log('getMixer', inputs)
+    const merge = new Tone.Merge(1);
+    inputs.map((voice, i) => {
+        console.log('connecting voice', i, voice)
+    // const gain = new Tone.Gain(levels[i]);
         voice.output!.connect(merge, 0, 0);
         // gain.connect(merge);
     });
+    merge.toDestination()
     return merge;
 }
 
@@ -251,6 +264,7 @@ export const getVoiceD = (input: Voice['output']) => {
             voice.delay,
             Tone.getDestination()
         );
+
         voice.lfo.start();
     }
     return voice;
