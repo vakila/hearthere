@@ -18,7 +18,7 @@ export async function init() {
         const fundamental = getVoice0();
         voices.push(fundamental);
         const noise = getVoice3();
-        voices.push(noise);
+        // voices.push(noise);
         // const delay = getVoiceD(noise.output);
         // voices.push(delay);
 

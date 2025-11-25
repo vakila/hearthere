@@ -103,20 +103,29 @@ export function getVoice0(): Voice {
         lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
         filters: {
             lowpass: new Tone.Filter({
-                frequency: cutoffFreq.max,
+                frequency: cutoffFreq.min,
                 type: 'lowpass',
-                Q: 80, // ? TODO
+                Q: 40, // ? TODO
+
             }),
+
+            // highpass: new Tone.Filter({
+            //     frequency: cutoffFreq.min,
+            //     type: 'highpass',
+            // // Q: 20, // ? TODO
+            // }),
+
             // resonance: new Tone.FeedbackCombFilter({
             //     delayTime: 0.0001,
             //     resonance: 0.58,
             // }),
-            // resonance: new Tone.Filter({
-            //     frequency: cutoffFreq.max,
-            //     type: 'peaking',
-            //     Q: 50,
-            //     gain: 24,
-            // }),
+
+            resonance: new Tone.Filter({
+                frequency: cutoffFreq.min,
+                type: 'peaking',
+                Q: 20,
+                gain: 3,
+            }),
 
         },
 
@@ -126,17 +135,20 @@ export function getVoice0(): Voice {
     };
 
 
-    voice.output = voice.filters!.lowpass;
     voice.lfo!.connect(voice.filters!.lowpass.frequency);
-    // voice.lfo.connect(voice.resonanceFilter.frequency);
+    voice.lfo!.connect(voice.filters!.resonance.frequency);
     voice.source!.chain(
+        voice.filters!.resonance,
         voice.filters!.lowpass,
-    // voice.filters.resonance,
+        // voice.filters!.highpass,
         // Tone.getDestination()
     ); 
 
+    voice.output = voice.filters!.lowpass;
+    voice.filters!.lowpass.debug = true;
+    // voice.filters!.resonance.debug = true;
     voice.source!.debug = true;
-    voice.output!.debug = true;
+    voice.lfo!.debug = true;
 
     voice.start = () => {
         voice.lfo!.start();
@@ -183,7 +195,7 @@ export const getVoice3 = (): Voice => {
         min: 1054 * 0.75,
         max: 1054 * 1.25
     };
-    let gain = -3.5;
+    let gain = -10;//-3.5;
     const voice: Voice = {
         name,
         gain,
