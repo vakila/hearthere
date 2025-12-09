@@ -1,71 +1,5 @@
 import * as Tone from "tone";
 
-// interface VoiceOptions {
-//     value: number;
-//     name: string;
-// }
-// class Voice {
-//     // Housekeeping
-//     name: string;
-//     index: number;
-
-//     // Audio pipeline
-//     delay?: any;
-//     lfo?: any;
-//     filter?: any;
-
-//     // Modulation
-//     inputSource: any;
-//     inputName: string;
-//     inputValue: number;
-
-
-//     static * getNextIndex(): Generator<number, number, number> {
-//         let i = 0;
-//         while (true) {
-//             yield i;
-//             i++;
-//         }
-//     }
-//     static indexGenerator = this.getNextIndex();
-
-//     constructor({ value, name }: VoiceOptions) {
-//         this.index = Voice.indexGenerator.next().value;
-//         this.name = name || `Voice ${this.index}`;
-//         this.delay = 'i am delay';
-//         this.lfo = 'i am lfo';
-//         this.filter = 'i am filter';
-//         this.inputName = 'filter freq'
-//         this.inputValue = value || 0;
-
-//     }
-
-// }
-
-
-// class OscVoice extends Voice {
-
-
-//     constructor(options: VoiceOptions & { color?: string }) {
-//         super(options);
-
-
-//     }
-// }
-
-
-// class NoiseVoice extends Voice {
-//     color: string;
-
-
-//     constructor(options: VoiceOptions & { color?: string }) {
-//         super(options);
-//         this.color = options.color || 'pink'
-
-
-//     }
-// }
-
 // types
 
 export interface Voice {
@@ -74,7 +8,7 @@ export interface Voice {
     lfo?: Tone.LFO;
     delay?: Tone.FeedbackDelay;
     filters?: {
-        [name: string]: Tone.Filter
+        [name: string]: Tone.Filter | Tone.AutoFilter | Tone.BiquadFilter
     };
     start: () => void;
     stop?: () => void;
@@ -89,44 +23,34 @@ export interface Voice {
 
 export function getVoice0(): Voice {
     let name = "fundamental";
-    let gain = 0;
+    let gain = -10;
     let freq = 174; // F3
     let lfoFreq = 0.03;
-    let cutoffFreq = { min: 800, max: 1200 };
+    let cutoffFreq = { min: 600, max: 1400 }; 
     const voice: Voice = {
         name,
         gain,
         source: new Tone.Oscillator({
             frequency: freq,
-            type: "sine",
+            type: "triangle",
         }),
         lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
         filters: {
-            lowpass: new Tone.Filter({
+            harmonics: new Tone.Filter({
+                frequency: 174,
+                type: 'lowpass',
+            }),
+            dampening: new Tone.Filter({
+                type: "peaking",
+                frequency: 174,
+                gain: -6,
+                rolloff: -24,
+            }),
+            sweep: new Tone.Filter({
                 frequency: cutoffFreq.min,
                 type: 'lowpass',
-                Q: 40, // ? TODO
-
+                Q: 30, 
             }),
-
-            // highpass: new Tone.Filter({
-            //     frequency: cutoffFreq.min,
-            //     type: 'highpass',
-            // // Q: 20, // ? TODO
-            // }),
-
-            // resonance: new Tone.FeedbackCombFilter({
-            //     delayTime: 0.0001,
-            //     resonance: 0.58,
-            // }),
-
-            resonance: new Tone.Filter({
-                frequency: cutoffFreq.min,
-                type: 'peaking',
-                Q: 20,
-                gain: 3,
-            }),
-
         },
 
         // placeholders
@@ -135,20 +59,15 @@ export function getVoice0(): Voice {
     };
 
 
-    voice.lfo!.connect(voice.filters!.lowpass.frequency);
-    voice.lfo!.connect(voice.filters!.resonance.frequency);
+    // voice.lfo!.connect(voice.filters!.lowpass.frequency);
+    voice.lfo!.connect(voice.filters!.sweep.frequency);
     voice.source!.chain(
-        voice.filters!.resonance,
-        voice.filters!.lowpass,
-        // voice.filters!.highpass,
-        // Tone.getDestination()
+        voice.filters!.harmonics,
+        voice.filters!.dampening,
+        voice.filters!.sweep,
     ); 
 
-    voice.output = voice.filters!.lowpass;
-    voice.filters!.lowpass.debug = true;
-    // voice.filters!.resonance.debug = true;
-    voice.source!.debug = true;
-    voice.lfo!.debug = true;
+    voice.output = voice.filters!.sweep;
 
     voice.start = () => {
         voice.lfo!.start();
