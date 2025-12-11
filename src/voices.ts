@@ -4,8 +4,8 @@ import * as Tone from "tone";
 
 export interface Voice {
     name: string;
-    source?: Tone.Oscillator | Tone.Noise;
-    lfo?: Tone.LFO;
+    source?: Tone.Oscillator | Tone.FatOscillator | Tone.PWMOscillator | Tone.FMOscillator | Tone.Noise;
+    lfo?: Tone.LFO | Tone.PulseOscillator | Tone.Oscillator;
     delay?: Tone.FeedbackDelay;
     filters?: {
         [name: string]: Tone.Filter | Tone.AutoFilter | Tone.BiquadFilter
@@ -77,18 +77,17 @@ export function getVoice0(): Voice {
 
 
 
-
-// Voice 1: Spacey
+// Voice 1
 
 export const getVoice1 = (): Voice => {
-    let name = 'spacey';
-    let freq = 220;
+    let name = 'depth';
+    let freq = 220; // A3
     let lfoFreq = 0.01;
     let cutoffFreq = {
         min: 522 * 0.7,
         max: 522 * 1.3,
     };
-    let gain = -11.25;
+    let gain = -3.5;
     const voice: Voice = {
         name,
         gain,
@@ -138,7 +137,7 @@ export const getVoice1 = (): Voice => {
 
 
 
-// Voice 2: Wildcard?
+// Voice 2: Spacey
 
 let lfo20;
 let vco2;
@@ -148,6 +147,71 @@ let filter2;
 
 let lfo22;
 let delay2;
+
+export const getVoice2 = (): Voice => {
+    let name = 'spacey';
+    let freq = 328; // D3
+    let lfo0Freq = 0.026;
+    let lfo1Freq = 0.01;
+    let cutoffFreq = {
+        min: 1326 * 53,
+        max: 1326 * 53,
+    };
+    let gain = -11.25;
+    const voice: Voice = {
+        name,
+        gain,
+        source: new Tone.FMOscillator({
+            frequency: freq,
+            type: "triangle",
+            modulationType: "square",
+            harmonicity: 0.0005,
+            modulationIndex: 0.5
+
+        }),
+        lfo: new Tone.Oscillator({
+            frequency: 0.03,
+            type: "square",
+        }),
+
+        filters: {
+            // harmonics: new Tone.Filter({
+            //     frequency: freq,
+            //     type: 'lowpass',
+            // }),
+            // dampening: new Tone.Filter({
+            //     type: "peaking",
+            //     frequency: freq,
+            //     gain: -12,
+            // }),
+            // sweep: new Tone.Filter({
+            //     frequency: cutoffFreq.min,
+            //     type: 'lowpass',
+            //     Q: 30,
+            // }),
+        },
+
+        // placeholders
+        start: () => { },
+        output: undefined,
+    };
+
+
+    voice.lfo!.connect((voice.source as Tone.Oscillator).frequency);
+    // voice.source!.chain(
+    //     voice.filters!.harmonics,
+    //     voice.filters!.dampening,
+    //     voice.filters!.sweep,
+    // );
+
+    voice.output = voice.source;
+
+    voice.start = () => {
+        // voice.lfo!.start();
+        voice.source!.start();
+    };
+    return voice;
+}
 
 
 
