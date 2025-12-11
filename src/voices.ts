@@ -59,7 +59,6 @@ export function getVoice0(): Voice {
     };
 
 
-    // voice.lfo!.connect(voice.filters!.lowpass.frequency);
     voice.lfo!.connect(voice.filters!.sweep.frequency);
     voice.source!.chain(
         voice.filters!.harmonics,
@@ -80,12 +79,62 @@ export function getVoice0(): Voice {
 
 
 // Voice 1: Spacey
-let lfo10;
-let vco1;
 
-let lfo11;
-let filter1;
+export const getVoice1 = (): Voice => {
+    let name = 'spacey';
+    let freq = 220;
+    let lfoFreq = 0.01;
+    let cutoffFreq = {
+        min: 522 * 0.7,
+        max: 522 * 1.3,
+    };
+    let gain = -11.25;
+    const voice: Voice = {
+        name,
+        gain,
+        source: new Tone.Oscillator({
+            frequency: freq,
+            type: "triangle",
+        }),
+        lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
+        filters: {
+            harmonics: new Tone.Filter({
+                frequency: freq,
+                type: 'lowpass',
+            }),
+            dampening: new Tone.Filter({
+                type: "peaking",
+                frequency: freq,
+                gain: -12,
+            }),
+            sweep: new Tone.Filter({
+                frequency: cutoffFreq.min,
+                type: 'lowpass',
+                Q: 30,
+            }),
+        },
 
+        // placeholders
+        start: () => { },
+        output: undefined,
+    };
+
+
+    voice.lfo!.connect(voice.filters!.sweep.frequency);
+    voice.source!.chain(
+        voice.filters!.harmonics,
+        voice.filters!.dampening,
+        voice.filters!.sweep,
+    );
+
+    voice.output = voice.filters!.sweep;
+
+    voice.start = () => {
+        voice.lfo!.start();
+        voice.source!.start();
+    };
+    return voice;
+}
 
 
 
@@ -114,7 +163,7 @@ export const getVoice3 = (): Voice => {
         min: 1054 * 0.75,
         max: 1054 * 1.25
     };
-    let gain = -10;//-3.5;
+    let gain = -17.5;
     const voice: Voice = {
         name,
         gain,

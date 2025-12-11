@@ -2,7 +2,7 @@
 
 import * as Tone from "tone";
 
-import { getMixer, getVoice0, getVoice3, getVoiceD, type Voice } from "./voices";
+import { getMixer, getVoice0, getVoice1, getVoice3, getVoiceD, type Voice } from "./voices";
 
 
 const F3maj = ["F3", "A3", "C3"];
@@ -17,8 +17,10 @@ export async function init() {
     if (!voices.length) {
         const fundamental = getVoice0();
         voices.push(fundamental);
+        const spacey = getVoice1();
+        voices.push(spacey);
         const noise = getVoice3();
-        // voices.push(noise);
+        voices.push(noise);
         // const delay = getVoiceD(noise.output);
         // voices.push(delay);
 
