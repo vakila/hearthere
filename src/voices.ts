@@ -139,24 +139,9 @@ export const getVoice1 = (): Voice => {
 
 // Voice 2: Spacey
 
-let lfo20;
-let vco2;
-
-let lfo21;
-let filter2;
-
-let lfo22;
-let delay2;
-
 export const getVoice2 = (): Voice => {
     let name = 'spacey';
     let freq = 328; // D3
-    let lfo0Freq = 0.026;
-    let lfo1Freq = 0.01;
-    let cutoffFreq = {
-        min: 1326 * 53,
-        max: 1326 * 53,
-    };
     let gain = -11.25;
     const voice: Voice = {
         name,
@@ -269,17 +254,11 @@ export const getVoice3 = (): Voice => {
 
 
 // Mix (dB units)
-let levels = [
-    0,
-    -3.5,
-    -11.25,
-    -17.9,
-];
 
 export const getMixer = (inputs: Voice[]) => {
     console.log('getMixer', inputs)
     const merge = new Tone.Merge(1);
-    inputs.map((voice, i) => {
+    inputs.map((voice) => {
         console.log('connecting voice', voice)
         const gain = new Tone.Gain(voice.gain, 'decibels');
         voice.output!.connect(gain);

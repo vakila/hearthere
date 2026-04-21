@@ -2,10 +2,10 @@
 
 import * as Tone from "tone";
 
-import { getMixer, getVoice0, getVoice1, getVoice2, getVoice3, getVoiceD, type Voice } from "./voices";
+import { getMixer, getVoice0, type Voice } from "./voices";
 
 
-const F3maj = ["F3", "A3", "C3"];
+
 
 let voices: Voice[] = [];
 
@@ -32,8 +32,8 @@ export async function init() {
 
 
     // expose in console for debugging
-    window.voices = voices;
-    window.mixer = mixer;
+    ;(window as typeof window & { voices?: Voice[] }).voices = voices;
+    ;(window as typeof window & { mixer?: ReturnType<typeof getMixer> }).mixer = mixer;
 }
 
 export async function play() {
