@@ -1,48 +1,43 @@
-import './style.css'; // Custom styles 
+import "./style.css"; // Custom styles
 
+import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
+import { map, customLayer, pointsLayer } from "./globe";
+import type { LngLatLike } from "maplibre-gl";
+import { getWeatherAt } from "./weather";
 
-import { init, play, pause } from './play'; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
-import { map, customLayer, pointsLayer } from './globe';
-import type { LngLatLike } from 'maplibre-gl';
-import { getWeatherAt } from './weather';
-
+import "./meteo";
 
 const togglePlaying = async (button: HTMLButtonElement) => {
   const playing = button.dataset.playing;
-  if (playing === 'true') {
+  if (playing === "true") {
     pause();
-    button.dataset.playing = '';
-    button.innerText = 'play';
+    button.dataset.playing = "";
+    button.innerText = "play";
   } else {
-    if (playing === 'init') {
-      await init(); 
+    if (playing === "init") {
+      await init();
     }
     play();
-    button.dataset.playing = 'true';
-    button.innerText = 'pause';
-
+    button.dataset.playing = "true";
+    button.innerText = "pause";
   }
-}
+};
 function setupButton(button: HTMLButtonElement) {
-  button.innerText = 'play';
-  button.dataset.playing = 'init';
-  button.addEventListener('click', () => togglePlaying(button))
+  button.innerText = "play";
+  button.dataset.playing = "init";
+  button.addEventListener("click", () => togglePlaying(button));
 }
 
 function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
-  slider.addEventListener('input', () => {
-
+  slider.addEventListener("input", () => {
     setFn(parseFloat(slider.value));
   });
 }
 
-
-setupButton(document.querySelector<HTMLButtonElement>('#playpause')!);
+setupButton(document.querySelector<HTMLButtonElement>("#playpause")!);
 // setupSlider(document.querySelector<HTMLInputElement>('#freq')!, setBaseFreq);
 // setupSlider(document.querySelector<HTMLInputElement>('#lfo-freq')!, setDelayFreq);
 // setupSlider(document.querySelector<HTMLInputElement>('#filter-freq')!, setFilterCutoff);
-
-
 
 // map.on('style.load', () => {
 //   map.setProjection({
@@ -85,4 +80,3 @@ setupButton(document.querySelector<HTMLButtonElement>('#playpause')!);
 
 //   });
 // });
-
