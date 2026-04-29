@@ -1,43 +1,96 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>hear there</title>
+    </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hear there</title>
-</head>
+    <body>
+        <div id="app">
+            <div id="map"></div>
+            <!-- <button id="project">Toggle projection</button> -->
 
-<body>
-  <div id="app">
-    <div id="map"></div>
-    <!-- <button id="project">Toggle projection</button> -->
-    <div class="card" id="info">
-      <h1>hear there</h1>
-      <button id="playpause" type="button">Play/Pause</button>
-      <div id="synth-controls">
-      <label>base freq
-        <input id="freq" type="range" value="270" min="100" max="500" />
-        </label>
-        <label>delay LFO freq
-          <input id="lfo-freq" type="range" value="0.1" min="0.05" max="0.2" step="0.01" />
-        </label>
-        <label>filter cutoff
-          <input id="filter-freq" type="range" value="270" min="100" max="500" />
-        </label>
-      </div>
+            <div class="card" id="info">
+                <h1>hear there</h1>
+                <button id="playpause" type="button">Play/Pause</button>
+                <div id="there-controls">
+                    <label>
+                        lat <span id="lat-value">52.52</span>
+                        <input
+                            id="lat"
+                            type="range"
+                            value="52.52"
+                            min="-90"
+                            max="90"
+                            step="0.01"
+                        />
+                    </label>
+                    <label>
+                        lon <span id="lon-value">13.41</span>
+                        <input
+                            id="lon"
+                            type="range"
+                            value="13.41"
+                            min="-180"
+                            max="180"
+                            step="0.01"
+                        />
+                    </label>
+                </div>
+                <div id="hear-controls">
+                    <label
+                        >base freq
+                        <input
+                            id="freq"
+                            type="range"
+                            value="270"
+                            min="100"
+                            max="500"
+                        />
+                    </label>
+                    <label
+                        >delay LFO freq
+                        <input
+                            id="lfo-freq"
+                            type="range"
+                            value="0.1"
+                            min="0.05"
+                            max="0.2"
+                            step="0.01"
+                        />
+                    </label>
+                    <label
+                        >filter cutoff
+                        <input
+                            id="filter-freq"
+                            type="range"
+                            value="270"
+                            min="100"
+                            max="500"
+                        />
+                    </label>
+                </div>
 
-        <p class="read-the-docs">
-          An homage to <a href="https://weatherfortheblind.org" target="_blank">weatherfortheblind.org</a>
-          </p>
-          <p class="read-the-docs">
-            Made with <a href="https://maplibre.org" target="_blank">Maplibre</a>, <a href="https://tonejs.github.io/"
-              target="_blank">Tone.js</a>,<a href="https://vite.dev/" target="_blank">Vite</a>,
-            <a href="https://typescriptlang.org" target="_blank">TypeScript</a>, and love at the <a
-              href="https://recurse.com">Recurse Center</a>
-    </p>
-  </div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
-
+                <p class="read-the-docs">
+                    An homage to
+                    <a href="https://weatherfortheblind.org" target="_blank"
+                        >weatherfortheblind.org</a
+                    >
+                    <br />
+                    Made with
+                    <a href="https://maplibre.org" target="_blank">Maplibre</a>,
+                    <a href="https://tonejs.github.io/" target="_blank"
+                        >Tone.js</a
+                    >,<a href="https://vite.dev/" target="_blank">Vite</a>,
+                    <a href="https://typescriptlang.org" target="_blank"
+                        >TypeScript</a
+                    >, and love at the
+                    <a href="https://recurse.com">Recurse Center</a>
+                </p>
+            </div>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
 </html>

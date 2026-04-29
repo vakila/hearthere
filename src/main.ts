@@ -1,11 +1,23 @@
 import "./style.css"; // Custom styles
 
 import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
-import { map, customLayer, pointsLayer } from "./globe";
+// import { map, customLayer, pointsLayer } from "./globe";
 import type { LngLatLike } from "maplibre-gl";
 import { getWeatherAt } from "./weather";
 
 import "./meteo";
+
+const thereControls = document.getElementById("there-controls");
+const latInput = document.getElementById("lat");
+const latLabel = document.getElementById("lat-value");
+latInput?.addEventListener("change", (e) => {
+  latLabel.textContent = e.target.value;
+});
+const lonInput = document.getElementById("lon");
+const lonLabel = document.getElementById("lon-value");
+lonInput?.addEventListener("change", (e) => {
+  lonLabel.textContent = e.target.value;
+});
 
 const togglePlaying = async (button: HTMLButtonElement) => {
   const playing = button.dataset.playing;
