@@ -9,36 +9,11 @@
 
     <body>
         <div id="app">
-            <div id="map"></div>
+            <!--<div id="map"></div>-->
             <!-- <button id="project">Toggle projection</button> -->
 
-            <div class="card" id="info">
-                <h1>hear there</h1>
-                <button id="playpause" type="button">Play/Pause</button>
-                <div id="there-controls">
-                    <label>
-                        lat <span id="lat-value">52.52</span>
-                        <input
-                            id="lat"
-                            type="range"
-                            value="52.52"
-                            min="-90"
-                            max="90"
-                            step="0.01"
-                        />
-                    </label>
-                    <label>
-                        lon <span id="lon-value">13.41</span>
-                        <input
-                            id="lon"
-                            type="range"
-                            value="13.41"
-                            min="-180"
-                            max="180"
-                            step="0.01"
-                        />
-                    </label>
-                </div>
+            <div id="controls" class="cosmos">
+                <!--<button id="playpause" type="button">Play/Pause</button>-->
                 <div id="hear-controls">
                     <label
                         >base freq
@@ -72,7 +47,33 @@
                         />
                     </label>
                 </div>
-
+                <div id="there-controls">
+                    <label>
+                        lat <span id="lat-value">52.52</span>
+                        <input
+                            id="lat"
+                            type="range"
+                            value="52.52"
+                            min="-90"
+                            max="90"
+                            step="0.01"
+                        />
+                    </label>
+                    <label>
+                        lon <span id="lon-value">13.41</span>
+                        <input
+                            id="lon"
+                            type="range"
+                            value="13.41"
+                            min="-180"
+                            max="180"
+                            step="0.01"
+                        />
+                    </label>
+                </div>
+            </div>
+            <div class="card" id="info">
+                <h1>hear there</h1>
                 <p class="read-the-docs">
                     An homage to
                     <a href="https://weatherfortheblind.org" target="_blank"
