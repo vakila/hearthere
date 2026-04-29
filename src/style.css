@@ -147,7 +147,9 @@ button:focus-visible {
 }
 #there-controls > label {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 @media (width > 680px) {

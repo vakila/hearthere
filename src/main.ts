@@ -5,19 +5,20 @@ import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFil
 import type { LngLatLike } from "maplibre-gl";
 import { getWeatherAt } from "./weather";
 
-import "./meteo";
+import * as meteo from "./meteo";
 
 const thereControls = document.getElementById("there-controls");
-const latInput = document.getElementById("lat");
-const latLabel = document.getElementById("lat-value");
-latInput?.addEventListener("change", (e) => {
-  latLabel.textContent = e.target.value;
-});
-const lonInput = document.getElementById("lon");
-const lonLabel = document.getElementById("lon-value");
-lonInput?.addEventListener("change", (e) => {
-  lonLabel.textContent = e.target.value;
-});
+const latInput = thereControls?.querySelector("#lat") as HTMLInputElement;
+const lonInput = thereControls?.querySelector("#lon") as HTMLInputElement;
+for (let input of [latInput, lonInput]) {
+  input?.addEventListener("change", async () => {
+    console.log("location changed, fetching weather");
+    const lat = latInput.valueAsNumber;
+    const lon = lonInput.valueAsNumber;
+    const weather = await meteo.fetchLatLon(lat, lon);
+    console.log(weather);
+  });
+}
 
 const togglePlaying = async (button: HTMLButtonElement) => {
   const playing = button.dataset.playing;
