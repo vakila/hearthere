@@ -138,10 +138,12 @@ button:focus-visible {
 #there-controls {
     /*display: none;*/
     display: grid;
-    grid-auto-flow: row;
     align-content: space-evenly;
 }
-
+#hear-controls {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+}
 #there-controls {
     grid-auto-flow: column;
 }
@@ -150,6 +152,33 @@ button:focus-visible {
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+}
+
+.voice-control {
+    background: black;
+    margin: 1em;
+    /*padding: 3em;*/
+    /*width: 20%;*/
+    border: 1px solid currentColor;
+    /*border-radius: 100%;*/
+}
+
+.voice-control > div::before {
+    content: attr(id);
+    padding-right: 1ch;
+}
+
+#earth {
+    color: green;
+}
+#air {
+    color: lightyellow;
+}
+#water {
+    color: royalblue;
+}
+#fire {
+    color: palevioletred;
 }
 
 @media (width > 680px) {

@@ -5,19 +5,41 @@ import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFil
 import type { LngLatLike } from "maplibre-gl";
 import { getWeatherAt } from "./weather";
 
-import * as meteo from "./meteo";
+import { fetchLatLon } from "./meteo";
 
 const thereControls = document.getElementById("there-controls");
+
+// THERE
 const latInput = thereControls?.querySelector("#lat") as HTMLInputElement;
 const lonInput = thereControls?.querySelector("#lon") as HTMLInputElement;
+
+async function fetchWeather() {
+  console.log("fetching weather");
+  const lat = latInput.valueAsNumber;
+  const lon = lonInput.valueAsNumber;
+  const weather = await fetchLatLon(lat, lon);
+  console.log(weather);
+  updateHearData(weather);
+}
+
+window.addEventListener("load", fetchWeather);
+
 for (let input of [latInput, lonInput]) {
-  input?.addEventListener("change", async () => {
-    console.log("location changed, fetching weather");
-    const lat = latInput.valueAsNumber;
-    const lon = lonInput.valueAsNumber;
-    const weather = await meteo.fetchLatLon(lat, lon);
-    console.log(weather);
-  });
+  input?.addEventListener("change", fetchWeather);
+}
+
+// HEAR
+const hearControls = document.getElementById("hear-controls");
+function updateHearData(data: Awaited<ReturnType<typeof fetchLatLon>>) {
+  console.log("updating hear data");
+  for (let [metric, value] of Object.entries(data)) {
+    console.log("metric:", metric, "value:", value);
+    const display = hearControls?.querySelector(`#${metric}`);
+    if (display) {
+      display.textContent =
+        value instanceof Date ? value.toLocaleTimeString() : value.toString();
+    }
+  }
 }
 
 const togglePlaying = async (button: HTMLButtonElement) => {
