@@ -5,19 +5,19 @@ import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFil
 import type { LngLatLike } from "maplibre-gl";
 import { getWeatherAt } from "./weather";
 
-import { fetchLatLon } from "./meteo";
+import { fetchCurrentWeather, fetchLocation } from "./meteo";
 
 const thereControls = document.getElementById("there-controls");
 
 // THERE
-const latInput = thereControls?.querySelector("#lat") as HTMLInputElement;
-const lonInput = thereControls?.querySelector("#lon") as HTMLInputElement;
+const latInput = document.getElementById("lat") as HTMLInputElement;
+const lonInput = document.getElementById("lon") as HTMLInputElement;
 
 async function fetchWeather() {
-  console.log("fetching weather");
+  console.log("lat lon change");
   const lat = latInput.valueAsNumber;
   const lon = lonInput.valueAsNumber;
-  const weather = await fetchLatLon(lat, lon);
+  const weather = await fetchCurrentWeather(lat, lon);
   console.log(weather);
   updateHearData(weather);
 }
@@ -28,16 +28,31 @@ for (let input of [latInput, lonInput]) {
   input?.addEventListener("change", fetchWeather);
 }
 
+const search = document.getElementById("search") as HTMLInputElement;
+search.addEventListener("change", async () => {
+  console.log("location search");
+  const [result] = await fetchLocation(search.value);
+  console.log(result);
+  latInput.value = result.latitude;
+  lonInput.value = result.longitude;
+  await fetchWeather();
+});
+
 // HEAR
-const hearControls = document.getElementById("hear-controls");
-function updateHearData(data: Awaited<ReturnType<typeof fetchLatLon>>) {
+const hearControls = document.getElementById("hear-controls")!;
+function updateHearData(data: Awaited<ReturnType<typeof fetchCurrentWeather>>) {
   console.log("updating hear data");
+
   for (let [metric, value] of Object.entries(data)) {
     console.log("metric:", metric, "value:", value);
+    const displayValue =
+      value instanceof Date
+        ? value.toISOString().replace("T", " ").replace(":00.000Z", "")
+        : value.toString();
+
     const display = hearControls?.querySelector(`#${metric}`);
     if (display) {
-      display.textContent =
-        value instanceof Date ? value.toLocaleTimeString() : value.toString();
+      display.textContent = displayValue;
     }
   }
 }
