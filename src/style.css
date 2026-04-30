@@ -135,19 +135,25 @@ button:focus-visible {
     height: 100%;
     display: grid;
     grid-template-rows: 50% 50%;
+    color: black;
 }
 
-#hear-controls,
-#there-controls {
+#controls > div {
     /*display: none;*/
-    /*display: grid;*/
+    display: grid;
+    width: 100%;
     align-content: space-evenly;
 }
+#controls h2 {
+    font-size: 5rem;
+    grid-area: "header";
+}
+
 #hear-controls {
-    max-width: 100%;
-    grid-template-columns: 50% 50%;
+    display: grid;
     background-color: hotpink;
 }
+
 #there-controls {
     grid-auto-flow: column;
     background-color: mediumturquoise;
@@ -175,6 +181,7 @@ button:focus-visible {
 
 #earth {
     color: green;
+    grid-area: "earth";
 }
 #air {
     color: lightyellow;
