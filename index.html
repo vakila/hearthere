@@ -11,30 +11,47 @@
         <div id="app">
             <!--<div id="map"></div>-->
             <!-- <button id="project">Toggle projection</button> -->
-
-            <div id="controls" class="cosmos">
-                <div id="hear-controls">
-                    <div class="voice-control" id="earth">
-                        <div id="elevation">elevation</div>
-                        <div id="temperature_2m">temperature</div>
-                        <div id="apparent_temperature">apparent temp</div>
-                    </div>
-                    <div class="voice-control" id="air">
-                        <div id="wind_speed_10m">wind speed</div>
-                        <div id="wind_gusts_10m">wind gust</div>
-                        <div id="wind_direction_10m">wind dir</div>
-                        <div id="surface_pressure">pressure</div>
-                    </div>
-                    <div class="voice-control" id="water">
-                        <div id="relative_humidity_2m">humidity</div>
-                        <div id="precipitation">precipitation</div>
-                    </div>
-                    <div class="voice-control" id="fire">
-                        <div id="time">time</div>
-                        <div id="is_day">is day</div>
-                        <div id="cloud_cover">cloud cover</div>
-                    </div>
-                    <!--<label
+            <div id="viz" class="cosmos">
+                <button id="playpause" type="button">Play/Pause</button>
+                <p class="read-the-docs">
+                    An homage to
+                    <a href="https://weatherfortheblind.org" target="_blank"
+                        >weatherfortheblind.org</a
+                    >
+                    <br />
+                    Made with
+                    <!--<a href="https://maplibre.org" target="_blank">Maplibre</a>,-->
+                    <a href="https://tonejs.github.io/" target="_blank"
+                        >Tone.js</a
+                    >
+                    by <a href="https://github.com/vakila">Anjana</a> at the
+                    <a href="https://recurse.com">Recurse Center</a>
+                </p>
+            </div>
+            <div class="card" id="info">
+                <div id="controls">
+                    <div id="hear-controls">
+                        <div class="voice-control" id="earth">
+                            <div id="elevation">elevation</div>
+                            <div id="temperature_2m">temperature</div>
+                            <div id="apparent_temperature">apparent temp</div>
+                        </div>
+                        <div class="voice-control" id="air">
+                            <div id="wind_speed_10m">wind speed</div>
+                            <div id="wind_gusts_10m">wind gust</div>
+                            <div id="wind_direction_10m">wind dir</div>
+                            <div id="surface_pressure">pressure</div>
+                        </div>
+                        <div class="voice-control" id="water">
+                            <div id="relative_humidity_2m">humidity</div>
+                            <div id="precipitation">precipitation</div>
+                        </div>
+                        <div class="voice-control" id="fire">
+                            <div id="time">time</div>
+                            <div id="is_day">is day</div>
+                            <div id="cloud_cover">cloud cover</div>
+                        </div>
+                        <!--<label
                         >base freq
                         <input
                             id="freq"
@@ -65,56 +82,40 @@
                             max="500"
                         />
                     </label>-->
+                    </div>
+                    <div id="there-controls">
+                        <label>
+                            latitude
+                            <input
+                                id="lat"
+                                type="number"
+                                value="52.52"
+                                min="-90"
+                                max="90"
+                                step="0.01"
+                            />
+                        </label>
+                        <label>
+                            longitude
+                            <input
+                                id="lon"
+                                type="number"
+                                value="13.41"
+                                min="-180"
+                                max="180"
+                                step="0.01"
+                            />
+                        </label>
+                        <label>
+                            search
+                            <input
+                                id="search"
+                                type="search"
+                                placeholder="Berlin"
+                            />
+                        </label>
+                    </div>
                 </div>
-                <div id="there-controls">
-                    <label>
-                        latitude
-                        <input
-                            id="lat"
-                            type="number"
-                            value="52.52"
-                            min="-90"
-                            max="90"
-                            step="0.01"
-                        />
-                    </label>
-                    <label>
-                        longitude
-                        <input
-                            id="lon"
-                            type="number"
-                            value="13.41"
-                            min="-180"
-                            max="180"
-                            step="0.01"
-                        />
-                    </label>
-                    <label>
-                        search
-                        <input id="search" type="search" placeholder="Berlin" />
-                    </label>
-                </div>
-            </div>
-            <div class="card" id="info">
-                <h1>hear there</h1>
-                <button id="playpause" type="button">Play/Pause</button>
-
-                <p class="read-the-docs">
-                    An homage to
-                    <a href="https://weatherfortheblind.org" target="_blank"
-                        >weatherfortheblind.org</a
-                    >
-                    <br />
-                    Made with
-                    <a href="https://maplibre.org" target="_blank">Maplibre</a>,
-                    <a href="https://tonejs.github.io/" target="_blank"
-                        >Tone.js</a
-                    >,<a href="https://vite.dev/" target="_blank">Vite</a>,
-                    <a href="https://typescriptlang.org" target="_blank"
-                        >TypeScript</a
-                    >, and love at the
-                    <a href="https://recurse.com">Recurse Center</a>
-                </p>
             </div>
         </div>
         <script type="module" src="/src/main.ts"></script>
