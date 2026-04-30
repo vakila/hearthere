@@ -30,92 +30,68 @@
             </div>
             <div class="card" id="info">
                 <div id="controls">
-                    <div id="hear-controls">
+                    <div id="hear">
                         <h2>hear</h2>
-                        <div class="voice-control" id="earth">
-                            <div id="elevation">elevation</div>
-                            <div id="temperature_2m">temperature</div>
-                            <div id="apparent_temperature">apparent temp</div>
+
+                        <div id="hear-controls">
+                            <div class="voice-control" id="earth">
+                                <div id="elevation">elevation</div>
+                                <div id="temperature_2m">temperature</div>
+                                <div id="apparent_temperature">
+                                    apparent temp
+                                </div>
+                            </div>
+                            <div class="voice-control" id="air">
+                                <div id="wind_speed_10m">wind speed</div>
+                                <div id="wind_gusts_10m">wind gust</div>
+                                <div id="wind_direction_10m">wind dir</div>
+                                <div id="surface_pressure">pressure</div>
+                            </div>
+                            <div class="voice-control" id="water">
+                                <div id="relative_humidity_2m">humidity</div>
+                                <div id="precipitation">precipitation</div>
+                            </div>
+                            <div class="voice-control" id="fire">
+                                <div id="time">time</div>
+                                <div id="is_day">is day</div>
+                                <div id="cloud_cover">cloud cover</div>
+                            </div>
                         </div>
-                        <div class="voice-control" id="air">
-                            <div id="wind_speed_10m">wind speed</div>
-                            <div id="wind_gusts_10m">wind gust</div>
-                            <div id="wind_direction_10m">wind dir</div>
-                            <div id="surface_pressure">pressure</div>
-                        </div>
-                        <div class="voice-control" id="water">
-                            <div id="relative_humidity_2m">humidity</div>
-                            <div id="precipitation">precipitation</div>
-                        </div>
-                        <div class="voice-control" id="fire">
-                            <div id="time">time</div>
-                            <div id="is_day">is day</div>
-                            <div id="cloud_cover">cloud cover</div>
-                        </div>
-                        <!--<label
-                        >base freq
-                        <input
-                            id="freq"
-                            type="range"
-                            value="270"
-                            min="100"
-                            max="500"
-                        />
-                    </label>
-                    <label
-                        >delay LFO freq
-                        <input
-                            id="lfo-freq"
-                            type="range"
-                            value="0.1"
-                            min="0.05"
-                            max="0.2"
-                            step="0.01"
-                        />
-                    </label>
-                    <label
-                        >filter cutoff
-                        <input
-                            id="filter-freq"
-                            type="range"
-                            value="270"
-                            min="100"
-                            max="500"
-                        />
-                    </label>-->
                     </div>
-                    <div id="there-controls">
+                    <div id="there">
                         <h2>there</h2>
-                        <label>
-                            latitude
-                            <input
-                                id="lat"
-                                type="number"
-                                value="52.52"
-                                min="-90"
-                                max="90"
-                                step="0.01"
-                            />
-                        </label>
-                        <label>
-                            longitude
-                            <input
-                                id="lon"
-                                type="number"
-                                value="13.41"
-                                min="-180"
-                                max="180"
-                                step="0.01"
-                            />
-                        </label>
-                        <label>
-                            search
-                            <input
-                                id="search"
-                                type="search"
-                                placeholder="Berlin"
-                            />
-                        </label>
+                        <div id="there-controls">
+                            <label>
+                                latitude
+                                <input
+                                    id="lat"
+                                    type="number"
+                                    value="52.52"
+                                    min="-90"
+                                    max="90"
+                                    step="0.01"
+                                />
+                            </label>
+                            <label>
+                                longitude
+                                <input
+                                    id="lon"
+                                    type="number"
+                                    value="13.41"
+                                    min="-180"
+                                    max="180"
+                                    step="0.01"
+                                />
+                            </label>
+                            <label>
+                                search
+                                <input
+                                    id="search"
+                                    type="search"
+                                    placeholder="Berlin"
+                                />
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

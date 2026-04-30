@@ -138,31 +138,52 @@ button:focus-visible {
     color: black;
 }
 
-#controls > div {
-    /*display: none;*/
-    display: grid;
-    width: 100%;
-    align-content: space-evenly;
-}
-#controls h2 {
-    font-size: 5rem;
-    grid-area: "header";
+#hear {
+    display: flex;
+    justify-content: space-between;
+
+    background-color: hotpink;
+
+    h2 {
+        font-size: 3em;
+        writing-mode: sideways-lr;
+    }
 }
 
 #hear-controls {
     display: grid;
-    background-color: hotpink;
+    grid-template-areas:
+        "air fire"
+        "earth water";
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+
+    div {
+        max-width: 20ch;
+        overflow: hidden;
+    }
 }
 
-#there-controls {
-    grid-auto-flow: column;
+#there {
     background-color: mediumturquoise;
-}
-#there-controls > label {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    h2 {
+        font-size: 3em;
+        writing-mode: vertical-rl;
+    }
+}
+#there-controls {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+
+    > label {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+    }
 }
 
 .voice-control {
@@ -185,12 +206,15 @@ button:focus-visible {
 }
 #air {
     color: lightyellow;
+    grid-area: "air";
 }
 #water {
     color: royalblue;
+    grid-area: "water";
 }
 #fire {
     color: palevioletred;
+    grid-area: "fire";
 }
 
 @media (width > 680px) {
