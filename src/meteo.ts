@@ -1,5 +1,7 @@
 import { fetchWeatherApi } from "openmeteo";
 
+export type WeatherData = Awaited<ReturnType<typeof fetchCurrentWeather>>;
+
 // const HOURLY_METRICS = [
 //   "sunshine_duration",
 //   "is_day",

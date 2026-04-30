@@ -1,82 +1,7 @@
 import "./style.css"; // Custom styles
 
-import { init, play, pause } from "./play"; // setBaseFreq, setDelayFreq, setFilterCutoff, playThere, playWeather } from './play';
-// import { map, customLayer, pointsLayer } from "./globe";
-import type { LngLatLike } from "maplibre-gl";
-import { getWeatherAt } from "./weather";
-
-import { fetchCurrentWeather, fetchLocation } from "./meteo";
-
-const thereControls = document.getElementById("there-controls");
-
-// THERE
-const latInput = document.getElementById("lat") as HTMLInputElement;
-const lonInput = document.getElementById("lon") as HTMLInputElement;
-
-async function fetchWeather() {
-  console.log("lat lon change");
-  const lat = latInput.valueAsNumber;
-  const lon = lonInput.valueAsNumber;
-  const weather = await fetchCurrentWeather(lat, lon);
-  console.log(weather);
-  updateHearData(weather);
-}
-
-window.addEventListener("load", fetchWeather);
-
-for (let input of [latInput, lonInput]) {
-  input?.addEventListener("change", fetchWeather);
-}
-
-const search = document.getElementById("search") as HTMLInputElement;
-search.addEventListener("change", async () => {
-  console.log("location search");
-  const [result] = await fetchLocation(search.value);
-  console.log(result);
-  latInput.value = result.latitude;
-  lonInput.value = result.longitude;
-  await fetchWeather();
-});
-
-// HEAR
-const hearControls = document.getElementById("hear-controls")!;
-function updateHearData(data: Awaited<ReturnType<typeof fetchCurrentWeather>>) {
-  console.log("updating hear data");
-
-  for (let [metric, value] of Object.entries(data)) {
-    console.log("metric:", metric, "value:", value);
-    const displayValue =
-      value instanceof Date
-        ? value.toISOString().replace("T", " ").replace(":00.000Z", "")
-        : value.toString();
-
-    const display = hearControls?.querySelector(`#${metric}`);
-    if (display) {
-      display.textContent = displayValue;
-    }
-  }
-}
-
-const togglePlaying = async (button: HTMLButtonElement) => {
-  const playing = button.dataset.playing;
-  if (playing === "true") {
-    pause();
-    button.dataset.playing = "";
-    button.innerText = "play";
-  } else {
-    if (playing === "init") {
-      await init();
-    }
-    play();
-    button.dataset.playing = "true";
-    button.innerText = "pause";
-  }
-};
-function setupButton(button: HTMLButtonElement) {
-  button.innerText = "play";
-  button.dataset.playing = "init";
-  button.addEventListener("click", () => togglePlaying(button));
-}
+import "./hear";
+import "./there";
 
 function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
   slider.addEventListener("input", () => {
@@ -84,7 +9,6 @@ function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
   });
 }
 
-setupButton(document.querySelector<HTMLButtonElement>("#playpause")!);
 // setupSlider(document.querySelector<HTMLInputElement>('#freq')!, setBaseFreq);
 // setupSlider(document.querySelector<HTMLInputElement>('#lfo-freq')!, setDelayFreq);
 // setupSlider(document.querySelector<HTMLInputElement>('#filter-freq')!, setFilterCutoff);

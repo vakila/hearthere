@@ -1,58 +1,58 @@
 // import { FeedbackDelay, Filter, LFO, Merge, PolySynth, PulseOscillator, Synth, start as toneStart } from "tone";
 
-import * as Tone from "tone";
+// import * as Tone from "tone";
 
-import { getMixer, getVoice0, getVoice1, getVoice2, getVoice3, getVoiceD, type Voice } from "./voices";
-
+import {
+  getMixer,
+  getVoice0,
+  getVoice1,
+  getVoice2,
+  getVoice3,
+  getVoiceD,
+  type Voice,
+} from "./voices";
 
 const F3maj = ["F3", "A3", "C3"];
 
 let voices: Voice[] = [];
 
-export async function init() {
-    // the AudioContext is suspended until user action
-    await Tone.start(); // Tone.start() un-suspends it
-    Tone.getDestination().set({ volume: -96 });
-    let mixer;
-    if (!voices.length) {
-        const fundamental = getVoice0();
-        voices.push(fundamental);
-        // const harmony = getVoice1();
-        // voices.push(harmony);
-        // const spacey = getVoice2();
-        // voices.push(spacey);
+export async function initialize() {
+  // the AudioContext is suspended until user action
+  await Tone.start(); // Tone.start() un-suspends it
+  Tone.getDestination().set({ volume: -96 });
+  let mixer;
+  if (!voices.length) {
+    const fundamental = getVoice0();
+    voices.push(fundamental);
+    // const harmony = getVoice1();
+    // voices.push(harmony);
+    // const spacey = getVoice2();
+    // voices.push(spacey);
 
-        // const noise = getVoice3();
-        // voices.push(noise);
-        // const delay = getVoiceD(noise.output);
-        // voices.push(delay);
+    // const noise = getVoice3();
+    // voices.push(noise);
+    // const delay = getVoiceD(noise.output);
+    // voices.push(delay);
 
-        mixer = getMixer(voices)
-    }
+    mixer = getMixer(voices);
+  }
 
-
-    // expose in console for debugging
-    window.voices = voices;
-    window.mixer = mixer;
+  // expose in console for debugging
+  window.voices = voices;
+  window.mixer = mixer;
 }
 
 export async function play() {
-
-    for (let voice of voices) {
-        console.log('starting voice', voice)
-        voice.start();
-    }
-    Tone.getDestination().volume.rampTo(0, 1);
+  for (let voice of voices) {
+    console.log("starting voice", voice);
+    voice.start();
+  }
+  Tone.getDestination().volume.rampTo(0, 1);
 }
-
 
 export function pause() {
-    Tone.getDestination().volume.rampTo(-96, 1);
-
+  Tone.getDestination().volume.rampTo(-96, 1);
 }
-
-
-
 
 // export function playThere(feature: any) {
 //     const lng = feature.geometry.coordinates[0];
