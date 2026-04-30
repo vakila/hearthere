@@ -1,35 +1,11 @@
-// import { start } from "tone";
-
-// import * as Tone from "tone";
-// console.log("state before:", Tone.getContext().state); // "suspended"
-
+// Hack to work around AudioContext warnings when importing Tone
 export let Tone: typeof import("tone");
-
 export const initializeTone = async () => {
   console.log("init");
   if (Tone) return;
   Tone = await import("tone");
   await Tone.start();
 };
-
-import type { WeatherData } from "./meteo";
-
-export function updateHearData(data: WeatherData) {
-  console.log("updating hear data");
-
-  for (let [metric, value] of Object.entries(data)) {
-    // console.log("metric:", metric, "value:", value);
-    const displayValue =
-      value instanceof Date
-        ? value.toISOString().replace("T", " ").replace(":00.000Z", "")
-        : value.toString();
-
-    const display = document.getElementById(metric);
-    if (display) {
-      display.textContent = displayValue;
-    }
-  }
-}
 
 export async function play() {
   console.log("play");
