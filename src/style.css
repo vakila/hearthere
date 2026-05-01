@@ -11,6 +11,11 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    --color-earth: #4ade80;
+    --color-air: #fef08a;
+    --color-water: #60a5fa;
+    --color-fire: #f472b6;
 }
 
 a {
@@ -162,6 +167,57 @@ input:focus-visible {
     justify-content: center;
     align-items: center;
     padding: 2em;
+    position: relative;
+}
+
+.viz-overlay {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    padding: 0.75em;
+    font-size: 0.85em;
+    min-width: 120px;
+    max-width: 180px;
+}
+
+.viz-overlay .data-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+    padding: 0.2em 0;
+}
+
+.viz-overlay .data-label {
+    opacity: 0.8;
+}
+
+.viz-overlay .data-value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+#overlay-air {
+    top: 1em;
+    left: 1em;
+    color: var(--color-air);
+}
+
+#overlay-fire {
+    top: 1em;
+    right: 1em;
+    color: var(--color-fire);
+}
+
+#overlay-earth {
+    bottom: 1em;
+    left: 1em;
+    color: var(--color-earth);
+}
+
+#overlay-water {
+    bottom: 1em;
+    right: 1em;
+    color: var(--color-water);
 }
 
 #info {
@@ -207,12 +263,37 @@ input:focus-visible {
 }
 
 #hear-controls .voice-control {
-    /*width: calc(100% - 1em);*/
-    height: calc(100% - 1em);
-    aspect-ratio: 1/1;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
     margin: auto;
     padding: 0.5em;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.voice-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voice-toggle {
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    padding: 0.2em 0.6em;
+    font-size: 0.75em;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+    pointer-events: auto;
+    align-self: center;
 }
 
 .voice-control {
@@ -274,9 +355,24 @@ input:focus-visible {
 }
 
 .voice-toggle.active {
-    background-color: currentColor;
-    color: #1a1a2e;
+    color: #000000;
     border-color: currentColor;
+}
+
+#earth .voice-toggle.active {
+    background-color: var(--color-earth);
+}
+
+#air .voice-toggle.active {
+    background-color: var(--color-air);
+}
+
+#water .voice-toggle.active {
+    background-color: var(--color-water);
+}
+
+#fire .voice-toggle.active {
+    background-color: var(--color-fire);
 }
 
 .voice-control:not(.disabled) {
@@ -284,9 +380,7 @@ input:focus-visible {
 }
 
 .voice-data {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25em;
+    display: none;
 }
 
 .data-item {
@@ -326,16 +420,39 @@ input:focus-visible {
 #there-controls {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    gap: 0.75em;
+    gap: 1em;
     padding: 0.5em;
     flex: 1;
 }
 
 #there-controls > label {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 25% 65%;
     align-items: center;
-    gap: 0.5em;
+    justify-items: left;
+    gap: 0.75em;
+    font-size: 1.4em;
+    font-weight: 500;
+}
+
+#there-controls input {
+    background-color: #1a1a2e;
+    color: rgba(255, 255, 255, 0.87);
+    border: 2px solid #555;
+    border-radius: 6px;
+    padding: 0.5em 0.8em;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#there-controls input:hover {
+    border-color: #333;
+}
+
+#there-controls input:focus-visible {
+    border-color: #1a1a2e;
+    outline-color: #1a1a2e;
 }
 
 .voice-control {
@@ -357,22 +474,22 @@ input:focus-visible {
 }
 
 #earth {
-    color: #4ade80;
+    color: var(--color-earth);
     grid-area: earth;
 }
 
 #air {
-    color: #fef08a;
+    color: var(--color-air);
     grid-area: air;
 }
 
 #water {
-    color: #60a5fa;
+    color: var(--color-water);
     grid-area: water;
 }
 
 #fire {
-    color: #f472b6;
+    color: var(--color-fire);
     grid-area: fire;
 }
 

@@ -27,6 +27,26 @@
                     by <a href="https://github.com/vakila">Anjana</a> at the
                     <a href="https://recurse.com">Recurse Center</a>
                 </p>
+                <div class="viz-overlay" id="overlay-air">
+                    <div class="data-item" id="wind_speed_10m-overlay"><span class="data-label">wind speed</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="wind_gusts_10m-overlay"><span class="data-label">wind gust</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="wind_direction_10m-overlay"><span class="data-label">wind dir</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="surface_pressure-overlay"><span class="data-label">pressure</span><span class="data-value">--</span></div>
+                </div>
+                <div class="viz-overlay" id="overlay-fire">
+                    <div class="data-item" id="time-overlay"><span class="data-label">time</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="is_day-overlay"><span class="data-label">is day</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="cloud_cover-overlay"><span class="data-label">cloud cover</span><span class="data-value">--</span></div>
+                </div>
+                <div class="viz-overlay" id="overlay-earth">
+                    <div class="data-item" id="elevation-overlay"><span class="data-label">elevation</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="temperature_2m-overlay"><span class="data-label">temperature</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="apparent_temperature-overlay"><span class="data-label">apparent temp</span><span class="data-value">--</span></div>
+                </div>
+                <div class="viz-overlay" id="overlay-water">
+                    <div class="data-item" id="relative_humidity_2m-overlay"><span class="data-label">humidity</span><span class="data-value">--</span></div>
+                    <div class="data-item" id="precipitation-overlay"><span class="data-label">precipitation</span><span class="data-value">--</span></div>
+                </div>
             </div>
             <div class="card" id="info">
                 <div id="controls">
@@ -37,14 +57,14 @@
                             <div class="voice-control" id="air">
                                 <div class="voice-header">
                                     <span class="voice-name">Air</span>
-                                    <button
-                                        class="voice-toggle"
-                                        aria-label="Toggle Air voice"
-                                        data-voice="air"
-                                    >
-                                        OFF
-                                    </button>
                                 </div>
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Air voice"
+                                    data-voice="air"
+                                >
+                                    OFF
+                                </button>
                                 <div class="voice-data">
                                     <div class="data-item" id="wind_speed_10m">
                                         <span class="data-label"
@@ -75,14 +95,14 @@
                             <div class="voice-control" id="fire">
                                 <div class="voice-header">
                                     <span class="voice-name">Fire</span>
-                                    <button
-                                        class="voice-toggle"
-                                        aria-label="Toggle Fire voice"
-                                        data-voice="fire"
-                                    >
-                                        OFF
-                                    </button>
                                 </div>
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Fire voice"
+                                    data-voice="fire"
+                                >
+                                    OFF
+                                </button>
                                 <div class="voice-data">
                                     <div class="data-item" id="time">
                                         <span class="data-label">time</span
@@ -102,14 +122,14 @@
                             <div class="voice-control" id="earth">
                                 <div class="voice-header">
                                     <span class="voice-name">Earth</span>
-                                    <button
-                                        class="voice-toggle"
-                                        aria-label="Toggle Earth voice"
-                                        data-voice="earth"
-                                    >
-                                        OFF
-                                    </button>
                                 </div>
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Earth voice"
+                                    data-voice="earth"
+                                >
+                                    OFF
+                                </button>
                                 <div class="voice-data">
                                     <div class="data-item" id="elevation">
                                         <span class="data-label">elevation</span
@@ -133,14 +153,14 @@
                             <div class="voice-control" id="water">
                                 <div class="voice-header">
                                     <span class="voice-name">Water</span>
-                                    <button
-                                        class="voice-toggle"
-                                        aria-label="Toggle Water voice"
-                                        data-voice="water"
-                                    >
-                                        OFF
-                                    </button>
                                 </div>
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Water voice"
+                                    data-voice="water"
+                                >
+                                    OFF
+                                </button>
                                 <div class="voice-data">
                                     <div
                                         class="data-item"

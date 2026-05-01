@@ -33,7 +33,7 @@ function setupVoiceControls() {
 
   const voiceContainers = document.querySelectorAll<HTMLElement>(".voice-control");
   voiceContainers.forEach((container) => {
-    container.addEventListener("click", () => {
+    container.addEventListener("click", (e) => {
       const button = container.querySelector<HTMLButtonElement>(".voice-toggle");
       const voice = button?.dataset.voice;
       if (!voice || !button) return;
@@ -44,10 +44,18 @@ function setupVoiceControls() {
 
 export function updateDataValue(elementId: string, value: string | number) {
   const container = document.getElementById(elementId);
-  if (!container) return;
-  const valueEl = container.querySelector<HTMLElement>(".data-value");
-  if (valueEl) {
-    valueEl.textContent = String(value);
+  if (container) {
+    const valueEl = container.querySelector<HTMLElement>(".data-value");
+    if (valueEl) {
+      valueEl.textContent = String(value);
+    }
+  }
+  const overlayContainer = document.getElementById(`${elementId}-overlay`);
+  if (overlayContainer) {
+    const overlayValueEl = overlayContainer.querySelector<HTMLElement>(".data-value");
+    if (overlayValueEl) {
+      overlayValueEl.textContent = String(value);
+    }
   }
 }
 
