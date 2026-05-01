@@ -1,4 +1,5 @@
 import { fetchCurrentWeather, fetchLocation, type WeatherData } from "./meteo";
+import { updateDataValue } from "./voice-controls";
 
 const thereControls = document.getElementById("there-controls");
 
@@ -19,16 +20,12 @@ export function updateWeatherData(data: WeatherData) {
   console.log("updating weather data");
 
   for (let [metric, value] of Object.entries(data)) {
-    // console.log("metric:", metric, "value:", value);
     const displayValue =
       value instanceof Date
         ? value.toISOString().replace("T", " ").replace(":00.000Z", "")
         : value.toString();
 
-    const display = document.getElementById(metric);
-    if (display) {
-      display.textContent = displayValue;
-    }
+    updateDataValue(metric, displayValue);
   }
 }
 
@@ -38,11 +35,25 @@ for (let input of [latInput, lonInput]) {
   input?.addEventListener("change", fetchWeather);
 }
 
+function clearWeatherData() {
+  const dataItems = document.querySelectorAll<HTMLElement>(".data-value");
+  dataItems.forEach((item) => {
+    item.textContent = "--";
+  });
+}
+
 const search = document.getElementById("search") as HTMLInputElement;
 search.addEventListener("change", async () => {
   console.log("location search");
-  const [result] = await fetchLocation(search.value);
-  console.log(result);
+  const results = await fetchLocation(search.value);
+  console.log(results);
+  if (!results || results.length === 0) {
+    latInput.value = "";
+    lonInput.value = "";
+    clearWeatherData();
+    return;
+  }
+  const [result] = results;
   latInput.value = result.latitude;
   lonInput.value = result.longitude;
   await fetchWeather();
