@@ -2,6 +2,7 @@ import "./style.css"; // Custom styles
 
 import "./hear";
 import "./there";
+import "./voice-controls";
 
 function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
   slider.addEventListener("input", () => {

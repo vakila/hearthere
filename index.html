@@ -34,27 +34,127 @@
                         <h2>hear</h2>
 
                         <div id="hear-controls">
-                            <div class="voice-control" id="earth">
-                                <div id="elevation">elevation</div>
-                                <div id="temperature_2m">temperature</div>
-                                <div id="apparent_temperature">
-                                    apparent temp
+                            <div class="voice-control" id="air">
+                                <div class="voice-header">
+                                    <span class="voice-name">Air</span>
+                                    <button
+                                        class="voice-toggle"
+                                        aria-label="Toggle Air voice"
+                                        data-voice="air"
+                                    >
+                                        OFF
+                                    </button>
+                                </div>
+                                <div class="voice-data">
+                                    <div class="data-item" id="wind_speed_10m">
+                                        <span class="data-label"
+                                            >wind speed</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="wind_gusts_10m">
+                                        <span class="data-label">wind gust</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div
+                                        class="data-item"
+                                        id="wind_direction_10m"
+                                    >
+                                        <span class="data-label">wind dir</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div
+                                        class="data-item"
+                                        id="surface_pressure"
+                                    >
+                                        <span class="data-label">pressure</span
+                                        ><span class="data-value">--</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="voice-control" id="air">
-                                <div id="wind_speed_10m">wind speed</div>
-                                <div id="wind_gusts_10m">wind gust</div>
-                                <div id="wind_direction_10m">wind dir</div>
-                                <div id="surface_pressure">pressure</div>
+
+                            <div class="voice-control" id="fire">
+                                <div class="voice-header">
+                                    <span class="voice-name">Fire</span>
+                                    <button
+                                        class="voice-toggle"
+                                        aria-label="Toggle Fire voice"
+                                        data-voice="fire"
+                                    >
+                                        OFF
+                                    </button>
+                                </div>
+                                <div class="voice-data">
+                                    <div class="data-item" id="time">
+                                        <span class="data-label">time</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="is_day">
+                                        <span class="data-label">is day</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="cloud_cover">
+                                        <span class="data-label"
+                                            >cloud cover</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="voice-control" id="earth">
+                                <div class="voice-header">
+                                    <span class="voice-name">Earth</span>
+                                    <button
+                                        class="voice-toggle"
+                                        aria-label="Toggle Earth voice"
+                                        data-voice="earth"
+                                    >
+                                        OFF
+                                    </button>
+                                </div>
+                                <div class="voice-data">
+                                    <div class="data-item" id="elevation">
+                                        <span class="data-label">elevation</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="temperature_2m">
+                                        <span class="data-label"
+                                            >temperature</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div
+                                        class="data-item"
+                                        id="apparent_temperature"
+                                    >
+                                        <span class="data-label"
+                                            >apparent temp</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="voice-control" id="water">
-                                <div id="relative_humidity_2m">humidity</div>
-                                <div id="precipitation">precipitation</div>
-                            </div>
-                            <div class="voice-control" id="fire">
-                                <div id="time">time</div>
-                                <div id="is_day">is day</div>
-                                <div id="cloud_cover">cloud cover</div>
+                                <div class="voice-header">
+                                    <span class="voice-name">Water</span>
+                                    <button
+                                        class="voice-toggle"
+                                        aria-label="Toggle Water voice"
+                                        data-voice="water"
+                                    >
+                                        OFF
+                                    </button>
+                                </div>
+                                <div class="voice-data">
+                                    <div
+                                        class="data-item"
+                                        id="relative_humidity_2m"
+                                    >
+                                        <span class="data-label">humidity</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="precipitation">
+                                        <span class="data-label"
+                                            >precipitation</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
