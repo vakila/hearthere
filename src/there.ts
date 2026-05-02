@@ -1,14 +1,9 @@
 import { fetchCurrentWeather, fetchLocation, type WeatherData } from "./meteo";
-import { updateDataValue } from "./voice-controls";
 
-const thereControls = document.getElementById("there-controls");
-
-// THERE
 const latInput = document.getElementById("lat") as HTMLInputElement;
 const lonInput = document.getElementById("lon") as HTMLInputElement;
 
 export async function fetchWeather() {
-  console.log("lat lon change");
   const lat = latInput.valueAsNumber;
   const lon = lonInput.valueAsNumber;
   const weather = await fetchCurrentWeather(lat, lon);
@@ -16,9 +11,25 @@ export async function fetchWeather() {
   updateWeatherData(weather);
 }
 
-export function updateWeatherData(data: WeatherData) {
-  console.log("updating weather data");
+export function updateDataValue(elementId: string, value: string | number) {
+  const container = document.getElementById(elementId);
+  if (container) {
+    const valueEl = container.querySelector<HTMLElement>(".data-value");
+    if (valueEl) {
+      valueEl.textContent = String(value);
+    }
+  }
+  const overlayContainer = document.getElementById(`${elementId}-overlay`);
+  if (overlayContainer) {
+    const overlayValueEl =
+      overlayContainer.querySelector<HTMLElement>(".data-value");
+    if (overlayValueEl) {
+      overlayValueEl.textContent = String(value);
+    }
+  }
+}
 
+export function updateWeatherData(data: WeatherData) {
   for (let [metric, value] of Object.entries(data)) {
     const displayValue =
       value instanceof Date

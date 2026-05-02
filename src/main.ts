@@ -2,17 +2,6 @@ import "./style.css"; // Custom styles
 
 import "./hear";
 import "./there";
-import "./voice-controls";
-
-function setupSlider(slider: HTMLInputElement, setFn: (freq: number) => void) {
-  slider.addEventListener("input", () => {
-    setFn(parseFloat(slider.value));
-  });
-}
-
-// setupSlider(document.querySelector<HTMLInputElement>('#freq')!, setBaseFreq);
-// setupSlider(document.querySelector<HTMLInputElement>('#lfo-freq')!, setDelayFreq);
-// setupSlider(document.querySelector<HTMLInputElement>('#filter-freq')!, setFilterCutoff);
 
 // map.on('style.load', () => {
 //   map.setProjection({
