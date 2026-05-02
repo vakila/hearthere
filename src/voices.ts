@@ -1,6 +1,4 @@
-// import * as Tone from "tone";
-
-// types
+import { Tone, initializeTone } from "./toner";
 
 export interface Voice {
   name: string;
@@ -16,15 +14,15 @@ export interface Voice {
     [name: string]: Tone.Filter | Tone.AutoFilter | Tone.BiquadFilter;
   };
   start: () => void;
-  stop?: () => void;
+  stop: () => void;
   output?: Tone.ToneAudioNode;
   gain: Tone.Unit.GainFactor;
 }
 
-// Voice 0: F0
+// Earth: F0
 
-export function getVoice0(): Voice {
-  let name = "fundamental";
+export function getEarth(): Voice {
+  let name = "earth";
   let gain = -10;
   let freq = 174; // F3
   let lfoFreq = 0.03;
@@ -57,6 +55,7 @@ export function getVoice0(): Voice {
 
     // placeholders
     start: () => {},
+    stop: () => {},
     output: undefined,
   };
 
@@ -73,13 +72,17 @@ export function getVoice0(): Voice {
     voice.lfo!.start();
     voice.source!.start();
   };
+  voice.stop = () => {
+    voice.lfo!.stop();
+    voice.source!.stop();
+  };
   return voice;
 }
 
-// Voice 1
+// Water: add depth?
 
-export const getVoice1 = (): Voice => {
-  let name = "depth";
+export const getWater = (): Voice => {
+  let name = "water";
   let freq = 220; // A3
   let lfoFreq = 0.01;
   let cutoffFreq = {
@@ -114,6 +117,7 @@ export const getVoice1 = (): Voice => {
 
     // placeholders
     start: () => {},
+    stop: () => {},
     output: undefined,
   };
 
@@ -130,10 +134,14 @@ export const getVoice1 = (): Voice => {
     voice.lfo!.start();
     voice.source!.start();
   };
+  voice.stop = () => {
+    voice.lfo!.stop();
+    voice.source!.stop();
+  };
   return voice;
 };
 
-// Voice 2: Spacey
+// Air: Spacey
 
 let lfo20;
 let vco2;
@@ -144,8 +152,8 @@ let filter2;
 let lfo22;
 let delay2;
 
-export const getVoice2 = (): Voice => {
-  let name = "spacey";
+export const getAir = (): Voice => {
+  let name = "air";
   let freq = 328; // D3
   let lfo0Freq = 0.026;
   let lfo1Freq = 0.01;
@@ -188,6 +196,7 @@ export const getVoice2 = (): Voice => {
 
     // placeholders
     start: () => {},
+    stop: () => {},
     output: undefined,
   };
 
@@ -204,13 +213,17 @@ export const getVoice2 = (): Voice => {
     // voice.lfo!.start();
     voice.source!.start();
   };
+  voice.stop = () => {
+    // voice.lfo!.stop();
+    voice.source!.stop();
+  };
   return voice;
 };
 
-// Voice 3: Noise
+// Fire: Noise
 
-export const getVoice3 = (): Voice => {
-  let name = "noise";
+export const getFire = (): Voice => {
+  let name = "fire";
   let color: Tone.NoiseType = "pink";
   let delayTime = 0.18;
   let lfoFreq = 0.16;
@@ -236,6 +249,7 @@ export const getVoice3 = (): Voice => {
     },
     output: undefined, // placeholder
     start: () => {}, // placeholder
+    stop: () => {}, // placeholder
   };
 
   voice.lfo!.connect(voice.filters!.lowpass.frequency);
@@ -251,6 +265,10 @@ export const getVoice3 = (): Voice => {
   voice.start = () => {
     voice.lfo!.start();
     voice.source!.start()!;
+  };
+  voice.stop = () => {
+    voice.lfo!.stop();
+    voice.source!.stop()!;
   };
   return voice;
 };
@@ -273,7 +291,7 @@ export const getMixer = (inputs: Voice[]) => {
 
 // Final Delay
 
-export const getVoiceD = (input: Voice["output"]) => {
+export const getDelay = (input: Voice["output"]) => {
   let name = "delay";
   let lfoFreq = 0.01;
   let delayTime = { min: 0.2, max: 0.3 };
@@ -296,3 +314,16 @@ export const getVoiceD = (input: Voice["output"]) => {
   };
   return voice;
 };
+
+export function getVoice(voiceName: string) {
+  switch (voiceName) {
+    case "earth":
+      return getEarth();
+    case "water":
+      return getWater();
+    case "air":
+      return getAir();
+    case "fire":
+      return getFire();
+  }
+}
