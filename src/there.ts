@@ -37,9 +37,7 @@ export function updateWeatherData(data: WeatherData) {
     const displayValue =
       value instanceof Date
         ? value.toISOString().replace("T", " ").replace(":00.000Z", "")
-        : typeof value === "number"
-          ? (Math.trunc(value * 100) / 100).toFixed(2)
-          : value.toString();
+        : (Math.trunc(value * 100) / 100).toFixed(2);
 
     updateDataValue(metric, displayValue);
   }

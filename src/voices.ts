@@ -41,23 +41,7 @@ export interface Voice {
   isActive: boolean;
   currentGain: number;
   updateData: (data: WeatherData) => void;
-  weatherData?: {
-    temperature_2m?: number;
-    apparent_temperature?: number;
-    surface_pressure?: number;
-    pressure_msl?: number;
-    relative_humidity_2m?: number;
-    precipitation?: number;
-    rain?: number;
-    snowfall?: number;
-    showers?: number;
-    wind_speed_10m?: number;
-    wind_direction_10m?: number;
-    wind_gusts_10m?: number;
-    cloud_cover?: number;
-    weather_code?: number;
-    is_day?: number;
-  };
+  weatherData?: Partial<WeatherData>;
 }
 
 // Earth: F0
