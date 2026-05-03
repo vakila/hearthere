@@ -50,7 +50,7 @@ export function createEarth(): Voice {
   let gain = -10;
   let freq = 174; // F3
   let lfoFreq = 0.03;
-  let cutoffFreq = { min: 600, max: 1400 };
+  let cutoffFreq = { min: 300, max: 600 };
   const earth: Voice = {
     name,
     gain,
@@ -59,10 +59,10 @@ export function createEarth(): Voice {
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
     filters: {
-      harmonics: new Tone.Filter({ frequency: 174, type: "lowpass" }),
+      harmonics: new Tone.Filter({ frequency: freq, type: "lowpass" }),
       dampening: new Tone.Filter({
         type: "peaking",
-        frequency: 174,
+        frequency: freq,
         gain: -6,
         rolloff: -24,
       }),
@@ -105,9 +105,9 @@ export function createEarth(): Voice {
     const temp = data.temperature_2m;
     const feelsLike = data.apparent_temperature;
     if (temp !== undefined && earth.source) {
-      const baseFreq = 174;
-      const freq = baseFreq + temp * 2;
-      (earth.source as Oscillator).frequency.rampTo(freq, 1);
+      const baseFreq = freq;
+      const newFreq = baseFreq + temp;
+      (earth.source as Oscillator).frequency.rampTo(newFreq, 1);
     }
     if (earth.lfo) {
       const lfoRate = 0.03 * (temp / feelsLike); // / 100000;
