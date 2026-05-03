@@ -1,11 +1,11 @@
-import { fetchCurrentWeather, fetchLocation, type WeatherData } from "./meteo";
+import { fetchCurrentWeather, findLocation, type WeatherData } from "./weather";
 import { updateMap } from "./globe";
 import { updateWeatherData as updateVoiceWeatherData } from "./voices";
 
 const latInput = document.getElementById("lat") as HTMLInputElement;
 const lonInput = document.getElementById("lon") as HTMLInputElement;
 
-export async function fetchWeather() {
+export async function updateLocation() {
   const lat = latInput.valueAsNumber;
   const lon = lonInput.valueAsNumber;
   const weather = await fetchCurrentWeather(lat, lon);
@@ -46,10 +46,10 @@ export function updateWeatherData(data: WeatherData) {
   updateVoiceWeatherData(data);
 }
 
-window.addEventListener("load", fetchWeather);
+window.addEventListener("load", updateLocation);
 
 for (let input of [latInput, lonInput]) {
-  input?.addEventListener("change", fetchWeather);
+  input?.addEventListener("change", updateLocation);
 }
 
 function clearWeatherData() {
@@ -62,7 +62,7 @@ function clearWeatherData() {
 const search = document.getElementById("search") as HTMLInputElement;
 search.addEventListener("change", async () => {
   console.log("location search");
-  const results = await fetchLocation(search.value);
+  const results = await findLocation(search.value);
   console.log(results);
   if (!results || results.length === 0) {
     latInput.value = "";
@@ -73,5 +73,5 @@ search.addEventListener("change", async () => {
   const [result] = results;
   latInput.value = result.latitude;
   lonInput.value = result.longitude;
-  await fetchWeather();
+  await updateLocation();
 });

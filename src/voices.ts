@@ -15,11 +15,10 @@ import type {
   Merge,
   NoiseType,
 } from "tone";
-import type { WeatherData } from "./meteo";
+import type { WeatherData } from "./weather";
 
 // Hack to work around AudioContext warnings when importing Tone
 export let Tone: typeof import("tone");
-
 export const initializeTone = async () => {
   console.log("initializing Tone.js");
   if (Tone) return Tone;
@@ -62,7 +61,7 @@ export interface Voice {
 }
 
 // Earth: F0
-export function getEarth(): Voice {
+export function createEarth(): Voice {
   let name = "earth";
   let gain = -10;
   let freq = 174; // F3
@@ -132,7 +131,7 @@ export function getEarth(): Voice {
 }
 
 // Water: add depth?
-export const getWater = (): Voice => {
+export const createWater = (): Voice => {
   let name = "water";
   let gain = -3.5;
   let freq = 220; // A3
@@ -203,7 +202,7 @@ export const getWater = (): Voice => {
 };
 
 // Air: Spacey
-export const getAir = (): Voice => {
+export const createAir = (): Voice => {
   let name = "air";
   let gain = -11.25;
   let freq = 328; // D3
@@ -260,7 +259,7 @@ export const getAir = (): Voice => {
 };
 
 // Fire: Noise
-export const getFire = (): Voice => {
+export const createFire = (): Voice => {
   let name = "fire";
   let color: NoiseType = "pink";
   let delayTime = 0.18;
@@ -353,13 +352,13 @@ export const VOICES: { [name: string]: Voice } = {};
 function createVoice(name: string): Voice {
   switch (name) {
     case "earth":
-      return getEarth();
+      return createEarth();
     case "water":
-      return getWater();
+      return createWater();
     case "air":
-      return getAir();
+      return createAir();
     case "fire":
-      return getFire();
+      return createFire();
     default:
       throw new Error(`Unknown voice: ${name}`);
   }

@@ -28,7 +28,7 @@ const CURRENT_METRICS = [
   "wind_gusts_10m", // air
 ];
 
-export async function fetchLocation(search = "Berlin") {
+export async function findLocation(search = "Berlin") {
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${search}&count=1`;
   const response = await fetch(url);
   const { results } = await response.json();
