@@ -42,8 +42,6 @@ a:focus-visible {
 body {
     margin: 0;
     width: 100vw;
-    /*display: flex;*/
-    /*place-items: center;*/
     min-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
@@ -149,16 +147,10 @@ input:focus-visible {
 }
 
 #app {
-    /*display: grid;*/
-    /*grid-auto-flow: row;*/
-    /*display:flex;
-    flex-direction: column;*/
-    /*position: fixed;*/
     margin: 0;
     padding: 0;
     text-align: center;
     width: 100vw;
-    /*height: fit-content;*/
     min-height: 100vh;
 }
 
@@ -254,8 +246,6 @@ input:focus-visible {
     height: 100%;
     display: flex;
     flex-direction: column;
-    /*display: grid;
-    grid-template-rows: 50% 50%;*/
 }
 
 #hear {
@@ -528,9 +518,17 @@ input:focus-visible {
 
 @media (width > 680px) {
     #app {
-        grid-template-columns: 1fr minmax(40%, 40vw);
+        display: grid;
+        grid-template-columns: 40% 60%;
+        grid-auto-flow: column;
+        position: fixed;
         width: 100vw;
-        height: 100vh;
+        height: fit-content;
+    }
+
+    #viz {
+        width: calc(100% - 2em);
+        height: calc(100vh - 2em);
     }
 
     #map {
@@ -539,8 +537,36 @@ input:focus-visible {
         padding-top: 70vh;
     }
 
-    #info {
-        height: 100vh;
+    #controls {
+        display: grid;
+        grid-template-rows: 50vh 50vh;
+    }
+
+    #hear {
+        flex-direction: row;
+    }
+
+    #hear h2 {
+        writing-mode: sideways-lr;
+    }
+
+    #hear-controls .voice-control {
+        max-width: 15%;
+        height: calc(100% - 1em);
+    }
+
+    #there {
+        flex-direction: row-reverse;
+    }
+
+    #there h2 {
+        writing-mode: vertical-rl;
+    }
+}
+
+@media (width > 1080px) {
+    .viz-overlay {
+        display: block;
     }
 }
 
