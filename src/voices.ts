@@ -141,7 +141,7 @@ export const getWater = (): Voice => {
   const water: Voice = {
     name,
     gain,
-    isActive: true,
+    isActive: false,
     currentGain: gain,
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
@@ -213,7 +213,7 @@ export const getAir = (): Voice => {
   const air: Voice = {
     name,
     gain,
-    isActive: true,
+    isActive: false,
     currentGain: gain,
     source: new Tone.FMOscillator({
       frequency: freq,
@@ -270,7 +270,7 @@ export const getFire = (): Voice => {
   const fire: Voice = {
     name,
     gain,
-    isActive: true,
+    isActive: false,
     currentGain: gain,
     source: new Tone.Noise(color),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
