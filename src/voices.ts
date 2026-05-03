@@ -1,4 +1,4 @@
-import { Tone, initializeTone } from "./toner";
+import { Tone } from "./toner";
 
 export interface Voice {
   name: string;
@@ -16,6 +16,7 @@ export interface Voice {
   start: () => void;
   stop: () => void;
   output?: Tone.ToneAudioNode;
+  gainNode?: Tone.Gain;
   gain: Tone.Unit.GainFactor;
 }
 
@@ -68,6 +69,10 @@ export function getEarth(): Voice {
 
   voice.output = voice.filters!.sweep;
 
+  voice.gainNode = new Tone.Gain(voice.gain, "decibels");
+  voice.output.connect(voice.gainNode);
+  voice.output = voice.gainNode;
+
   voice.start = () => {
     voice.lfo!.start();
     voice.source!.start();
@@ -119,6 +124,7 @@ export const getWater = (): Voice => {
     start: () => {},
     stop: () => {},
     output: undefined,
+    gainNode: undefined,
   };
 
   voice.lfo!.connect(voice.filters!.sweep.frequency);
@@ -129,6 +135,10 @@ export const getWater = (): Voice => {
   );
 
   voice.output = voice.filters!.sweep;
+
+  voice.gainNode = new Tone.Gain(voice.gain, "decibels");
+  voice.output.connect(voice.gainNode);
+  voice.output = voice.gainNode;
 
   voice.start = () => {
     voice.lfo!.start();
@@ -198,6 +208,7 @@ export const getAir = (): Voice => {
     start: () => {},
     stop: () => {},
     output: undefined,
+    gainNode: undefined,
   };
 
   voice.lfo!.connect((voice.source as Tone.Oscillator).frequency);
@@ -208,6 +219,10 @@ export const getAir = (): Voice => {
   // );
 
   voice.output = voice.source;
+
+  voice.gainNode = new Tone.Gain(voice.gain, "decibels");
+  voice.output.connect(voice.gainNode);
+  voice.output = voice.gainNode;
 
   voice.start = () => {
     // voice.lfo!.start();
@@ -248,6 +263,7 @@ export const getFire = (): Voice => {
       }),
     },
     output: undefined, // placeholder
+    gainNode: undefined,
     start: () => {}, // placeholder
     stop: () => {}, // placeholder
   };
@@ -261,6 +277,10 @@ export const getFire = (): Voice => {
   voice.output = voice.filters!.lowpass;
   voice.source!.debug = true;
   voice.output!.debug = true;
+
+  voice.gainNode = new Tone.Gain(voice.gain, "decibels");
+  voice.output.connect(voice.gainNode);
+  voice.output = voice.gainNode;
 
   voice.start = () => {
     voice.lfo!.start();
@@ -281,9 +301,7 @@ export const getMixer = (inputs: Voice[]) => {
   const merge = new Tone.Merge(1);
   inputs.map((voice, i) => {
     console.log("connecting voice", voice);
-    const gain = new Tone.Gain(voice.gain, "decibels");
-    voice.output!.connect(gain);
-    gain.connect(merge);
+    voice.gainNode!.connect(merge);
   });
   merge.toDestination();
   return merge;

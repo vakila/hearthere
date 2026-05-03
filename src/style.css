@@ -383,6 +383,16 @@ input:focus-visible {
     display: none;
 }
 
+.voice-gain {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    width: 1.5em;
+    height: 80px;
+    align-self: center;
+    cursor: pointer;
+    accent-color: currentColor;
+}
+
 .data-item {
     display: flex;
     justify-content: space-between;
