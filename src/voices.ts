@@ -423,11 +423,10 @@ export async function playAudio() {
   if (!mixerInitialized) {
     mixer = getMixer(activeVoices);
     mixerInitialized = true;
-
-    for (let voice of activeVoices) {
-      console.log("starting voice", voice);
-      voice.start();
-    }
+  }
+  for (let voice of activeVoices) {
+    console.log("starting voice", voice);
+    voice.start();
   }
 
   for (let voice of activeVoices) {
@@ -442,6 +441,15 @@ export async function playAudio() {
 export function pauseAudio() {
   console.log("pause");
   Tone.getDestination().volume.rampTo(-96, 1);
+  const activeVoices = getActiveVoices();
+
+  for (let voice of activeVoices) {
+    console.log("pausing voice", voice);
+    if (voice.gainNode) {
+      voice.gainNode.gain.rampTo(-96, 1);
+    }
+    voice.stop();
+  }
 }
 
 export function updateWeatherData(data: WeatherData) {
