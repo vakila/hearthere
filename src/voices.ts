@@ -304,9 +304,9 @@ export const getFire = (): Voice => {
   fire.updateData = (data) => {
     fire.weatherData = { ...fire.weatherData, ...data };
     const cloudCover = fire.weatherData.cloud_cover;
-    if (cloudCover !== undefined && fire.filters?.lowpass) {
+    if (cloudCover !== undefined && fire.lfo) {
       const cutoff = 1054 * (0.75 + (cloudCover / 100) * 0.5);
-      fire.filters.lowpass.frequency.rampTo(cutoff, 1);
+      fire.lfo.frequency.rampTo(cutoff, 1);
     }
     if (fire.weatherData.is_day && fire.gainNode) {
       const gain = fire.weatherData.is_day ? -17.5 : -22;
