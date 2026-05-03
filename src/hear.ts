@@ -1,9 +1,6 @@
-import { Tone, initializeTone } from "./toner";
-import { getVoice, getMixer } from "./voices";
+import { Tone, initializeTone, getVoice, getMixer } from "./voices";
 import type { Voice } from "./voices";
 import { marker } from "./globe";
-
-const PLAYPAUSEBTN = document.querySelector<HTMLButtonElement>("#playpause")!;
 
 const VOICES: {
   [name: string]: {
@@ -174,14 +171,13 @@ function updateMarkerIcon(playing: boolean) {
   }
 }
 
-function setupPlayPauseButton(button: HTMLButtonElement) {
+function setupPlayPauseButton() {
   const svg = marker.getElement();
-  button.style.display = "none"; // Hide the original button
   svg.dataset.playing = "init";
   updateMarkerIcon(false); // Show play icon initially
   svg.addEventListener("click", () => togglePlaying());
 }
-setupPlayPauseButton(PLAYPAUSEBTN);
+setupPlayPauseButton();
 
 function toggleVoice(
   voice: string,
