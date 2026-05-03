@@ -88,102 +88,11 @@
                         <h2>hear</h2>
 
                         <div id="hear-controls">
-                            <div class="voice-control" id="air">
-                                <div class="voice-header">
-                                    <span class="voice-name">Air</span>
-                                </div>
-                                <button
-                                    class="voice-toggle"
-                                    aria-label="Toggle Air voice"
-                                    data-voice="air"
-                                >
-                                    OFF
-                                </button>
-                                <input
-                                    type="range"
-                                    class="voice-gain"
-                                    min="-48"
-                                    max="0"
-                                    step="0.25"
-                                    value="-11.25"
-                                    data-voice="air"
-                                    aria-label="Air gain"
-                                />
-                                <div class="voice-data">
-                                    <div class="data-item" id="wind_speed_10m">
-                                        <span class="data-label"
-                                            >wind speed</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                    <div class="data-item" id="wind_gusts_10m">
-                                        <span class="data-label">wind gust</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                    <div
-                                        class="data-item"
-                                        id="wind_direction_10m"
-                                    >
-                                        <span class="data-label">wind dir</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                    <div
-                                        class="data-item"
-                                        id="surface_pressure"
-                                    >
-                                        <span class="data-label">pressure</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="voice-control" id="fire">
-                                <div class="voice-header">
-                                    <span class="voice-name">Fire</span>
-                                </div>
-                                <button
-                                    class="voice-toggle"
-                                    aria-label="Toggle Fire voice"
-                                    data-voice="fire"
-                                >
-                                    OFF
-                                </button>
-                                <input
-                                    type="range"
-                                    class="voice-gain"
-                                    min="-48"
-                                    max="0"
-                                    step="0.25"
-                                    value="-17.5"
-                                    data-voice="fire"
-                                    aria-label="Fire gain"
-                                />
-                                <div class="voice-data">
-                                    <div class="data-item" id="time">
-                                        <span class="data-label">time</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                    <div class="data-item" id="is_day">
-                                        <span class="data-label">is day</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                    <div class="data-item" id="cloud_cover">
-                                        <span class="data-label"
-                                            >cloud cover</span
-                                        ><span class="data-value">--</span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="voice-control" id="earth">
                                 <div class="voice-header">
                                     <span class="voice-name">earth</span>
                                 </div>
-                                <button
-                                    class="voice-toggle active"
-                                    aria-label="Toggle Earth voice"
-                                    data-voice="earth"
-                                >
-                                    ON
-                                </button>
+
                                 <input
                                     type="range"
                                     class="voice-gain"
@@ -192,8 +101,15 @@
                                     step="0.25"
                                     value="-10"
                                     data-voice="earth"
-                                    aria-label="Earth gain"
+                                    aria-label="Earth voice volume"
                                 />
+                                <button
+                                    class="voice-toggle active"
+                                    aria-label="Toggle Earth voice"
+                                    data-voice="earth"
+                                >
+                                    ON
+                                </button>
                                 <!--<div class="voice-data">
                                     <div class="data-item" id="elevation">
                                         <span class="data-label">elevation</span
@@ -218,6 +134,17 @@
                                 <div class="voice-header">
                                     <span class="voice-name">Water</span>
                                 </div>
+
+                                <input
+                                    type="range"
+                                    class="voice-gain"
+                                    min="-48"
+                                    max="0"
+                                    step="0.25"
+                                    value="-48"
+                                    data-voice="water"
+                                    aria-label="Water gain"
+                                />
                                 <button
                                     class="voice-toggle"
                                     aria-label="Toggle Water voice"
@@ -225,17 +152,7 @@
                                 >
                                     OFF
                                 </button>
-                                <input
-                                    type="range"
-                                    class="voice-gain"
-                                    min="-48"
-                                    max="0"
-                                    step="0.25"
-                                    value="-3.5"
-                                    data-voice="water"
-                                    aria-label="Water gain"
-                                />
-                                <div class="voice-data">
+                                <!--<div class="voice-data">
                                     <div
                                         class="data-item"
                                         id="relative_humidity_2m"
@@ -248,7 +165,94 @@
                                             >precipitation</span
                                         ><span class="data-value">--</span>
                                     </div>
+                                </div>-->
+                            </div>
+
+                            <div class="voice-control" id="air">
+                                <div class="voice-header">
+                                    <span class="voice-name">Air</span>
                                 </div>
+
+                                <input
+                                    type="range"
+                                    class="voice-gain"
+                                    min="-48"
+                                    max="0"
+                                    step="0.25"
+                                    value="-48"
+                                    data-voice="air"
+                                    aria-label="Air volume"
+                                />
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Air voice"
+                                    data-voice="air"
+                                >
+                                    OFF
+                                </button>
+                                <!--<div class="voice-data">
+                                    <div class="data-item" id="wind_speed_10m">
+                                        <span class="data-label"
+                                            >wind speed</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="wind_gusts_10m">
+                                        <span class="data-label">wind gust</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div
+                                        class="data-item"
+                                        id="wind_direction_10m"
+                                    >
+                                        <span class="data-label">wind dir</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div
+                                        class="data-item"
+                                        id="surface_pressure"
+                                    >
+                                        <span class="data-label">pressure</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                </div>-->
+                            </div>
+
+                            <div class="voice-control" id="fire">
+                                <div class="voice-header">
+                                    <span class="voice-name">Fire</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    class="voice-gain"
+                                    min="-48"
+                                    max="0"
+                                    step="0.25"
+                                    value="-48"
+                                    data-voice="fire"
+                                    aria-label="Fire voice volume"
+                                />
+                                <button
+                                    class="voice-toggle"
+                                    aria-label="Toggle Fire voice"
+                                    data-voice="fire"
+                                >
+                                    OFF
+                                </button>
+                                <!--<div class="voice-data">
+                                    <div class="data-item" id="time">
+                                        <span class="data-label">time</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="is_day">
+                                        <span class="data-label">is day</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                    <div class="data-item" id="cloud_cover">
+                                        <span class="data-label"
+                                            >cloud cover</span
+                                        ><span class="data-value">--</span>
+                                    </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
