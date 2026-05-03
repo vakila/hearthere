@@ -80,19 +80,21 @@ export async function play() {
 
   Tone.getDestination().volume.rampTo(0, 1);
 
-  PLAYPAUSEBTN.dataset.playing = "true";
-  PLAYPAUSEBTN.innerText = "pause";
+  marker.getElement().dataset.playing = "true";
+  updateMarkerIcon(true);
 }
 
 export function pause() {
   console.log("pause");
   Tone.getDestination().volume.rampTo(-96, 1);
-  PLAYPAUSEBTN.dataset.playing = "";
-  PLAYPAUSEBTN.innerText = "play";
+  marker.getElement().dataset.playing = "";
+  updateMarkerIcon(false);
 }
 
 const togglePlaying = async () => {
-  let playing = PLAYPAUSEBTN.dataset.playing;
+  const markerEl = marker.getElement();
+  if (!markerEl) return;
+  let playing = markerEl.dataset.playing;
   if (playing === "init") {
     await initializeTone();
     playing = "false";
@@ -104,20 +106,79 @@ const togglePlaying = async () => {
   }
 };
 
+function updateMarkerIcon(playing: boolean) {
+  const markerEl = marker.getElement();
+  if (!markerEl) return;
+  const svg =
+    markerEl.tagName === "svg" ? markerEl : markerEl.querySelector("svg");
+  if (!svg) return;
+  const circle = svg.querySelector("circle");
+  if (!circle) return;
+
+  const existingIcon = svg.querySelector(".marker-play-pause-icon");
+  if (existingIcon) existingIcon.remove();
+
+  const cx = parseFloat(circle.getAttribute("cx") || "0");
+  const cy = parseFloat(circle.getAttribute("cy") || "0");
+  const r = parseFloat(circle.getAttribute("r") || "10");
+
+  if (playing) {
+    // Pause icon: two vertical bars
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.classList.add("marker-play-pause-icon");
+    g.setAttribute("fill", "var(--color-hear");
+
+    const barWidth = r * 0.15;
+    const barHeight = r * 0.6;
+    const barY = cy - barHeight / 2;
+    const gap = r * 0.1;
+
+    const rect1 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect",
+    );
+    rect1.setAttribute("x", (cx - gap / 2 - barWidth).toString());
+    rect1.setAttribute("y", barY.toString());
+    rect1.setAttribute("width", barWidth.toString());
+    rect1.setAttribute("height", barHeight.toString());
+
+    const rect2 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect",
+    );
+    rect2.setAttribute("x", (cx + gap / 2).toString());
+    rect2.setAttribute("y", barY.toString());
+    rect2.setAttribute("width", barWidth.toString());
+    rect2.setAttribute("height", barHeight.toString());
+
+    g.appendChild(rect1);
+    g.appendChild(rect2);
+    circle.parentNode?.appendChild(g);
+  } else {
+    // Play icon: right-pointing triangle
+    const polygon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "polygon",
+    );
+    polygon.classList.add("marker-play-pause-icon");
+    polygon.setAttribute("fill", "var(--color-hear)");
+
+    const triangleSize = r * 0.6;
+    const points = [
+      `${cx - triangleSize * 0.3},${cy - triangleSize * 0.4}`,
+      `${cx + triangleSize * 0.5},${cy}`,
+      `${cx - triangleSize * 0.3},${cy + triangleSize * 0.4}`,
+    ].join(" ");
+    polygon.setAttribute("points", points);
+    circle.parentNode?.appendChild(polygon);
+  }
+}
+
 function setupPlayPauseButton(button: HTMLButtonElement) {
   const svg = marker.getElement();
-  // const circle = svg.getElementsByTagName("circle")[1];
-  // console.log(circle);
-  // svg.dataset.playing = "init";
-  // const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  // text.textContent = "play";
-  // // text.setAttribute("x", "5");
-  // // text.setAttribute("y", "5");
-  // // text.setAttribute("fill", "#000000");
-  // circle.parentNode?.append(text);
-  // circle.parentNode?.appendChild(PLAYPAUSEBTN);
-  button.innerText = "play";
-  button.dataset.playing = "init";
+  button.style.display = "none"; // Hide the original button
+  svg.dataset.playing = "init";
+  updateMarkerIcon(false); // Show play icon initially
   svg.addEventListener("click", () => togglePlaying());
 }
 setupPlayPauseButton(PLAYPAUSEBTN);
