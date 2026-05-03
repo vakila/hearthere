@@ -1,6 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css"; // Map styles
 import {
   Map,
+  Marker,
   type DataDrivenPropertyValueSpecification,
   type LngLatLike,
 } from "maplibre-gl";
@@ -126,8 +127,60 @@ export const pointsLayer = {
 //     });
 // });
 
+// https://maplibre.org/maplibre-gl-js/docs/examples/add-an-animated-icon-to-the-map/
+const size = 200;
+const pulsingDot = {
+  width: size,
+  height: size,
+  data: new Uint8ClampedArray(size * size * 4),
+  context: null as CanvasRenderingContext2D | null,
+
+  // get rendering context for the map canvas when layer is added to the map
+  onAdd() {
+    const canvas = document.createElement("canvas");
+    canvas.width = this.width;
+    canvas.height = this.height;
+    this.context = canvas.getContext("2d");
+  },
+
+  // called once before every frame where the icon will be used
+  render() {
+    const duration = 1000;
+    const t = (performance.now() % duration) / duration;
+
+    const radius = (size / 2) * 0.3;
+    const outerRadius = (size / 2) * 0.7 * t + radius;
+    const context = this.context!;
+
+    // draw outer circle
+    // context.clearRect(0, 0, this.width, this.height);
+    // context.beginPath();
+    // context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+    // context.fillStyle = `rgba(255, 200, 200,${1 - t})`;
+    // context.fill();
+
+    // draw inner circle
+    context.beginPath();
+    context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+    context.fillStyle = "rgba(255, 100, 100, 1)";
+    context.strokeStyle = "white";
+    // context.lineWidth = 2 + 4 * (1 - t);
+    context.fill();
+    context.stroke();
+
+    // update this image's data with data from the canvas
+    this.data = context.getImageData(0, 0, this.width, this.height).data;
+
+    // continuously repaint the map, resulting in the smooth animation of the dot
+    map.triggerRepaint();
+
+    // return `true` to let the map know that the image was updated
+    return true;
+  },
+};
+
 // // configuration of the custom layer for a 3D model per the CustomLayerInterface
-// export const customLayer: any = {
+// export const threeLayer: any = {
 //   id: "3d-model",
 //   type: "custom",
 //   renderingMode: "3d", // The layer MUST be marked as 3D in order to get the proper depth buffer with globe depths in it.
@@ -197,14 +250,37 @@ map.on("style.load", () => {
   map.setProjection({
     type: "globe", // Set projection to globe
   });
+  // map.addLayer(threeLayer);
 
-  // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-  map.on("mouseenter", "stations", () => {
-    map.getCanvas().style.cursor = "pointer";
-  });
+  // map.addImage("pulsing-dot", pulsingDot, { pixelRatio: 2 });
 
-  // Change it back to a pointer when it leaves.
-  map.on("mouseleave", "stations", () => {
-    map.getCanvas().style.cursor = "";
-  });
+  // map.addSource("points", {
+  //   type: "geojson",
+  //   data: {
+  //     type: "Point",
+  //     coordinates: [BERLIN.lon, BERLIN.lat],
+  //   },
+  // });
+  // map.addLayer({
+  //   id: "points",
+  //   type: "symbol",
+  //   source: "points",
+  //   layout: {
+  //     "icon-image": "pulsing-dot",
+  //   },
+  // });
 });
+
+export const marker = new Marker({
+  scale: 10,
+  anchor: "bottom",
+  offset: [0, 50],
+  color: "var(--color-there)",
+})
+  .setLngLat(BERLIN)
+  .addTo(map);
+
+export function updateMap(lat: number, lon: number) {
+  map.easeTo({ center: [lon, lat] });
+  marker.setLngLat([lon, lat]);
+}

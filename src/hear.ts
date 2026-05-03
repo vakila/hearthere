@@ -1,6 +1,7 @@
 import { Tone, initializeTone } from "./toner";
 import { getVoice, getMixer } from "./voices";
 import type { Voice } from "./voices";
+import { marker } from "./globe";
 
 const PLAYPAUSEBTN = document.querySelector<HTMLButtonElement>("#playpause")!;
 
@@ -102,10 +103,22 @@ const togglePlaying = async () => {
     play();
   }
 };
+
 function setupPlayPauseButton(button: HTMLButtonElement) {
+  const svg = marker.getElement();
+  // const circle = svg.getElementsByTagName("circle")[1];
+  // console.log(circle);
+  // svg.dataset.playing = "init";
+  // const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  // text.textContent = "play";
+  // // text.setAttribute("x", "5");
+  // // text.setAttribute("y", "5");
+  // // text.setAttribute("fill", "#000000");
+  // circle.parentNode?.append(text);
+  // circle.parentNode?.appendChild(PLAYPAUSEBTN);
   button.innerText = "play";
   button.dataset.playing = "init";
-  button.addEventListener("click", () => togglePlaying());
+  svg.addEventListener("click", () => togglePlaying());
 }
 setupPlayPauseButton(PLAYPAUSEBTN);
 
@@ -133,7 +146,10 @@ function toggleVoice(
 
   if (isActive) {
     gainNode.gain.rampTo(voiceState.currentGain ?? voiceState.voice.gain, 1);
-    if (slider) slider.value = (voiceState.currentGain ?? voiceState.voice.gain).toString();
+    if (slider)
+      slider.value = (
+        voiceState.currentGain ?? voiceState.voice.gain
+      ).toString();
   } else {
     gainNode.gain.rampTo(-48, 1);
     if (slider) slider.value = "-48";

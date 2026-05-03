@@ -12,10 +12,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
+    --color-there: #48d1cc;
+    --color-hear: #ff69b4;
     --color-earth: #4ade80;
     --color-air: #fef08a;
     --color-water: #60a5fa;
-    --color-fire: #f472b6;
+    --color-fire: orange;
 }
 
 a {
@@ -67,6 +69,9 @@ h1 {
 }
 
 .read-the-docs {
+    position: relative;
+    bottom: 0;
+    left: 0;
     color: #aaa;
     margin: 1em 0;
 }
@@ -165,11 +170,14 @@ input:focus-visible {
     background-blend-mode: multiply;
     background-size: cover;
     background-position: center;
+}
+
+#viz {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    padding: 2em;
+    padding: 1em;
     position: relative;
     overflow: hidden;
 }
@@ -519,8 +527,8 @@ input:focus-visible {
 
     #map {
         width: 100%;
-        height: 55vh;
-        margin-top: 45vh;
+        height: 100vh;
+        padding-top: 70vh;
     }
 
     #info {
