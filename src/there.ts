@@ -1,4 +1,5 @@
 import { fetchCurrentWeather, fetchLocation, type WeatherData } from "./meteo";
+import { map } from "./globe";
 
 const latInput = document.getElementById("lat") as HTMLInputElement;
 const lonInput = document.getElementById("lon") as HTMLInputElement;
@@ -9,6 +10,7 @@ export async function fetchWeather() {
   const weather = await fetchCurrentWeather(lat, lon);
   console.log(weather);
   updateWeatherData(weather);
+  map.easeTo({ center: [lon, lat] });
 }
 
 export function updateDataValue(elementId: string, value: string | number) {

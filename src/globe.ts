@@ -1,115 +1,120 @@
+import "maplibre-gl/dist/maplibre-gl.css"; // Map styles
+import {
+  Map,
+  type DataDrivenPropertyValueSpecification,
+  type LngLatLike,
+} from "maplibre-gl";
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import 'maplibre-gl/dist/maplibre-gl.css'; // Map styles
-import { Map, type DataDrivenPropertyValueSpecification, type LngLatLike } from 'maplibre-gl';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import STATION_SRC from './stations.geo.json';
-import type { FeatureCollection } from 'geojson';
-
-const STATIONS = Object.fromEntries(STATION_SRC.features.map((feat) => [
-    feat.properties.name,
-    feat.geometry.coordinates as LngLatLike,
-]));
+const BERLIN = {
+  lat: 52.52,
+  lon: 13.41,
+};
 
 const COLORS = {
-    DeepBlue: "#101d30",
-    DeepGreen: "#162d11",
-    Yellow: "#f5ee1eff"
+  DeepBlue: "#101d30",
+  DeepGreen: "#162d11",
+  Yellow: "#f5ee1eff",
 };
 
 export const map = new Map({
-    container: 'map',
-    style: {
-        "version": 8,
-        "sources": {
-            "satellite": {
-                "type": "raster",
-                "tiles": [
-                    "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg"
-                ],
-                "tileSize": 256
-            },
-            "maplibre": {
-                "url": "https://demotiles.maplibre.org/tiles/tiles.json",
-                "type": "vector"
-            },
-        },
-        "layers": [{
-            "id": "background",
-            "type": "background",
-            "paint": {
-                "background-color": COLORS.DeepBlue
-            },
-            "layout": {
-                "visibility": "visible"
-            },
-            "maxzoom": 24
-        },
-        {
-            "id": "land",
-            "type": "fill",
-            "source": "maplibre",
-            "source-layer": "countries",
-            "paint": {
-                "fill-color": COLORS.DeepGreen
-            }
-        },
-        {
-            "id": "coastline",
-            "type": "line",
-            "paint": {
-                "line-blur": 0.5,
-                "line-color": COLORS.DeepGreen,
-                "line-width": {
-                    "stops": [
-                        [
-                            0,
-                            2
-                        ],
-                        [
-                            6,
-                            6
-                        ],
-                        [
-                            14,
-                            9
-                        ],
-                        [
-                            22,
-                            18
-                        ]
-                    ]
-                } as DataDrivenPropertyValueSpecification<number>
-            },
-            "filter": [
-                "all"
-            ],
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round",
-                "visibility": "visible"
-            },
-            "source": "maplibre",
-            "maxzoom": 24,
-            "minzoom": 0,
-            "source-layer": "countries"
-        },
-        {
-            "id": "satellite",
-            "type": "raster",
-            "source": "satellite"
-        }
-        ]
+  container: "map",
+  style: {
+    version: 8,
+    sources: {
+      satellite: {
+        type: "raster",
+        tiles: [
+          "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg",
+        ],
+        tileSize: 256,
+      },
+      maplibre: {
+        url: "https://demotiles.maplibre.org/tiles/tiles.json",
+        type: "vector",
+      },
     },
-    zoom: 1.5,
-    center: STATIONS.Brooklyn,
-    // maxPitch: 60,
-    // pitch: 50,
-    canvasContextAttributes: {
-        antialias: true, // create the gl context with MSAA antialiasing, so custom layers are antialiased
-        alpha: true,
-    }
+    layers: [
+      {
+        id: "background",
+        type: "background",
+        paint: {
+          "background-color": COLORS.DeepBlue,
+        },
+        layout: {
+          visibility: "visible",
+        },
+        maxzoom: 4,
+        minzoom: 4,
+      },
+      {
+        id: "land",
+        type: "fill",
+        source: "maplibre",
+        "source-layer": "countries",
+        paint: {
+          "fill-color": COLORS.DeepGreen,
+        },
+        maxzoom: 4,
+        minzoom: 4,
+      },
+      {
+        id: "coastline",
+        type: "line",
+        paint: {
+          "line-blur": 0.5,
+          "line-color": COLORS.DeepGreen,
+          "line-width": {
+            stops: [
+              [0, 2],
+              [6, 6],
+              [14, 9],
+              [22, 18],
+            ],
+          } as DataDrivenPropertyValueSpecification<number>,
+        },
+        filter: ["all"],
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+          visibility: "visible",
+        },
+        source: "maplibre",
+        maxzoom: 4,
+        minzoom: 4,
+        "source-layer": "countries",
+      },
+      {
+        id: "satellite",
+        type: "raster",
+        source: "satellite",
+      },
+    ],
+  },
+  zoom: 4,
+  center: BERLIN,
+  // maxPitch: 60,
+  pitch: 80,
+  canvasContextAttributes: {
+    antialias: true, // create the gl context with MSAA antialiasing, so custom layers are antialiased
+    alpha: true,
+  },
+  interactive: false,
 });
+
+export const pointsLayer = {
+  id: "stations",
+  type: "circle",
+  source: {
+    type: "geojson",
+    // data: STATION_SRC as FeatureCollection,
+  },
+  paint: {
+    "circle-radius": 10,
+    "circle-color": COLORS.Yellow,
+  },
+} as const;
 
 // The API demonstrated in this example will work regardless of projection.
 // // Click this button to toggle it.
@@ -121,102 +126,85 @@ export const map = new Map({
 //     });
 // });
 
+// // configuration of the custom layer for a 3D model per the CustomLayerInterface
+// export const customLayer: any = {
+//   id: "3d-model",
+//   type: "custom",
+//   renderingMode: "3d", // The layer MUST be marked as 3D in order to get the proper depth buffer with globe depths in it.
+//   onAdd(map: Map, gl: WebGLRenderingContext) {
+//     this.camera = new THREE.Camera();
+//     this.scene = new THREE.Scene();
 
+//     // create two three.js lights to illuminate the model
+//     const directionalLight = new THREE.DirectionalLight(0xffffff);
+//     directionalLight.position.set(0, -70, 100).normalize();
+//     this.scene.add(directionalLight);
 
-export const pointsLayer = {
-    'id': 'stations',
-    'type': 'circle',
-    'source': {
-        type: 'geojson',
-        data: STATION_SRC as FeatureCollection
-    },
-    "paint": {
-        "circle-radius": 10,
-        "circle-color": COLORS.Yellow,
-    }
-} as const;
+//     const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+//     directionalLight2.position.set(0, 70, 100).normalize();
+//     this.scene.add(directionalLight2);
 
-// configuration of the custom layer for a 3D model per the CustomLayerInterface
-export const customLayer: any = {
-    id: '3d-model',
-    type: 'custom',
-    renderingMode: '3d', // The layer MUST be marked as 3D in order to get the proper depth buffer with globe depths in it.
-    onAdd(map: Map, gl: WebGLRenderingContext) {
-        this.camera = new THREE.Camera();
-        this.scene = new THREE.Scene();
+//     // use the three.js GLTF loader to add the 3D model to the three.js scene
+//     const loader = new GLTFLoader();
+//     loader.load(
+//       "https://maplibre.org/maplibre-gl-js/docs/assets/34M_17/34M_17.gltf",
+//       (gltf) => {
+//         this.scene.add(gltf.scene);
+//       },
+//     );
+//     this.map = map;
 
-        // create two three.js lights to illuminate the model
-        const directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(0, -70, 100).normalize();
-        this.scene.add(directionalLight);
+//     // use the MapLibre GL JS map canvas for three.js
+//     this.renderer = new THREE.WebGLRenderer({
+//       canvas: map.getCanvas(),
+//       context: gl,
+//       antialias: true,
+//     });
 
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff);
-        directionalLight2.position.set(0, 70, 100).normalize();
-        this.scene.add(directionalLight2);
+//     this.renderer.autoClear = false;
+//   },
+//   render(_gl: any, args: any) {
+//     // parameters to ensure the model is georeferenced correctly on the map
+//     const modelOrigin: LngLatLike = BERLIN;
+//     // [148.9819, -35.39847];
+//     const modelAltitude = 0;
 
-        // use the three.js GLTF loader to add the 3D model to the three.js scene
-        const loader = new GLTFLoader();
-        loader.load(
-            'https://maplibre.org/maplibre-gl-js/docs/assets/34M_17/34M_17.gltf',
-            (gltf) => {
-                this.scene.add(gltf.scene);
-            }
-        );
-        this.map = map;
+//     // Make the object ~10s of km tall to make it visible at planetary scale.
+//     const scaling = 10_000.0;
 
-        // use the MapLibre GL JS map canvas for three.js
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: map.getCanvas(),
-            context: gl,
-            antialias: true
-        });
+//     // We can use this API to get the correct model matrix.
+//     // It will work regardless of current projection.
+//     // See MapLibre source code, file "mercator_transform.ts" or "vertical_perspective_transform.ts".
+//     const modelMatrix = map.transform.getMatrixForModel(
+//       modelOrigin,
+//       modelAltitude,
+//     );
+//     const m = new THREE.Matrix4().fromArray(
+//       args.defaultProjectionData.mainMatrix,
+//     );
+//     const l = new THREE.Matrix4()
+//       .fromArray(modelMatrix)
+//       .scale(new THREE.Vector3(scaling, scaling, scaling));
 
-        this.renderer.autoClear = false;
-    },
-    render(_gl: any, args: any) {
-        // parameters to ensure the model is georeferenced correctly on the map
-        const modelOrigin: LngLatLike = STATIONS.Brooklyn;
-        // [148.9819, -35.39847];
-        const modelAltitude = 0;
+//     this.camera.projectionMatrix = m.multiply(l);
+//     this.renderer.resetState();
+//     this.renderer.render(this.scene, this.camera);
+//     this.map.triggerRepaint();
+//   },
+// };
 
-        // Make the object ~10s of km tall to make it visible at planetary scale.
-        const scaling = 10_000.0;
+map.on("style.load", () => {
+  map.setProjection({
+    type: "globe", // Set projection to globe
+  });
 
-        // We can use this API to get the correct model matrix.
-        // It will work regardless of current projection.
-        // See MapLibre source code, file "mercator_transform.ts" or "vertical_perspective_transform.ts".
-        const modelMatrix = map.transform.getMatrixForModel(modelOrigin, modelAltitude);
-        const m = new THREE.Matrix4().fromArray(args.defaultProjectionData.mainMatrix);
-        const l = new THREE.Matrix4().fromArray(modelMatrix).scale(
-            new THREE.Vector3(
-                scaling,
-                scaling,
-                scaling
-            )
-        );
+  // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+  map.on("mouseenter", "stations", () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
 
-        this.camera.projectionMatrix = m.multiply(l);
-        this.renderer.resetState();
-        this.renderer.render(this.scene, this.camera);
-        this.map.triggerRepaint();
-    }
-};
-
-
-map.on('style.load', () => {
-
-    map.setProjection({
-        type: 'globe', // Set projection to globe
-    });
-
-
-    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-    map.on('mouseenter', 'stations', () => {
-        map.getCanvas().style.cursor = 'pointer';
-    });
-
-    // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'stations', () => {
-        map.getCanvas().style.cursor = '';
-    });
-})
+  // Change it back to a pointer when it leaves.
+  map.on("mouseleave", "stations", () => {
+    map.getCanvas().style.cursor = "";
+  });
+});

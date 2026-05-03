@@ -151,9 +151,12 @@ input:focus-visible {
 }
 
 #map {
-    position: relative;
-    width: 100vw;
-    min-height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
 .cosmos {
@@ -168,6 +171,7 @@ input:focus-visible {
     align-items: center;
     padding: 2em;
     position: relative;
+    overflow: hidden;
 }
 
 .viz-overlay {
@@ -178,6 +182,7 @@ input:focus-visible {
     font-size: 0.85em;
     min-width: 120px;
     max-width: 180px;
+    z-index: 10;
 }
 
 .viz-overlay .data-item {
@@ -291,7 +296,9 @@ input:focus-visible {
     background-color: rgba(255, 255, 255, 0.1);
     color: inherit;
     cursor: pointer;
-    transition: background-color 0.25s, border-color 0.25s;
+    transition:
+        background-color 0.25s,
+        border-color 0.25s;
     pointer-events: auto;
     align-self: center;
 }
@@ -505,14 +512,15 @@ input:focus-visible {
 
 @media (width > 680px) {
     #app {
-        grid-template-columns: 1fr minmax(40%, 100vh);
+        grid-template-columns: 1fr minmax(40%, 40vw);
         width: 100vw;
         height: 100vh;
     }
 
     #map {
         width: 100%;
-        height: 100vh;
+        height: 55vh;
+        margin-top: 45vh;
     }
 
     #info {

@@ -2,6 +2,7 @@ import "./style.css"; // Custom styles
 
 import "./hear";
 import "./there";
+import "./globe"; // Initialize map
 
 // map.on('style.load', () => {
 //   map.setProjection({
