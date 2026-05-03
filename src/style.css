@@ -41,12 +41,12 @@ a:focus-visible {
 
 body {
     margin: 0;
-    width: 100%;
-    display: flex;
-    place-items: center;
+    width: 100vw;
+    /*display: flex;*/
+    /*place-items: center;*/
     min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 h1,
@@ -149,23 +149,17 @@ input:focus-visible {
 }
 
 #app {
-    display: grid;
-    grid-auto-flow: column;
-    position: fixed;
+    /*display: grid;*/
+    /*grid-auto-flow: row;*/
+    /*display:flex;
+    flex-direction: column;*/
+    /*position: fixed;*/
     margin: 0;
     padding: 0;
     text-align: center;
     width: 100vw;
+    /*height: fit-content;*/
     min-height: 100vh;
-}
-
-#map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
 }
 
 .cosmos {
@@ -184,11 +178,24 @@ input:focus-visible {
     padding: 1em;
     position: relative;
     overflow: hidden;
-    width: calc(100% - 2em);
-    height: calc(100vh - 2em);
+    width: calc(100vw - 2em);
+    height: 60vh;
+    max-height: calc(100vh - 2em);
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: 50vh;
+    padding-top: 50vh;
 }
 
 .viz-overlay {
+    display: none;
+
     position: absolute;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 8px;
@@ -245,24 +252,26 @@ input:focus-visible {
 #controls {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-rows: 50% 50%;
+    display: flex;
+    flex-direction: column;
+    /*display: grid;
+    grid-template-rows: 50% 50%;*/
 }
 
 #hear {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     background-color: var(--color-hear);
     color: var(--color-dark);
     padding: 1em;
     gap: 1em;
-    /*height: 50%;*/
     overflow: hidden;
 }
 
 #hear h2 {
     font-size: 3em;
-    writing-mode: sideways-lr;
+    /*writing-mode: sideways-lr;*/
 }
 
 #hear-controls {
@@ -283,7 +292,6 @@ input:focus-visible {
 #hear-controls .voice-control {
     width: 100%;
     height: 100%;
-    aspect-ratio: 1 / 1;
     margin: auto;
     padding: 0.5em;
     overflow: hidden;
@@ -350,7 +358,7 @@ input:focus-visible {
 .voice-name {
     font-weight: 600;
     font-size: 1.1em;
-    text-transform: capitalize;
+    text-transform: lowercase;
 }
 
 .voice-toggle {
@@ -433,10 +441,11 @@ input:focus-visible {
 }
 
 #there {
+    position: static;
     background-color: var(--color-there);
     color: var(--color-dark);
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
     justify-content: space-between;
     padding: 1em;
     gap: 1em;
@@ -444,7 +453,7 @@ input:focus-visible {
 
 #there h2 {
     font-size: 3em;
-    writing-mode: vertical-rl;
+    /*writing-mode: vertical-rl;*/
 }
 
 #there-controls {
@@ -495,12 +504,6 @@ input:focus-visible {
 
 .voice-control > div {
     padding: 0.25em 0;
-}
-
-.voice-control > div::before {
-    content: attr(id);
-    padding-right: 1ch;
-    font-weight: 600;
 }
 
 #earth {
