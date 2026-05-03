@@ -180,6 +180,8 @@ input:focus-visible {
     padding: 1em;
     position: relative;
     overflow: hidden;
+    width: calc(100% - 2em);
+    height: calc(100vh - 2em);
 }
 
 .viz-overlay {
@@ -188,8 +190,7 @@ input:focus-visible {
     border-radius: 8px;
     padding: 0.75em;
     font-size: 0.85em;
-    min-width: 120px;
-    max-width: 180px;
+    width: 20%;
     z-index: 10;
 }
 
@@ -222,13 +223,13 @@ input:focus-visible {
 }
 
 #overlay-earth {
-    bottom: 1em;
+    top: 10em;
     left: 1em;
     color: var(--color-earth);
 }
 
 #overlay-water {
-    bottom: 1em;
+    top: 10em;
     right: 1em;
     color: var(--color-water);
 }
