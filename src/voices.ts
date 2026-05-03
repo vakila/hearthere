@@ -114,19 +114,23 @@ export function createEarth(): Voice {
     earth.source!.stop();
   };
 
-  earth.updateData = (data) => {
+  earth.updateData = (
+    data: Pick<WeatherData, "temperature_2m" | "apparent_temperature">,
+  ) => {
     earth.weatherData = { ...earth.weatherData, ...data };
-    const temp = data.temperature_2m ?? data.apparent_temperature;
+    const temp = data.temperature_2m;
+    const feelsLike = data.apparent_temperature;
     if (temp !== undefined && earth.source) {
       const baseFreq = 174;
-      const freq = baseFreq + (temp - 20) * 2;
+      const freq = baseFreq + temp * 2;
       (earth.source as Oscillator).frequency.rampTo(freq, 1);
     }
-    if (data.surface_pressure !== undefined && earth.lfo) {
-      const lfoRate = 0.03 + (data.surface_pressure - 1013) / 100000;
+    if (earth.lfo) {
+      const lfoRate = 0.03 * (temp / feelsLike); // / 100000;
       earth.lfo.frequency.rampTo(Math.max(0.01, lfoRate), 1);
     }
   };
+
   return earth;
 }
 
