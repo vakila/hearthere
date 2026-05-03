@@ -1,5 +1,6 @@
 import { fetchCurrentWeather, fetchLocation, type WeatherData } from "./meteo";
 import { updateMap } from "./globe";
+import { updateWeatherData as updateVoiceWeatherData } from "./voices";
 
 const latInput = document.getElementById("lat") as HTMLInputElement;
 const lonInput = document.getElementById("lon") as HTMLInputElement;
@@ -42,6 +43,7 @@ export function updateWeatherData(data: WeatherData) {
 
     updateDataValue(metric, displayValue);
   }
+  updateVoiceWeatherData(data);
 }
 
 window.addEventListener("load", fetchWeather);

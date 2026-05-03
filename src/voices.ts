@@ -22,6 +22,23 @@ export interface Voice {
   gain: number;
   isActive: boolean;
   currentGain: number;
+  weatherData?: {
+    temperature_2m?: number;
+    apparent_temperature?: number;
+    surface_pressure?: number;
+    pressure_msl?: number;
+    relative_humidity_2m?: number;
+    precipitation?: number;
+    rain?: number;
+    snowfall?: number;
+    showers?: number;
+    wind_speed_10m?: number;
+    wind_direction_10m?: number;
+    wind_gusts_10m?: number;
+    cloud_cover?: number;
+    weather_code?: number;
+    is_day?: number;
+  };
 }
 
 // Earth: F0
@@ -287,4 +304,89 @@ export async function playAudio() {
 export function pauseAudio() {
   console.log("pause");
   Tone.getDestination().volume.rampTo(-96, 1);
+}
+
+type WeatherData = {
+  temperature_2m?: number;
+  apparent_temperature?: number;
+  surface_pressure?: number;
+  pressure_msl?: number;
+  relative_humidity_2m?: number;
+  precipitation?: number;
+  rain?: number;
+  snowfall?: number;
+  showers?: number;
+  wind_speed_10m?: number;
+  wind_direction_10m?: number;
+  wind_gusts_10m?: number;
+  cloud_cover?: number;
+  weather_code?: number;
+  is_day?: number;
+};
+
+export function updateWeatherData(data: WeatherData) {
+  const voiceNames = ["earth", "water", "air", "fire"];
+  voiceNames.forEach(name => {
+    const voice = ensureVoice(name);
+    voice.weatherData = { ...voice.weatherData, ...data };
+  });
+
+  // Earth: temperature and pressure affect oscillator frequency and LFO
+  const earth = VOICES["earth"];
+  if (earth && earth.source && "frequency" in earth.source) {
+    const temp = data.temperature_2m ?? data.apparent_temperature;
+    if (temp !== undefined) {
+      const baseFreq = 174;
+      const freq = baseFreq + (temp - 20) * 2;
+      (earth.source as Tone.Oscillator).frequency.rampTo(freq, 1);
+    }
+    if (data.surface_pressure !== undefined && earth.lfo) {
+      const lfoRate = 0.03 + (data.surface_pressure - 1013) / 100000;
+      (earth.lfo as Tone.LFO).frequency.rampTo(Math.max(0.01, lfoRate), 1);
+    }
+  }
+
+  // Water: humidity and precipitation affect gain and delay
+  const water = VOICES["water"];
+  if (water) {
+    const humidity = data.relative_humidity_2m;
+    if (humidity !== undefined && water.gainNode) {
+      const gain = -3.5 - (humidity / 100) * 6;
+      water.currentGain = gain;
+      if (water.isActive) water.gainNode.gain.rampTo(gain, 1);
+    }
+    if (data.precipitation !== undefined && water.lfo) {
+      const lfoRate = 0.01 + data.precipitation * 0.005;
+      (water.lfo as Tone.LFO).frequency.rampTo(Math.max(0.01, lfoRate), 1);
+    }
+  }
+
+  // Air: wind speed affects LFO and FM modulation
+  const air = VOICES["air"];
+  if (air && air.source && "modulationIndex" in air.source) {
+    const windSpeed = data.wind_speed_10m ?? data.wind_gusts_10m;
+    if (windSpeed !== undefined) {
+      const modIndex = 0.5 + windSpeed * 0.1;
+      (air.source as Tone.FMOscillator).modulationIndex.rampTo(modIndex, 1);
+    }
+    if (windSpeed !== undefined && air.lfo) {
+      const lfoRate = 0.03 + windSpeed * 0.01;
+      (air.lfo as Tone.Oscillator).frequency.rampTo(Math.max(0.01, lfoRate), 1);
+    }
+  }
+
+  // Fire: cloud cover and day/night affect filter and gain
+  const fire = VOICES["fire"];
+  if (fire) {
+    const cloudCover = data.cloud_cover;
+    if (cloudCover !== undefined && fire.filters?.lowpass) {
+      const cutoff = 1054 * (0.75 + (cloudCover / 100) * 0.5);
+      (fire.filters.lowpass as Tone.Filter).frequency.rampTo(cutoff, 1);
+    }
+    if (data.is_day !== undefined && fire.gainNode) {
+      const gain = data.is_day ? -17.5 : -22;
+      fire.currentGain = gain;
+      if (fire.isActive) fire.gainNode.gain.rampTo(gain, 1);
+    }
+  }
 }
