@@ -20,16 +20,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.16",
     "@types/maplibre-gl": "^1.13.2",
-    "@types/three": "^0.180.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.9"
   },
   "dependencies": {
     "maplibre-gl": "^5.9.0",
     "openmeteo": "^1.2.3",
-    "three": "^0.180.0",
     "tone": "^15.1.22"
   }
 }
