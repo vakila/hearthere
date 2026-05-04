@@ -8,24 +8,26 @@
     </head>
 
     <body>
+        <a href="#controls" class="skip-link">Skip to controls</a>
         <div id="app">
+            <h1 class="visually-hidden">hear there - weather sonification</h1>
             <div id="viz" class="cosmos">
                 <div id="map"></div>
                 <p class="read-the-docs">
                     An homage to
-                    <a href="https://weatherfortheblind.org" target="_blank"
-                        >weatherfortheblind.org</a
+                    <a href="https://weatherfortheblind.org" target="_blank" rel="noopener noreferrer"
+                        >weatherfortheblind.org<span class="visually-hidden"> (opens in new tab)</span></a
                     >
                     <br />
                     Made with
-                    <a href="https://maplibre.org" target="_blank">Maplibre</a>,
-                    <a href="https://tonejs.github.io/" target="_blank"
-                        >Tone.js</a
+                    <a href="https://maplibre.org" target="_blank" rel="noopener noreferrer">Maplibre<span class="visually-hidden"> (opens in new tab)</span></a>,
+                    <a href="https://tonejs.github.io/" target="_blank" rel="noopener noreferrer"
+                        >Tone.js<span class="visually-hidden"> (opens in new tab)</span></a
                     >
                     by <a href="https://github.com/vakila">Anjana</a> at the
                     <a href="https://recurse.com">Recurse Center</a>
                 </p>
-                <div class="viz-overlay" id="overlay-air">
+                <div class="viz-overlay" id="overlay-air" aria-live="polite" aria-atomic="true">
                     <div class="data-item" id="wind_speed_10m-overlay">
                         <span class="data-label">wind speed</span
                         ><span class="data-value">--</span>
@@ -43,7 +45,7 @@
                         ><span class="data-value">--</span>
                     </div>
                 </div>
-                <div class="viz-overlay" id="overlay-fire">
+                <div class="viz-overlay" id="overlay-fire" aria-live="polite" aria-atomic="true">
                     <div class="data-item" id="time-overlay">
                         <span class="data-label">time</span
                         ><span class="data-value">--</span>
@@ -57,7 +59,7 @@
                         ><span class="data-value">--</span>
                     </div>
                 </div>
-                <div class="viz-overlay" id="overlay-earth">
+                <div class="viz-overlay" id="overlay-earth" aria-live="polite" aria-atomic="true">
                     <!--<div class="data-item" id="elevation-overlay">
                         <span class="data-label">elevation</span
                         ><span class="data-value">--</span>
@@ -71,7 +73,7 @@
                         ><span class="data-value">--</span>
                     </div>
                 </div>
-                <div class="viz-overlay" id="overlay-water">
+                <div class="viz-overlay" id="overlay-water" aria-live="polite" aria-atomic="true">
                     <div class="data-item" id="relative_humidity_2m-overlay">
                         <span class="data-label">humidity</span
                         ><span class="data-value">--</span>
@@ -88,7 +90,7 @@
                         <h2>hear</h2>
 
                         <div id="hear-controls">
-                            <div class="voice-control" id="earth">
+                            <div class="voice-control" id="earth" tabindex="0" role="group" aria-label="Earth voice controls">
                                 <div class="voice-header">
                                     <span class="voice-name">earth</span>
                                 </div>
@@ -106,6 +108,7 @@
                                 <button
                                     class="voice-toggle active"
                                     aria-label="Toggle Earth voice"
+                                    aria-pressed="true"
                                     data-voice="earth"
                                 >
                                     ON
@@ -130,7 +133,7 @@
                                     </div>
                                 </div>-->
                             </div>
-                            <div class="voice-control" id="water">
+                            <div class="voice-control" id="water" tabindex="0" role="group" aria-label="Water voice controls">
                                 <div class="voice-header">
                                     <span class="voice-name">Water</span>
                                 </div>
@@ -148,6 +151,7 @@
                                 <button
                                     class="voice-toggle active"
                                     aria-label="Toggle Water voice"
+                                    aria-pressed="true"
                                     data-voice="water"
                                 >
                                     ON
@@ -168,7 +172,7 @@
                                 </div>-->
                             </div>
 
-                            <div class="voice-control" id="air">
+                            <div class="voice-control" id="air" tabindex="0" role="group" aria-label="Air voice controls">
                                 <div class="voice-header">
                                     <span class="voice-name">Air</span>
                                 </div>
@@ -186,6 +190,7 @@
                                 <button
                                     class="voice-toggle active"
                                     aria-label="Toggle Air voice"
+                                    aria-pressed="true"
                                     data-voice="air"
                                 >
                                     ON
@@ -217,7 +222,7 @@
                                 </div>-->
                             </div>
 
-                            <div class="voice-control" id="fire">
+                            <div class="voice-control" id="fire" tabindex="0" role="group" aria-label="Fire voice controls">
                                 <div class="voice-header">
                                     <span class="voice-name">Fire</span>
                                 </div>
@@ -234,6 +239,7 @@
                                 <button
                                     class="voice-toggle active"
                                     aria-label="Toggle Fire voice"
+                                    aria-pressed="true"
                                     data-voice="fire"
                                 >
                                     ON
@@ -287,6 +293,7 @@
                                     id="search"
                                     type="search"
                                     placeholder="berlin"
+                                    aria-label="Search for a location"
                                 />
                             </label>
                         </div>

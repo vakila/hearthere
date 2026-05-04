@@ -60,6 +60,18 @@ export const marker = new Marker({
   .setLngLat(BERLIN)
   .addTo(map);
 
+// Make marker keyboard accessible
+const markerEl = marker.getElement();
+markerEl.setAttribute("tabindex", "0");
+markerEl.setAttribute("role", "button");
+markerEl.setAttribute("aria-label", "Toggle audio playback");
+markerEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    markerEl.click();
+  }
+});
+
 export function updateMap(lat: number, lon: number) {
   map.easeTo({ center: [lon, lat] });
   marker.setLngLat([lon, lat]);

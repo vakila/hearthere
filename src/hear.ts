@@ -115,6 +115,7 @@ function setupVoiceControls() {
       const isActive = toggleVoice(voice);
       button.textContent = isActive ? "ON" : "OFF";
       button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", isActive.toString());
       container.classList.toggle("disabled", !isActive);
 
       const slider = container.querySelector<HTMLInputElement>(".voice-gain");
@@ -127,6 +128,7 @@ function setupVoiceControls() {
   const voiceControls =
     document.querySelectorAll<HTMLElement>(".voice-control");
   voiceControls.forEach((container) => {
+    // Click handler
     container.addEventListener("click", () => {
       const button =
         container.querySelector<HTMLButtonElement>(".voice-toggle");
@@ -136,11 +138,20 @@ function setupVoiceControls() {
       const isActive = toggleVoice(voice);
       button.textContent = isActive ? "ON" : "OFF";
       button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", isActive.toString());
       container.classList.toggle("disabled", !isActive);
 
       const slider = container.querySelector<HTMLInputElement>(".voice-gain");
       if (slider) {
         slider.value = isActive ? VOICES[voice].currentGain.toString() : "-48";
+      }
+    });
+
+    // Keyboard handler for Enter/Space
+    container.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        container.click();
       }
     });
   });
