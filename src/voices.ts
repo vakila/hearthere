@@ -46,7 +46,7 @@ export interface Voice {
   gain: number;
   isActive: boolean;
   currentGain: number;
-  updateData: (data: WeatherData) => void;
+  updateData: (data: Partial<WeatherData>) => void;
   weatherData?: Partial<WeatherData>;
 }
 
@@ -109,22 +109,102 @@ export function createEarth(): Voice {
     earth.source!.stop();
   };
 
+  function getEarthFrequency(latitude: number, longitude: number) {
+    console.log("getEarthFrequency", latitude, longitude);
+
+    // Use longitude to determine note, with C at 0 and F#/Gb at 180
+    const F3 = 174.61;
+    const C3 = 130.81;
+    const C4 = 262;
+    const A4 = 440;
+    const lonAddition = (longitude / 180) * 20;
+    // longitude > 0
+    //   ? (longitude / 180) * 20
+    //   : longitude < 0
+    //     ? (longitude / -180) * -20
+    //     : 0;
+    const lonNote = F3 + lonAddition;
+    console.log(
+      "longitude",
+      longitude,
+      "lonAddition",
+      lonAddition,
+      "lonNote",
+      lonNote,
+    );
+
+    // Use latitude to determine octave (+/-2);
+    const tropicalLat = 23.43;
+    const arcticLat = 66.57;
+    const absLat = Math.abs(latitude);
+    const latFactor = absLat > arcticLat ? 4 : absLat > tropicalLat ? 2 : 1;
+    const latOctave =
+      latitude >= 0
+        ? // northern hemisphere: higher octaves
+          lonNote * latFactor
+        : // southern hemisphere: lower octaves
+          lonNote / latFactor;
+
+    console.log(
+      "latitude",
+      latitude,
+      "latFactor",
+      latFactor,
+      "latOctave",
+      latOctave,
+    );
+
+    return latOctave;
+  }
+
   earth.updateData = (
-    data: Pick<WeatherData, "temperature_2m" | "apparent_temperature">,
+    data: Pick<
+      Partial<WeatherData>,
+      | "elevation"
+      | "latitude"
+      | "longitude"
+      | "temperature_2m"
+      | "apparent_temperature"
+    >,
   ) => {
+    console.log("earth.updateData", data);
     earth.weatherData = { ...earth.weatherData, ...data };
-    const temp = data.temperature_2m;
-    const feelsLike = data.apparent_temperature;
-    if (temp !== undefined && earth.source) {
-      const baseFreq = freq;
-      const newFreq = baseFreq + temp;
-      (earth.source as Oscillator).frequency.rampTo(newFreq, 1);
+    const {
+      elevation,
+      latitude,
+      longitude,
+      temperature_2m: temp,
+      apparent_temperature: feelsLike,
+    } = earth.weatherData;
+
+    const baseFreq = freq;
+
+    if (latitude !== undefined && longitude !== undefined) {
+      const newFreq = getEarthFrequency(latitude, longitude);
+      freq = newFreq;
+      (earth.source as Oscillator).frequency.rampTo(freq, 1);
+      for (const filter in earth.filters) {
+        earth.filters[filter].frequency.rampTo(freq, 1);
+      }
     }
-    if (earth.lfo) {
-      const lfoRate = 0.03 * (temp / feelsLike); // / 100000;
-      earth.lfo.frequency.rampTo(Math.max(0.01, lfoRate), 1);
-    }
+
+    // if (temp !== undefined && earth.source) {
+    //   const newFreq = baseFreq + temp;
+    //   freq = newFreq;
+    //   (earth.source as Oscillator).frequency.rampTo(freq, 1);
+    //   for (const filter in earth.filters) {
+    //     earth.filters[filter].frequency.rampTo(freq, 1);
+    //   }
+
+    //   if (earth.lfo && feelsLike !== undefined) {
+    //     const newLFOFreq = lfoFreq * (temp / feelsLike); // / 100000;
+    //     lfoFreq = newLFOFreq;
+    //     earth.lfo.frequency.rampTo(Math.max(0.01, lfoFreq), 1);
+    //   }
+    // }
   };
+
+  earth.updateData(earth.weatherData || {});
 
   return earth;
 }
