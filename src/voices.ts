@@ -12,7 +12,6 @@ import type {
   BiquadFilter,
   ToneAudioNode,
   Gain,
-  Merge,
   NoiseType,
 } from "tone";
 import type { WeatherData } from "./weather";
@@ -113,45 +112,45 @@ export function createEarth(): Voice {
     earth.source!.stop();
   };
 
-  function getEarthFrequency(latitude: number, longitude: number) {
-    console.log("getEarthFrequency", latitude, longitude);
+  // function getEarthFrequency(latitude: number, longitude: number) {
+  //   console.log("getEarthFrequency", latitude, longitude);
 
-    // Use longitude to determine note, with C at 0 and F#/Gb at 180
-    const F3 = 174.61;
-    const lonAddition = (longitude / 180) * 20;
-    const lonNote = F3 + lonAddition;
-    console.log(
-      "longitude",
-      longitude,
-      "lonAddition",
-      lonAddition,
-      "lonNote",
-      lonNote,
-    );
+  //   // Use longitude to determine note, with C at 0 and F#/Gb at 180
+  //   const F3 = 174.61;
+  //   const lonAddition = (longitude / 180) * 20;
+  //   const lonNote = F3 + lonAddition;
+  //   console.log(
+  //     "longitude",
+  //     longitude,
+  //     "lonAddition",
+  //     lonAddition,
+  //     "lonNote",
+  //     lonNote,
+  //   );
 
-    // Use latitude to determine octave (+/-2);
-    const tropicalLat = 23.43;
-    const arcticLat = 66.57;
-    const absLat = Math.abs(latitude);
-    const latFactor = absLat > arcticLat ? 4 : absLat > tropicalLat ? 2 : 1;
-    const latOctave =
-      latitude >= 0
-        ? // northern hemisphere: higher octaves
-          lonNote * latFactor
-        : // southern hemisphere: lower octaves
-          lonNote / latFactor;
+  //   // Use latitude to determine octave (+/-2);
+  //   const tropicalLat = 23.43;
+  //   const arcticLat = 66.57;
+  //   const absLat = Math.abs(latitude);
+  //   const latFactor = absLat > arcticLat ? 4 : absLat > tropicalLat ? 2 : 1;
+  //   const latOctave =
+  //     latitude >= 0
+  //       ? // northern hemisphere: higher octaves
+  //         lonNote * latFactor
+  //       : // southern hemisphere: lower octaves
+  //         lonNote / latFactor;
 
-    console.log(
-      "latitude",
-      latitude,
-      "latFactor",
-      latFactor,
-      "latOctave",
-      latOctave,
-    );
+  //   console.log(
+  //     "latitude",
+  //     latitude,
+  //     "latFactor",
+  //     latFactor,
+  //     "latOctave",
+  //     latOctave,
+  //   );
 
-    return latOctave;
-  }
+  //   return latOctave;
+  // }
 
   earth.updateData = (
     data: Pick<
@@ -560,7 +559,6 @@ export function setVoiceGain(name: string, gain: number) {
 }
 
 let mixerInitialized = false;
-let mixer: Merge | undefined;
 
 export async function playAudio() {
   console.log("play");
@@ -575,7 +573,7 @@ export async function playAudio() {
   }
 
   if (!mixerInitialized) {
-    mixer = getMixer(activeVoices);
+    getMixer(activeVoices);
     mixerInitialized = true;
   }
   for (let voice of activeVoices) {
