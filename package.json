@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/maplibre-gl": "^1.13.2",
     "typescript": "^5.9.3",
-    "vite": "^8.0.9"
+    "vite": "^8.0.10"
   },
   "dependencies": {
     "maplibre-gl": "^5.9.0",
