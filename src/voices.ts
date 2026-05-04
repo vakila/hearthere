@@ -293,7 +293,7 @@ export const createFire = (): Voice => {
   let freq = 305;
   let lfoFreq = 0.015;
   let cutoffFreq = 1326;
-  let delay = {
+  let delayInfo = {
     delayTime: 0.5,
     feedback: 0.6,
     wet: 0.5,
@@ -320,8 +320,8 @@ export const createFire = (): Voice => {
       }),
       delayTime: new Tone.LFO({
         frequency: timeFreq,
-        min: delay.delayTime * 0.7,
-        max: delay.delayTime * 1.3,
+        min: delayInfo.delayTime * 0.7,
+        max: delayInfo.delayTime * 1.3,
       }),
     },
     filters: {
@@ -331,7 +331,7 @@ export const createFire = (): Voice => {
         Q: 1,
       }),
     },
-    delay: new Tone.FeedbackDelay(delay),
+    delay: new Tone.FeedbackDelay(delayInfo),
 
     start: () => {},
     stop: () => {},
@@ -367,10 +367,11 @@ export const createFire = (): Voice => {
     const { is_day, cloud_cover } = fire.weatherData;
     if (is_day !== undefined && fire.gainNode) {
       console.log("is_day", is_day);
-      const gain = is_day === 1 ? -17.5 : -24; // quieter at night
-      console.log("setting fire.currentGain to", gain);
-      fire.currentGain = gain;
-      if (fire.isActive) fire.gainNode.gain.rampTo(gain, 1);
+      console.log("fire.currentGain", fire.currentGain);
+      console.log("fire.source", fire.source!.get());
+      const dayGain = is_day === 1 ? 0 : -12; // quieter at night
+      console.log("setting fire.source.volume to", dayGain);
+      fire.source!.volume.rampTo(dayGain, 1);
     }
 
     if (cloud_cover !== undefined && fire.lfos?.cutoff) {
