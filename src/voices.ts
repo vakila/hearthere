@@ -76,11 +76,11 @@ export function createEarth(): Voice {
         rolloff: -12,
         Q: 1,
       }),
-      sweep: new Tone.Filter({
-        frequency: cutoffFreq.min,
-        type: "lowpass",
-        Q: 30,
-      }),
+      // sweep: new Tone.Filter({
+      //   frequency: cutoffFreq.min,
+      //   type: "lowpass",
+      //   Q: 30,
+      // }),
     },
     start: () => {},
     stop: () => {},
@@ -88,7 +88,7 @@ export function createEarth(): Voice {
     output: undefined,
   };
 
-  earth.lfo!.connect(earth.filters!.sweep.frequency);
+  // earth.lfo!.connect(earth.filters!.sweep.frequency);
   // (earth.source as PulseOscillator).carrierType = "sine";
   earth.source!.chain(
     earth.filters!.harmonics,
@@ -114,9 +114,6 @@ export function createEarth(): Voice {
 
     // Use longitude to determine note, with C at 0 and F#/Gb at 180
     const F3 = 174.61;
-    const C3 = 130.81;
-    const C4 = 262;
-    const A4 = 440;
     const lonAddition = (longitude / 180) * 20;
     // longitude > 0
     //   ? (longitude / 180) * 20
@@ -169,22 +166,14 @@ export function createEarth(): Voice {
   ) => {
     console.log("earth.updateData", data);
     earth.weatherData = { ...earth.weatherData, ...data };
-    const {
-      elevation,
-      latitude,
-      longitude,
-      temperature_2m: temp,
-      apparent_temperature: feelsLike,
-    } = earth.weatherData;
-
-    const baseFreq = freq;
+    const { latitude, longitude } = earth.weatherData;
 
     if (latitude !== undefined && longitude !== undefined) {
       const newFreq = getEarthFrequency(latitude, longitude);
       freq = newFreq;
-      (earth.source as Oscillator).frequency.rampTo(freq, 1);
+      (earth.source as Oscillator)?.frequency.rampTo(Math.max(20, freq), 1);
       for (const filter in earth.filters) {
-        earth.filters[filter].frequency.rampTo(freq, 1);
+        earth.filters[filter]?.frequency.rampTo(Math.max(20, freq), 1);
       }
     }
 
@@ -285,9 +274,6 @@ export const createAir = (): Voice => {
   let name = "air";
   let gain = -11.25;
   let freq = 328; // D3
-  let lfo0Freq = 0.026;
-  let lfo1Freq = 0.01;
-  let cutoffFreq = { min: 1326 * 53, max: 1326 * 53 };
   const air: Voice = {
     name,
     gain,
@@ -427,6 +413,7 @@ export const getDelay = (input: Voice["output"]) => {
 
 // VOICES state
 export const VOICES: { [name: string]: Voice } = {};
+let latestWeatherData: WeatherData | null = null;
 
 function createVoice(name: string): Voice {
   switch (name) {
@@ -495,6 +482,13 @@ export async function playAudio() {
 
   const activeVoices = getActiveVoices();
 
+  // Apply latest weather data to voices before playing
+  if (latestWeatherData) {
+    activeVoices.forEach((voice) => {
+      voice.updateData(latestWeatherData!);
+    });
+  }
+
   if (!mixerInitialized) {
     mixer = getMixer(activeVoices);
     mixerInitialized = true;
@@ -528,6 +522,7 @@ export function pauseAudio() {
 }
 
 export function updateWeatherData(data: WeatherData) {
+  latestWeatherData = data;
   const voiceNames = ["earth", "water", "air", "fire"];
   voiceNames.forEach((name) => {
     const voice = VOICES[name];
