@@ -29,7 +29,13 @@ export const initializeTone = async () => {
 
 export interface Voice {
   name: string;
-  source?: Oscillator | FatOscillator | PWMOscillator | FMOscillator | Noise;
+  source?:
+    | Oscillator
+    | FatOscillator
+    | PulseOscillator
+    | PWMOscillator
+    | FMOscillator
+    | Noise;
   lfo?: LFO | PulseOscillator | Oscillator;
   delay?: FeedbackDelay;
   filters?: { [name: string]: Filter | AutoFilter | BiquadFilter };
@@ -50,21 +56,25 @@ export function createEarth(): Voice {
   let gain = -10;
   let freq = 174; // F3
   let lfoFreq = 0.03;
-  let cutoffFreq = { min: 300, max: 600 };
+  let cutoffFreq = { min: 600, max: 1200 };
   const earth: Voice = {
     name,
     gain,
     isActive: true,
     currentGain: gain,
+    // source: new Tone.PulseOscillator({ frequency: freq, width: 0.9 }),
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
     filters: {
-      harmonics: new Tone.Filter({ frequency: freq, type: "lowpass" }),
-      dampening: new Tone.Filter({
-        type: "peaking",
+      harmonics: new Tone.Filter({
         frequency: freq,
-        gain: -6,
-        rolloff: -24,
+        type: "highshelf",
+      }),
+      dampening: new Tone.Filter({
+        type: "bandpass",
+        frequency: freq,
+        rolloff: -12,
+        Q: 1,
       }),
       sweep: new Tone.Filter({
         frequency: cutoffFreq.min,
@@ -79,12 +89,13 @@ export function createEarth(): Voice {
   };
 
   earth.lfo!.connect(earth.filters!.sweep.frequency);
+  // (earth.source as PulseOscillator).carrierType = "sine";
   earth.source!.chain(
     earth.filters!.harmonics,
     earth.filters!.dampening,
-    earth.filters!.sweep,
+    // earth.filters!.sweep,
   );
-  earth.output = earth.filters!.sweep;
+  earth.output = earth.filters!.dampening;
   earth.gainNode = new Tone.Gain(earth.gain, "decibels");
   earth.output.connect(earth.gainNode);
   earth.output = earth.gainNode;
