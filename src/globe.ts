@@ -45,6 +45,10 @@ map.on("style.load", () => {
   map.setProjection({
     type: "globe",
   });
+
+  map.setPadding({
+    top: map.getCanvas().clientHeight * 0.75,
+  });
 });
 
 export const marker = new Marker({
