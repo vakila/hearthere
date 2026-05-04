@@ -60,7 +60,7 @@ export function createEarth(): Voice {
   const earth: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     // source: new Tone.PulseOscillator({ frequency: freq, width: 0.9 }),
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
@@ -204,14 +204,14 @@ export function createEarth(): Voice {
 // Water: add depth?
 export const createWater = (): Voice => {
   let name = "water";
-  let gain = 0;
+  let gain = -3;
   let freq = 220; // A3
   let lfoFreq = 0.05;
   let cutoffFreq = { min: freq * 2, max: freq * 8 };
   const water: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
