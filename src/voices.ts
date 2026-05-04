@@ -62,7 +62,7 @@ export function createEarth(): Voice {
   const earth: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     // source: new Tone.PulseOscillator({ frequency: freq, width: 0.9 }),
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
@@ -215,7 +215,7 @@ export const createWater = (): Voice => {
   const water: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfos: {
@@ -396,7 +396,7 @@ export const createAir = (): Voice => {
   const air: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     source: new Tone.Noise(color),
     lfos: {
