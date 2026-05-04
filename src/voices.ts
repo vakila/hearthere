@@ -60,7 +60,7 @@ export function createEarth(): Voice {
   const earth: Voice = {
     name,
     gain,
-    isActive: true,
+    isActive: false,
     currentGain: gain,
     // source: new Tone.PulseOscillator({ frequency: freq, width: 0.9 }),
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
@@ -211,7 +211,7 @@ export const createWater = (): Voice => {
   const water: Voice = {
     name,
     gain,
-    isActive: true,
+    isActive: false,
     currentGain: gain,
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
@@ -280,12 +280,12 @@ export const createWater = (): Voice => {
   return water;
 };
 
-// Air: Spacey
-export const createAir = (): Voice => {
-  let name = "air";
+// Fire: Spacey & Complicated
+export const createFire = (): Voice => {
+  let name = "fire";
   let gain = -11.25;
   let freq = 328; // D3
-  const air: Voice = {
+  const fire: Voice = {
     name,
     gain,
     isActive: false,
@@ -306,52 +306,60 @@ export const createAir = (): Voice => {
     gainNode: undefined,
   };
 
-  air.lfo!.connect((air.source as Oscillator).frequency);
-  air.output = air.source;
-  air.gainNode = new Tone.Gain(air.gain, "decibels");
-  air.output?.connect(air.gainNode);
-  air.output = air.gainNode;
+  fire.lfo!.connect((fire.source as Oscillator).frequency);
+  fire.output = fire.source;
+  fire.gainNode = new Tone.Gain(fire.gain, "decibels");
+  fire.output?.connect(fire.gainNode);
+  fire.output = fire.gainNode;
 
-  air.start = () => {
-    air.source!.start();
+  fire.start = () => {
+    fire.source!.start();
   };
-  air.stop = () => {
-    air.source!.stop();
+  fire.stop = () => {
+    fire.source!.stop();
   };
 
-  air.updateData = (data) => {
-    air.weatherData = { ...air.weatherData, ...data };
-    const windSpeed = data.wind_speed_10m ?? data.wind_gusts_10m;
-    if (windSpeed !== undefined) {
-      const modIndex = 0.5 + windSpeed * 0.1;
-      (air.source as FMOscillator).modulationIndex.rampTo(modIndex, 1);
-    }
-    if (windSpeed !== undefined && air.lfo) {
-      const lfoRate = 0.03 + windSpeed * 0.01;
-      air.lfo.frequency.rampTo(Math.max(0.01, lfoRate), 1);
-    }
+  fire.updateData = (data) => {
+    fire.weatherData = { ...fire.weatherData, ...data };
+
+    // // const cloudCover = fire.weatherData.cloud_cover;
+    // if (cloudCover !== undefined && fire.lfo) {
+    //   const cutoff = 1054 * (0.75 + (cloudCover / 100) * 0.5);
+    //   fire.lfo.frequency.rampTo(cutoff, 1);
+    // }
+    // if (fire.weatherData.is_day && fire.gainNode) {
+    //   const gain = fire.weatherData.is_day ? -17.5 : -22;
+    //   fire.currentGain = gain;
+    //   if (fire.isActive) fire.gainNode.gain.rampTo(gain, 1);
+    // }
   };
-  return air;
+  return fire;
 };
 
-// Fire: Noise
-export const createFire = (): Voice => {
-  let name = "fire";
+// Air: Noise
+export const createAir = (): Voice => {
+  let name = "air";
   let color: NoiseType = "pink";
   let delayTime = 0.18;
   let lfoFreq = 0.16;
-  let cutoffFreq = { min: 1054 * 0.75, max: 1054 * 1.25 };
+  let cutoff = 1054;
+  let cutoffFreq = { min: cutoff * 0.5, max: cutoff * 1.5 };
   let gain = -17.5;
-  const fire: Voice = {
+  const air: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     source: new Tone.Noise(color),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
-    delay: new Tone.FeedbackDelay({ delayTime, feedback: 0.6 }),
+    delay: new Tone.FeedbackDelay({ delayTime, feedback: 0.6, wet: 0.6 }),
     filters: {
-      lowpass: new Tone.Filter({ frequency: cutoffFreq.max, type: "lowpass" }),
+      lowpass: new Tone.Filter({
+        frequency: cutoffFreq.min,
+        type: "lowpass",
+        Q: 1,
+        rolloff: -48,
+      }),
     },
     output: undefined,
     gainNode: undefined,
@@ -360,36 +368,47 @@ export const createFire = (): Voice => {
     updateData: ({}) => {},
   };
 
-  fire.lfo!.connect(fire.filters!.lowpass.frequency);
-  fire.source!.chain(fire.delay!, fire.filters!.lowpass);
-  fire.output = fire.filters!.lowpass;
-  fire.gainNode = new Tone.Gain(fire.gain, "decibels");
-  fire.output.connect(fire.gainNode);
-  fire.output = fire.gainNode;
+  (air.lfo as LFO).set({ type: "triangle" });
+  air.lfo!.connect(air.filters!.lowpass.frequency);
+  air.source!.chain(air.delay!, air.filters!.lowpass);
+  air.output = air.filters!.lowpass;
+  air.gainNode = new Tone.Gain(air.gain, "decibels");
+  air.output.connect(air.gainNode);
+  air.output = air.gainNode;
 
-  fire.start = () => {
-    fire.lfo!.start();
-    fire.source!.start()!;
+  air.start = () => {
+    air.lfo!.start();
+    air.source!.start()!;
   };
-  fire.stop = () => {
-    fire.lfo!.stop();
-    fire.source!.stop()!;
+  air.stop = () => {
+    air.lfo!.stop();
+    air.source!.stop()!;
   };
 
-  fire.updateData = (data) => {
-    fire.weatherData = { ...fire.weatherData, ...data };
-    const cloudCover = fire.weatherData.cloud_cover;
-    if (cloudCover !== undefined && fire.lfo) {
-      const cutoff = 1054 * (0.75 + (cloudCover / 100) * 0.5);
-      fire.lfo.frequency.rampTo(cutoff, 1);
-    }
-    if (fire.weatherData.is_day && fire.gainNode) {
-      const gain = fire.weatherData.is_day ? -17.5 : -22;
-      fire.currentGain = gain;
-      if (fire.isActive) fire.gainNode.gain.rampTo(gain, 1);
+  air.updateData = (data) => {
+    console.log("air.updateData", data);
+    air.weatherData = { ...air.weatherData, ...data };
+    const { wind_speed_10m: windSpeed, wind_gusts_10m: windGusts } =
+      air.weatherData;
+    if (windSpeed !== undefined && air.lfo !== undefined) {
+      console.log("windSpeed", windSpeed);
+      const speedFreq = 0.16 * (windSpeed / 10);
+      console.log("setting air.lfo.frequency to", speedFreq);
+      lfoFreq = speedFreq;
+      air.lfo.frequency.rampTo(speedFreq, 1);
+
+      if (windGusts !== undefined) {
+        console.log("windGusts", windGusts);
+        const gustiness = windGusts / windSpeed;
+        console.log("gustiness", gustiness);
+        let min = (air.lfo as LFO).min;
+        const newMax = min * gustiness;
+        console.log("setting air.lfo.max to", newMax);
+        air.lfo.set({ max: newMax });
+      }
     }
   };
-  return fire;
+  return air;
 };
 
 export const getMixer = (inputs: Voice[]) => {
