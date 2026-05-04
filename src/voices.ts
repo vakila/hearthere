@@ -56,7 +56,7 @@ export function createEarth(): Voice {
   let gain = -10;
   let freq = 174; // F3
   let lfoFreq = 0.03;
-  let cutoffFreq = { min: 600, max: 1200 };
+  let cutoffFreq = { min: 800, max: 1200 };
   const earth: Voice = {
     name,
     gain,
@@ -76,11 +76,11 @@ export function createEarth(): Voice {
         rolloff: -12,
         Q: 1,
       }),
-      // sweep: new Tone.Filter({
-      //   frequency: cutoffFreq.min,
-      //   type: "lowpass",
-      //   Q: 30,
-      // }),
+      sweep: new Tone.Filter({
+        frequency: cutoffFreq.min,
+        type: "lowpass",
+        Q: 30,
+      }),
     },
     start: () => {},
     stop: () => {},
@@ -88,14 +88,14 @@ export function createEarth(): Voice {
     output: undefined,
   };
 
-  // earth.lfo!.connect(earth.filters!.sweep.frequency);
+  earth.lfo!.connect(earth.filters!.sweep.frequency);
   // (earth.source as PulseOscillator).carrierType = "sine";
   earth.source!.chain(
     earth.filters!.harmonics,
     earth.filters!.dampening,
-    // earth.filters!.sweep,
+    earth.filters!.sweep,
   );
-  earth.output = earth.filters!.dampening;
+  earth.output = earth.filters!.sweep;
   earth.gainNode = new Tone.Gain(earth.gain, "decibels");
   earth.output.connect(earth.gainNode);
   earth.output = earth.gainNode;
@@ -115,11 +115,6 @@ export function createEarth(): Voice {
     // Use longitude to determine note, with C at 0 and F#/Gb at 180
     const F3 = 174.61;
     const lonAddition = (longitude / 180) * 20;
-    // longitude > 0
-    //   ? (longitude / 180) * 20
-    //   : longitude < 0
-    //     ? (longitude / -180) * -20
-    //     : 0;
     const lonNote = F3 + lonAddition;
     console.log(
       "longitude",
@@ -166,31 +161,39 @@ export function createEarth(): Voice {
   ) => {
     console.log("earth.updateData", data);
     earth.weatherData = { ...earth.weatherData, ...data };
-    const { latitude, longitude } = earth.weatherData;
+    const { temperature_2m: temp, apparent_temperature: feelsLike } =
+      earth.weatherData;
+    // const { latitude, longitude } = earth.weatherData;
 
-    if (latitude !== undefined && longitude !== undefined) {
-      const newFreq = getEarthFrequency(latitude, longitude);
-      freq = newFreq;
-      (earth.source as Oscillator)?.frequency.rampTo(Math.max(20, freq), 1);
-      for (const filter in earth.filters) {
-        earth.filters[filter]?.frequency.rampTo(Math.max(20, freq), 1);
-      }
-    }
-
-    // if (temp !== undefined && earth.source) {
-    //   const newFreq = baseFreq + temp;
+    // if (latitude !== undefined && longitude !== undefined) {
+    //   const newFreq = getEarthFrequency(latitude, longitude);
     //   freq = newFreq;
-    //   (earth.source as Oscillator).frequency.rampTo(freq, 1);
-    //   for (const filter in earth.filters) {
-    //     earth.filters[filter].frequency.rampTo(freq, 1);
-    //   }
-
-    //   if (earth.lfo && feelsLike !== undefined) {
-    //     const newLFOFreq = lfoFreq * (temp / feelsLike); // / 100000;
-    //     lfoFreq = newLFOFreq;
-    //     earth.lfo.frequency.rampTo(Math.max(0.01, lfoFreq), 1);
+    //   (earth.source as Oscillator)?.frequency.rampTo(Math.max(20, freq), 1);
+    //   for (const filter of ["harmonics", "dampening"] as const) {
+    //     if (earth.filters && filter in earth.filters) {
+    //       earth.filters[filter].frequency.rampTo(Math.max(20, freq), 1);
+    //     }
     //   }
     // }
+
+    if (temp !== undefined && earth.source) {
+      const newFreq = freq + temp;
+      console.log("setting earth.freq to", freq);
+      freq = newFreq;
+      (earth.source as Oscillator).frequency.rampTo(freq, 1);
+      for (const filter of ["harmonics", "dampening"] as const) {
+        if (earth.filters && filter in earth.filters) {
+          earth.filters[filter].frequency.rampTo(Math.max(20, freq), 1);
+        }
+      }
+
+      if (earth.lfo && feelsLike !== undefined) {
+        const newLFOFreq = lfoFreq * (temp / feelsLike); // / 100000;
+        console.log("setting earth.lfo.frequency to", newLFOFreq);
+        lfoFreq = newLFOFreq;
+        earth.lfo.frequency.rampTo(Math.max(0.01, lfoFreq), 1);
+      }
+    }
   };
 
   earth.updateData(earth.weatherData || {});
