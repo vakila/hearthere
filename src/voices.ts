@@ -74,7 +74,7 @@ export function createEarth(): Voice {
         type: "bandpass",
         frequency: freq,
         rolloff: -12,
-        Q: 1,
+        Q: 10,
       }),
       sweep: new Tone.Filter({
         frequency: cutoffFreq.min,
@@ -204,28 +204,31 @@ export function createEarth(): Voice {
 // Water: add depth?
 export const createWater = (): Voice => {
   let name = "water";
-  let gain = -3.5;
+  let gain = 0;
   let freq = 220; // A3
-  let lfoFreq = 0.01;
-  let cutoffFreq = { min: 522 * 0.7, max: 522 * 1.3 };
+  let lfoFreq = 0.05;
+  let cutoffFreq = { min: freq * 2, max: freq * 8 };
   const water: Voice = {
     name,
     gain,
-    isActive: false,
+    isActive: true,
     currentGain: gain,
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfo: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
     filters: {
-      harmonics: new Tone.Filter({ frequency: freq, type: "lowpass" }),
-      dampening: new Tone.Filter({
-        type: "peaking",
+      harmonics: new Tone.Filter({
         frequency: freq,
-        gain: -12,
+        type: "highshelf",
+        rolloff: -24,
+      }),
+      dampening: new Tone.Filter({
+        type: "lowpass",
+        frequency: freq,
       }),
       sweep: new Tone.Filter({
         frequency: cutoffFreq.min,
-        type: "lowpass",
-        Q: 30,
+        type: "bandpass",
+        Q: 10,
       }),
     },
     start: () => {},
@@ -238,10 +241,10 @@ export const createWater = (): Voice => {
   water.lfo!.connect(water.filters!.sweep.frequency);
   water.source!.chain(
     water.filters!.harmonics,
-    water.filters!.dampening,
     water.filters!.sweep,
+    water.filters!.dampening,
   );
-  water.output = water.filters!.sweep;
+  water.output = water.filters!.dampening;
   water.gainNode = new Tone.Gain(water.gain, "decibels");
   water.output.connect(water.gainNode);
   water.output = water.gainNode;
@@ -256,17 +259,22 @@ export const createWater = (): Voice => {
   };
 
   water.updateData = (data) => {
+    console.log("water.updateData", data);
     water.weatherData = { ...water.weatherData, ...data };
 
-    const humidity = data.relative_humidity_2m;
-    if (humidity !== undefined && water.gainNode) {
-      const gain = -3.5 - (humidity / 100) * 6;
-      water.currentGain = gain;
-      if (water.isActive) water.gainNode.gain.rampTo(gain, 1);
+    const { relative_humidity_2m: humidity, precipitation } = water.weatherData;
+
+    if (humidity !== undefined && water.filters?.sweep) {
+      console.log("humidity", humidity);
+      const newQ = (humidity / 100) * 15;
+      console.log("setting water.filters.sweep.Q to", newQ);
+      water.filters.sweep.set({ Q: newQ });
     }
     if (data.precipitation !== undefined && water.lfo) {
-      const lfoRate = 0.01 + data.precipitation * 0.005;
-      (water.lfo as LFO).frequency.rampTo(Math.max(0.01, lfoRate), 1);
+      console.log("precipitation", precipitation);
+      const lfoRate = lfoFreq + data.precipitation / 2;
+      console.log("setting water.lfo.frequency to", lfoRate);
+      (water.lfo as LFO).frequency.rampTo(lfoRate, 1);
     }
   };
   return water;
