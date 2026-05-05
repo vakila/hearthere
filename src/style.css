@@ -74,8 +74,12 @@ h1 {
     position: relative;
     bottom: 0;
     left: 0;
-    color: #aaa;
-    margin: 1em 0;
+    color: var(--color-light);
+    opacity: 0.9;
+    background-color: var(--color-dark);
+    padding: 0.5em;
+    margin: 1.5em 0;
+    border-radius: 8px;
 }
 
 button {
@@ -465,7 +469,7 @@ input:focus-visible {
 
 #there-controls input {
     background-color: var(--color-dark);
-    color: rgba(255, 255, 255, 0.87);
+    color: var(--color-light);
     border: 2px solid #555;
     border-radius: 6px;
     padding: 0.5em 0.8em;
