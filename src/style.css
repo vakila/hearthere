@@ -80,6 +80,7 @@ h1 {
     padding: 0.5em;
     margin: 1.5em 0;
     border-radius: 8px;
+    font-size: small;
 }
 
 button {
@@ -229,13 +230,13 @@ input:focus-visible {
 }
 
 #overlay-earth {
-    top: 10em;
+    top: 6em;
     left: 1em;
     color: var(--color-earth);
 }
 
 #overlay-water {
-    top: 10em;
+    top: 6em;
     right: 1em;
     color: var(--color-water);
 }
@@ -522,7 +523,7 @@ input:focus-visible {
 @media (width > 680px) {
     #app {
         display: grid;
-        grid-template-columns: 40% 60%;
+        grid-template-columns: 50% 50%;
         grid-auto-flow: column;
         position: fixed;
         width: 100vw;

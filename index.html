@@ -15,19 +15,42 @@
                 <div id="map"></div>
                 <p class="read-the-docs">
                     An homage to
-                    <a href="https://weatherfortheblind.org" target="_blank" rel="noopener noreferrer"
-                        >weatherfortheblind.org<span class="visually-hidden"> (opens in new tab)</span></a
+                    <a
+                        href="https://weatherfortheblind.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >weatherfortheblind.org<span class="visually-hidden">
+                            (opens in new tab)</span
+                        ></a
                     >
                     <br />
                     Made with
-                    <a href="https://maplibre.org" target="_blank" rel="noopener noreferrer">Maplibre<span class="visually-hidden"> (opens in new tab)</span></a>,
-                    <a href="https://tonejs.github.io/" target="_blank" rel="noopener noreferrer"
-                        >Tone.js<span class="visually-hidden"> (opens in new tab)</span></a
+                    <a
+                        href="https://maplibre.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Maplibre<span class="visually-hidden">
+                            (opens in new tab)</span
+                        ></a
+                    >
+                    &
+                    <a
+                        href="https://tonejs.github.io/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Tone.js<span class="visually-hidden">
+                            (opens in new tab)</span
+                        ></a
                     >
                     by <a href="https://github.com/vakila">Anjana</a> at the
                     <a href="https://recurse.com">Recurse Center</a>
                 </p>
-                <div class="viz-overlay" id="overlay-air" aria-live="polite" aria-atomic="true">
+                <div
+                    class="viz-overlay"
+                    id="overlay-air"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
                     <div class="data-item" id="wind_speed_10m-overlay">
                         <span class="data-label">wind speed</span
                         ><span class="data-value">--</span>
@@ -36,20 +59,25 @@
                         <span class="data-label">wind gust</span
                         ><span class="data-value">--</span>
                     </div>
-                    <div class="data-item" id="wind_direction_10m-overlay">
+                    <!--<div class="data-item" id="wind_direction_10m-overlay">
                         <span class="data-label">wind dir</span
                         ><span class="data-value">--</span>
                     </div>
                     <div class="data-item" id="surface_pressure-overlay">
                         <span class="data-label">pressure</span
                         ><span class="data-value">--</span>
-                    </div>
+                    </div>-->
                 </div>
-                <div class="viz-overlay" id="overlay-fire" aria-live="polite" aria-atomic="true">
-                    <div class="data-item" id="time-overlay">
+                <div
+                    class="viz-overlay"
+                    id="overlay-fire"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    <!--<div class="data-item" id="time-overlay">
                         <span class="data-label">time</span
                         ><span class="data-value">--</span>
-                    </div>
+                    </div>-->
                     <div class="data-item" id="is_day-overlay">
                         <span class="data-label">is day</span
                         ><span class="data-value">--</span>
@@ -59,7 +87,12 @@
                         ><span class="data-value">--</span>
                     </div>
                 </div>
-                <div class="viz-overlay" id="overlay-earth" aria-live="polite" aria-atomic="true">
+                <div
+                    class="viz-overlay"
+                    id="overlay-earth"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
                     <!--<div class="data-item" id="elevation-overlay">
                         <span class="data-label">elevation</span
                         ><span class="data-value">--</span>
@@ -69,11 +102,16 @@
                         ><span class="data-value">--</span>
                     </div>
                     <div class="data-item" id="apparent_temperature-overlay">
-                        <span class="data-label">apparent temp</span
+                        <span class="data-label">feels like</span
                         ><span class="data-value">--</span>
                     </div>
                 </div>
-                <div class="viz-overlay" id="overlay-water" aria-live="polite" aria-atomic="true">
+                <div
+                    class="viz-overlay"
+                    id="overlay-water"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
                     <div class="data-item" id="relative_humidity_2m-overlay">
                         <span class="data-label">humidity</span
                         ><span class="data-value">--</span>
@@ -90,7 +128,13 @@
                         <h2>hear</h2>
 
                         <div id="hear-controls">
-                            <div class="voice-control" id="earth" tabindex="0" role="group" aria-label="Earth voice controls">
+                            <div
+                                class="voice-control"
+                                id="earth"
+                                tabindex="0"
+                                role="group"
+                                aria-label="Earth voice controls"
+                            >
                                 <div class="voice-header">
                                     <span class="voice-name">earth</span>
                                 </div>
@@ -133,7 +177,13 @@
                                     </div>
                                 </div>-->
                             </div>
-                            <div class="voice-control" id="water" tabindex="0" role="group" aria-label="Water voice controls">
+                            <div
+                                class="voice-control"
+                                id="water"
+                                tabindex="0"
+                                role="group"
+                                aria-label="Water voice controls"
+                            >
                                 <div class="voice-header">
                                     <span class="voice-name">Water</span>
                                 </div>
@@ -172,7 +222,13 @@
                                 </div>-->
                             </div>
 
-                            <div class="voice-control" id="air" tabindex="0" role="group" aria-label="Air voice controls">
+                            <div
+                                class="voice-control"
+                                id="air"
+                                tabindex="0"
+                                role="group"
+                                aria-label="Air voice controls"
+                            >
                                 <div class="voice-header">
                                     <span class="voice-name">Air</span>
                                 </div>
@@ -222,7 +278,13 @@
                                 </div>-->
                             </div>
 
-                            <div class="voice-control" id="fire" tabindex="0" role="group" aria-label="Fire voice controls">
+                            <div
+                                class="voice-control"
+                                id="fire"
+                                tabindex="0"
+                                role="group"
+                                aria-label="Fire voice controls"
+                            >
                                 <div class="voice-header">
                                     <span class="voice-name">Fire</span>
                                 </div>
