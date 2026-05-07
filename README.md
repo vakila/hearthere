@@ -72,18 +72,25 @@ Each voice maps weather data to synthesis parameters, creating a unique sonic ch
 
 ### Tools & Libraries
 - [WebAudio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-- [ToneJS](https://tonejs.github.io/)
+- [Tone.js](https://tonejs.github.io/)
 - [OpenMeteo API](https://open-meteo.com)
-- [WebAudio Studio](https://webaudio.studio) for understanding/experimenting with WebAudio API
+- [WebAudio Studio](https://webaudio.studio) for understanding/experimenting/prototyping with WebAudio API
 - [VCV Rack](https://vcvrack.com/Rack) for experimenting/prototyping sounds on desktop
 
 ### Learning resources
 
-- (h/t ToneJS website): https://www.soundonsound.com/techniques/whats-sound
-- (h/t ToneJS website): https://github.com/cwilso/midi-synth
+- [Your First Synth Patch](soundandsynthesis.com/firstsynthpatch
+) free intro course by Sarah Belle Reid, uses VCV Rack
+- [What's sound](https://www.soundonsound.com/techniques/whats-sound) oldie-but-goodie, multi-part deep dive
 
+### Sonification inspiration
 
-## Acknowledgement
+- [Data Sonification Archive](https://sonification.design) with tons of examples
+- [Data Sonification Canvas](https://sonification.design/assets/resource/Data_sonification_canvas.pdf) Sonification design template
+- [Loud Numbers](https://www.loudnumbers.net/) Sonification studio with cool podcast & tooling
+- [Open Sonifications](https://opensonifications.net/) Manifesto & vision for a wide range of sonifications
+
+## Acknowledgements
 
 Huge thank you to my Recurse Center Fall 2 2025 batchmates: 
 
