@@ -55,9 +55,9 @@ export interface Voice {
 export function createEarth(): Voice {
   let name = "earth";
   let gain = -10;
-  let freq = 174; // F3
-  let lfoFreq = 0.03;
-  let cutoffFreq = { min: 800, max: 1200 };
+  const freq = 174; // F3
+  const lfoFreq = 0.03;
+  const cutoffFreq = { min: 800, max: 1200 };
   const earth: Voice = {
     name,
     gain,
@@ -120,20 +120,18 @@ export function createEarth(): Voice {
 
     if (temp !== undefined && earth.source) {
       const newFreq = freq + temp;
-      console.log("setting earth.freq to", freq);
-      freq = newFreq;
-      (earth.source as Oscillator).frequency.rampTo(freq, 1);
+      console.log("setting earth.freq to", newFreq);
+      (earth.source as Oscillator).frequency.rampTo(newFreq, 1);
       for (const filter of ["harmonics", "dampening"] as const) {
         if (earth.filters && filter in earth.filters) {
-          earth.filters[filter].frequency.rampTo(Math.max(20, freq), 1);
+          earth.filters[filter].frequency.rampTo(Math.max(20, newFreq), 1);
         }
       }
 
       if (earth.lfos?.cutoff && feelsLike !== undefined) {
         const newLFOFreq = lfoFreq * (temp / feelsLike);
         console.log("setting cutoff.frequency to", newLFOFreq);
-        lfoFreq = newLFOFreq;
-        earth.lfos.cutoff.frequency.rampTo(Math.max(0.01, lfoFreq), 1);
+        earth.lfos.cutoff.frequency.rampTo(Math.max(0.01, newLFOFreq), 1);
       }
     }
   };
@@ -387,7 +385,6 @@ export const createAir = (): Voice => {
       console.log("windSpeed", windSpeed);
       const speedFreq = 0.16 * (windSpeed / 10);
       console.log("setting air.lfo.frequency to", speedFreq);
-      lfoFreq = speedFreq;
       air.lfos.cutoff.frequency.rampTo(speedFreq, 1);
 
       if (windGusts !== undefined) {
