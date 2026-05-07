@@ -63,7 +63,6 @@ export function createEarth(): Voice {
     gain,
     isActive: true,
     currentGain: gain,
-    // source: new Tone.PulseOscillator({ frequency: freq, width: 0.9 }),
     source: new Tone.Oscillator({ frequency: freq, type: "triangle" }),
     lfos: {
       cutoff: new Tone.LFO(lfoFreq, cutoffFreq.min, cutoffFreq.max),
@@ -92,7 +91,6 @@ export function createEarth(): Voice {
   };
 
   earth.lfos!.cutoff.connect(earth.filters!.sweep.frequency);
-  // (earth.source as PulseOscillator).carrierType = "sine";
   earth.source!.chain(
     earth.filters!.harmonics,
     earth.filters!.dampening,
@@ -113,31 +111,12 @@ export function createEarth(): Voice {
   };
 
   earth.updateData = (
-    data: Pick<
-      Partial<WeatherData>,
-      | "elevation"
-      | "latitude"
-      | "longitude"
-      | "temperature_2m"
-      | "apparent_temperature"
-    >,
+    data: Pick<Partial<WeatherData>, "temperature_2m" | "apparent_temperature">,
   ) => {
     console.log("earth.updateData", data);
     earth.weatherData = { ...earth.weatherData, ...data };
     const { temperature_2m: temp, apparent_temperature: feelsLike } =
       earth.weatherData;
-    // const { latitude, longitude } = earth.weatherData;
-
-    // if (latitude !== undefined && longitude !== undefined) {
-    //   const newFreq = getEarthFrequency(latitude, longitude);
-    //   freq = newFreq;
-    //   (earth.source as Oscillator)?.frequency.rampTo(Math.max(20, freq), 1);
-    //   for (const filter of ["harmonics", "dampening"] as const) {
-    //     if (earth.filters && filter in earth.filters) {
-    //       earth.filters[filter].frequency.rampTo(Math.max(20, freq), 1);
-    //     }
-    //   }
-    // }
 
     if (temp !== undefined && earth.source) {
       const newFreq = freq + temp;
@@ -151,7 +130,7 @@ export function createEarth(): Voice {
       }
 
       if (earth.lfos?.cutoff && feelsLike !== undefined) {
-        const newLFOFreq = lfoFreq * (temp / feelsLike); // / 100000;
+        const newLFOFreq = lfoFreq * (temp / feelsLike);
         console.log("setting cutoff.frequency to", newLFOFreq);
         lfoFreq = newLFOFreq;
         earth.lfos.cutoff.frequency.rampTo(Math.max(0.01, lfoFreq), 1);
